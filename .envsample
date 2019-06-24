@@ -1,0 +1,3 @@
+DEV_DATABASE_URL=postgres://john:doe@127.0.0.1:5432/userschema
+TEST_DATABASE_URL=postgres://john:doe@127.0.0.1:5432/userschema_test
+DATABASE_URL=postgres://john:doe@127.0.0.1:5432/userschema
