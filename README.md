@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/andela/ah-jawans-backend.svg?branch=master)](https://travis-ci.com/andela/ah-jawans-backend)
+
 Authors Haven - A Social platform for the creative at heart.
 =======
 
