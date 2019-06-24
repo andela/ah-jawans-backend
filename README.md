@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/andela/ah-jawans-backend.svg?branch=master)](https://travis-ci.com/andela/ah-jawans-backend)
+[![Build Status](https://travis-ci.com/andela/ah-jawans-backend.svg?branch=develop)](https://travis-ci.com/andela/ah-jawans-backend)
 
 Authors Haven - A Social platform for the creative at heart.
 =======
@@ -392,3 +392,23 @@ No additional parameters required
 ### Get Tags
 
 `GET /api/tags`
+
+### Steps to Setup the DB:PostgreSQL
+
+It will install the packages required
+`npm install`
+
+This will start your database before that make sure you have PostreSQL Database installed
+`brew services start postgresql`
+
+Initaillize Sequelize
+`sequelize init`
+
+create database
+`createdb @DBNAME`
+
+create model
+`sequelize model:create --name @tablename --attributes title:string, price:string, description:string`
+
+create table 
+`sequelize db:migrate OR If it throws error Use : npm run sequelize` 
