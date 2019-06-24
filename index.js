@@ -7,8 +7,9 @@ const fs = require("fs"),
     session = require("express-session"),
     cors = require("cors"),
     passport = require("passport"),
-    errorhandler = require("errorhandler"),
-    mongoose = require("mongoose");
+    errorhandler = require("errorhandler");
+// commenting mongoose
+    //    mongoose = require("mongoose"); 
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -18,7 +19,7 @@ const app = express();
 app.use(cors());
 
 // Normal express config defaults
-app.use(require("morgan")("dev"));
+//app.use(require("morgan")("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -38,12 +39,13 @@ if (!isProduction) {
     app.use(errorhandler());
 }
 
-if (isProduction) {
-    mongoose.connect(process.env.MONGODB_URI);
-} else {
-    mongoose.connect("mongodb://localhost/conduit");
-    mongoose.set("debug", true);
-}
+// commenting as mongo db will not be used
+// if (isProduction) {
+//     mongoose.connect(process.env.MONGODB_URI);
+// } else {
+//     mongoose.connect("mongodb://localhost/conduit");
+//     mongoose.set("debug", true);
+// }
 
 require("./models/User");
 

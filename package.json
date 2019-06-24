@@ -4,17 +4,23 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon --exec babel-node index.js",
+    "sequelize": "sequelize db:migrate",
+    "seqinit": "sequelize init",
+    "build": "npm run clear && babel server --out-dir build",
+    "clear": "rm -rf build",
+    "coveralls": "npm test  && nyc report --reporter=text-lcov | coveralls",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.4",
-    "dotenv": "^6.0.0",
+    "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "errorhandler": "^1.5.0",
-    "express": "^4.16.3",
+    "express": "^4.17.1",
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.3.0",
@@ -24,7 +30,41 @@
     "mongoose-unique-validator": "^2.0.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.3",
     "request": "^2.87.0",
+    "sequelize": "^5.8.12",
+    "sequelize-cli": "^5.5.0",
     "underscore": "^1.9.1"
-  }
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "@babel/runtime": "^7.4.5",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.0.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3",
+    "nodemon": "^1.19.1",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint-plugin-react": "^7.13.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela/ah-jawans-backend.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/andela/ah-jawans-backend/issues"
+  },
+  "homepage": "https://github.com/andela/ah-jawans-backend#readme"
 }
