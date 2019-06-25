@@ -36,13 +36,7 @@
     "request": "^2.87.0",
     "sequelize": "^5.8.12",
     "sequelize-cli": "^5.5.0",
-    "underscore": "^1.9.1"
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.0.2",
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.18.0",
+    "underscore": "^1.9.1",
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/node": "^7.4.5",
@@ -50,7 +44,12 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.4.5",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.0.6"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3",
     "nodemon": "^1.19.1",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
