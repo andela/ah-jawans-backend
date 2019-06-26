@@ -1,15 +1,13 @@
-//const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const router = require("express").Router();
 const passport = require("passport");
-//const User = mongoose.model("User");
-import model from '../../models/User.js';
-const { User } = model;
+const User = mongoose.model("User");
 
 router.get("/user", function(req, res, next) {
     User.findById(req.payload.id)
         .then(function(user) {
             if (!user) {
-                return res.sendStatus(401)
+                return res.sendStatus(401);
             }
             return res.json({ user: user.toAuthJSON() });
         })
@@ -87,4 +85,3 @@ router.post("/users", function(req, res, next) {
 });
 
 module.exports = router;
-
