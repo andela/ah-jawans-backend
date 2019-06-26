@@ -1,42 +1,42 @@
-'use strict';
 export default (sequelize) => {
-  const user = sequelize.define('user', {
-    username: {
+  const user = sequelize.define(
+    'user', {
+      username: {
         type: String,
         unique: true,
         required: true
-    },
-    mail: {
+      },
+      mail: {
         type: String,
         lowercase: true,
         unique: true,
-        required:true
-    },
-    bio: {
+        required: true
+      },
+      bio: {
         type: String
-    },
-    image: {
+      },
+      image: {
         type: String
-    },
-    favorites: {
+      },
+      favorites: {
         type: String
-    },
-    following: {
+      },
+      following: {
         type: String
-    },
-    hash: {
+      },
+      hash: {
         type: String
-    },
-    salt: {
+      },
+      salt: {
         type: String
-    },
-    
-},
-{ timestamps: true }
-);
+      },
 
-user.associate = function(models) {
+    },
+    { timestamps: true }
+  );
+
+  user.associate = (models) => {
     // associations can be defined here
   };
   return user;
-};
+}; 
