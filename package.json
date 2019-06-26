@@ -4,10 +4,12 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node index.js",
+    "start": "npm run create && NODE_ENV=production babel-node ./src/index.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "sequelize": "sequelize db:migrate",
+    "create": "NODE_ENV=staging sequelize db:migrate",
     "seqinit": "sequelize init",
-    "build": "npm run clear && babel server --out-dir build",
+    "build": "npm run clear && babel src --out-dir build",
     "clear": "rm -rf build",
     "coveralls": "npm test  && nyc report --reporter=text-lcov | coveralls",
     "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register --timeout 3000 ./test/*.js --exit"

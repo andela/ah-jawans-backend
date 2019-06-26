@@ -1,6 +1,6 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
-import index from "./../index";
+import index from "./../src/index";
 
 /*global it*/
 /*global describe*/
