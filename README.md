@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.com/andela/ah-jawans-backend.svg?branch=develop)](https://travis-ci.com/andela/ah-jawans-backend)
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
+[![Reviewed by Hound](https://img.shields.io/github/issues/andela/ah-jawans-backend.svg?style=flat-square)](https://houndci.com)
 
 Authors Haven - A Social platform for the creative at heart.
 =======
