@@ -1,19 +1,17 @@
-
 const dotenv = require('dotenv');
-const config = {};
+
 dotenv.config();
-config.development = {
- use_env_variable: 'DEV_DATABASE_URL',
- logging: false
-};
 
-config.staging = {
- use_env_variable: 'DATABASE_URL',
+module.exports = {
+  development: {
+    use_env_variable: 'DEV_DATABASE_URL',
+    logging: false
+  },
+  staging: {
+    use_env_variable: 'DATABASE_URL',
+  },
+  test: {
+    use_env_variable: 'TEST_DATABASE_URL',
+    logging: false,
+  }
 };
-
-config.test = {
- use_env_variable: 'TEST_DATABASE_URL',
- logging: false,
-};
-
-module.exports = config;
