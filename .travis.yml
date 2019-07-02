@@ -17,5 +17,7 @@ before_script:
   - psql -c 'create database test_database;' -U postgres
   - npm run sequelize
   - npm run seed-test
+  - npm destroy
+  - npm run sequelizeall
 script:
   - npm run test
