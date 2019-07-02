@@ -1,10 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import passport from 'passport';
+import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import swagger from '../swagger.json';
 import route from './routes/index';
 
+import './config/passport';
 
 const app = express();
 
@@ -13,13 +16,14 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static(`${__dirname}/public`));
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/', (req, res) => {
-  res.send({
-    message: 'Welcome to Authors Haven',
-  });
-});
+app.use(express.static(`${__dirname}/public`));
 
 app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swagger));
 
