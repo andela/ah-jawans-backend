@@ -37,3 +37,6 @@ node_modules
 
 # .env to ignore
 .env
+
+# Don't need to include this	
+.nyc_output/

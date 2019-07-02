@@ -1,12 +1,20 @@
 language: node_js
 node_js:
   - "stable"
+services:
+  - postgresql
+before_install:
+  - npm install sequelize-cli -g
 env:
   global:
     - TEST_DATABASE_URL=postgres://postgres:@127.0.0.1:5432/test_database
 before-script:
-  - npm run sequelize-cli
+  - npm add sequelize-cli
+    - SECRET_KEY=hellowolrd@1234
+    - NODE_ENV=test
+before_script:
+  - psql -c 'drop database if exists test_database;' -U postgres
+  - psql -c 'create database test_database;' -U postgres
   - npm run sequelize
 script:
   - npm run test
-after_success:
