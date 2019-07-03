@@ -5,12 +5,12 @@ import SendGrid from '@sendgrid/mail';
 import models from '../models';
 import Tokenizer from '../helpers/tokenGenerator';
 
+const { User } = models;
 const { generateToken } = Tokenizer;
 
 
 dotenv.config();
 
-const { User } = models;
 const { SENDGRID_API_KEY } = process.env;
 export default class UserController {
   static async createUser(req, res) {

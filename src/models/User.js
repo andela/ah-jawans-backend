@@ -42,7 +42,7 @@ export default (sequelize) => {
       }
 
     },
-    { timestamps: false }
+    { timestamps: false, tableName: 'User' }
   );
 
   // eslint-disable-next-line no-unused-vars
