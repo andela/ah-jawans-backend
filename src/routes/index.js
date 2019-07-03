@@ -1,9 +1,11 @@
 import express from 'express';
 
-import api from './api';
+import UserController from '../controllers/userController';
+import AuthController from '../controllers/authController';
 
 const router = express.Router();
 
-router.use('/api', api);
+router.post('/api/users', UserController.createUser);
+router.post('/api/users/login', AuthController.signin);
 
-module.exports = router;
+export default router;

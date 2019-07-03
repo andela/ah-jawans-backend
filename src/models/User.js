@@ -1,16 +1,24 @@
 export default (sequelize) => {
-  const user = sequelize.define(
-    'user', {
+  const User = sequelize.define(
+    'User', {
       username: {
         type: String,
         unique: true,
-        required: true
+        required: true,
       },
-      mail: {
+      firstName: {
+        allowNull: true,
+        type: String
+      },
+      lastName: {
+        allowNull: true,
+        type: String
+      },
+      email: {
         type: String,
         lowercase: true,
         unique: true,
-        required: true
+        required: true,
       },
       bio: {
         type: String
@@ -18,25 +26,28 @@ export default (sequelize) => {
       image: {
         type: String
       },
-      favorites: {
-        type: String
-      },
       following: {
         type: String
       },
-      hash: {
+      password: {
         type: String
       },
-      salt: {
-        type: String
+      createdAt: {
+        allowNull: true,
+        type: Date
       },
+      updatedAt: {
+        allowNull: true,
+        type: Date
+      }
 
     },
-    { timestamps: true }
+    { timestamps: false }
   );
 
-  user.associate = (models) => {
+  // eslint-disable-next-line no-unused-vars
+  User.associate = (models) => {
     // associations can be defined here
   };
-  return user;
-}; 
+  return User;
+};
