@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "./src/index.js",
   "scripts": {
-    "start": "npm run create && NODE_ENV=production babel-node ./src/index.js",
+    "start": "npm run create && NODE_ENV=staging babel-node ./src/index.js",
     "dev": "nodemon --exec babel-node ./src/index.js",
     "sequelize": "sequelize db:migrate",
     "create": "NODE_ENV=staging sequelize db:migrate",
@@ -16,8 +16,8 @@
     "test": "NODE_ENV=test npm run migrate && NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register --timeout 3000 ./src/test/*.js --exit",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
-    "seed-test" : "sequelize db:seed:undo:all --env test && sequelize db:seed:all --env test",
-    "seed-dev" : "sequelize db:seed:undo:all --env development && sequelize db:seed:all --env development"
+    "seed-test": "sequelize db:seed:undo:all --env test && sequelize db:seed:all --env test",
+    "seed-dev": "sequelize db:seed:undo:all --env development && sequelize db:seed:all --env development"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
@@ -28,10 +28,11 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.4.5",
-    "babel-polyfill": "^6.26.0",
     "@sendgrid/mail": "^6.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.4",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
@@ -50,9 +51,7 @@
     "sequelize": "^5.8.12",
     "sequelize-cli": "^5.5.0",
     "swagger-ui-express": "^4.0.6",
-    "underscore": "^1.9.1",
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0"
+    "underscore": "^1.9.1"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.4.4",
