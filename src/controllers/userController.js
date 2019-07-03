@@ -21,7 +21,7 @@ export default class UserController {
 
       const generatedToken = await generateToken({ email });
 
-      return res.status(200)
+      return res.status(201)
         .json({
           user: {
             token: generatedToken,

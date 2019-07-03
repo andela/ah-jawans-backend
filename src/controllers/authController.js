@@ -12,13 +12,13 @@ export default class AuthController {
     try {
       const user = await UserService.getUser(email);
       if (!user) {
-        return res.status(400).json({
+        return res.status(403).json({
           error: 'Invalid username or password!'
         });
       }
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        return res.status(400).json({
+        return res.status(403).json({
           error: 'Invalid username or password'
         });
       }
