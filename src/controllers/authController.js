@@ -1,29 +1,41 @@
 /* eslint-disable require-jsdoc */
+import bcrypt from 'bcrypt';
+import _ from 'underscore';
+import UserService from '../services/userService';
+import Tokenizer from '../helpers/tokenGenerator';
 
-import passport from 'passport';
+const { generateToken } = Tokenizer;
 
 export default class AuthController {
-  static loginUser(req, res, next) {
-    if (!req.body.user.email) {
-      return res.status(422).json({ errors: { email: "can't be blank" } });
-    }
-
-    if (!req.body.user.password) {
-      return res.status(422).json({ errors: { password: "can't be blank" } });
-    }
-    passport.authenticate('local', { session: false }, (
-      err,
-      user,
-      info
-    ) => {
-      if (err) {
-        return next(err);
+  static async loginUser(req, res) {
+    const { email, password } = req.body;
+    try {
+      const user = await UserService.getUser(email);
+      if (!user) {
+        return res.status(400).json({
+          error: 'Invalid username or password!'
+        });
       }
-
-      if (user) {
-        return res.json({ user: user.toAuthJSON() });
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).json({
+          error: 'Invalid username or password'
+        });
       }
-      return res.status(422).json(info);
-    })(req, res, next);
+      const newUser = _.omit(user.dataValues, 'password');
+      const token = await generateToken(newUser);
+      return res.status(200).json({
+        data: {
+          token,
+          email: newUser.email,
+          username: newUser.username
+        }
+      });
+    } catch (error) {
+      return res.status(500)
+        .json({
+          Error: error
+        });
+    }
   }
 }
