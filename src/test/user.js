@@ -5,6 +5,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
+import models from '../models';
+import Tokenizer from '../helpers/tokenGenerator';
+
+const { User } = models;
+const { generateToken } = Tokenizer;
 
 chai.use(chaiHttp);
 chai.should();
@@ -250,6 +255,42 @@ describe('users', () => {
         res.should.have.status(400);
         res.body.errors[0].should.have.property('lastName');
         res.should.be.json;
+        done();
+      });
+  });
+});
+
+describe('SignOut', () => {
+  before(async () => {
+    const user = {
+      username: 'Joseph',
+      email: 'joseph@gmail.com',
+      password: 'joseph@123',
+    };
+
+    const newUser = await User.create(user);
+
+    token = await generateToken({ id: newUser.id });
+  });
+
+  it('user should logout with a valid token', (done) => {
+    chai
+      .request(app)
+      .post('/api/users/logout')
+      .set('authorization', token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.message.should.be.a('string');
+        done();
+      });
+  });
+  it('Token is missing', (done) => {
+    chai
+      .request(app)
+      .post('/api/users/logout')
+      .set('token', ' ')
+      .end((err, res) => {
+        res.should.have.status(401);
         done();
       });
   });

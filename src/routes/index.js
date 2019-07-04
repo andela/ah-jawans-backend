@@ -11,6 +11,9 @@ import { decodeResetPasswordToken, checkEmail } from '../middlewares/User';
 import bodyValidate from '../middlewares/bodyValidation';
 import signupValidation from '../middlewares/signupValidation';
 import socialRoute from './socialTestRoute';
+import Auth from '../middlewares/Auth';
+
+const { verifyToken } = Auth;
 
 const router = express.Router();
 const { google, twitter } = socialAccount;
@@ -33,6 +36,7 @@ router.post('/api/users', bodyValidate, signupValidation.validateUser, UserContr
 router.post('/api/users/login', AuthController.signin);
 router.post('/api/users/passwordreset', UserController.passwordReset);
 router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEmail, UserController.changePassword);
+router.post('/api/users/logout', verifyToken, UserController.signOut);
 
 
 export default router;
