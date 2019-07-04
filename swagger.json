@@ -1,73 +1,94 @@
 {
-    "swagger" : "2.0",
-    "info" : {
-      "description" : "A Social platform for the creative at heart",
-      "version" : "1.0.0",
-      "title" : "Authors Haven - Jawans"
-    },
-    "tags" : [ {
-      "name" : "user",
-      "description" : "Operations about the user"
-    } ],
-    "paths" : {
-      "/user" : {
-        "post" : {
-          "tags" : [ "user" ],
-          "summary" : "Create user",
-          "operationId" : "createUser",
-          "produces" : [ "application/json" ],
-          "parameters" : [ {
-            "in" : "body",
-            "name" : "body",
-            "description" : "Created user object",
-            "required" : true,
-            "schema" : {
-              "$ref" : "#/definitions/User"
-            }
-          } ],
-          "responses" : {
-            "default" : {
-              "description" : "successful operation"
-            }
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "A Social platform for the creative at heart.\n",
+    "version" : "1.0.0",
+    "title" : "Authors Haven - Jawans"
+  },
+  "tags" : [ {
+    "name" : "user",
+    "description" : "Operations about user"
+  } ],
+  "paths" : {
+    "/user" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Create user",
+        "operationId" : "createUser",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Created user object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
           }
         }
       }
     },
-    "definitions" : {
-      "User" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "username" : {
-            "type" : "string"
-          },
-          "firstName" : {
-            "type" : "string"
-          },
-          "lastName" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          },
-          "password" : {
-            "type" : "string"
-          },
-          "phone" : {
-            "type" : "string"
-          },
-          "userStatus" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "User Status"
+    "/api/passwordreset" : {
+      "post" : {
+        "tags" : [ "reset password" ],
+        "summary" : "reset password",
+        "description" : "sending a link to reset password",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
           }
         }
       }
+    }
+  },
+  "definitions" : {
+    "User" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "username" : {
+          "type" : "string"
+        },
+        "firstName" : {
+          "type" : "string"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "password" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "userStatus" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "User Status"
+        }
+      }
     },
-    "host" : "virtserver.swaggerhub.com",
-    "basePath" : "/Michael23/ah-jawans/1.0.0",
-    "schemes" : [ "https", "http" ]
-  }
+    "passwordReset" : {
+      "type" : "object",
+      "properties" : {
+        "mail" : {
+          "type" : "string"
+        }
+      }
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/Michael23/ah-jawans/1.0.0",
+  "schemes" : [ "https", "http" ]
+}
