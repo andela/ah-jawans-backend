@@ -37,9 +37,6 @@ passport.use(new FacebookStrategy(
               callbackURL: `${process.env.BASE_URL}/api/social/login/twitter/redirect`
             },
             (token, tokenSecret, profile, done) => {
-              console.log(token);
-              console.log(tokenSecret);
-              console.log(profile);
               done(null, profile);
             }
           )

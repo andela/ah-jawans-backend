@@ -3,11 +3,10 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import SendGrid from '@sendgrid/mail';
 import models from '../models';
-import Tokenizer from '../helpers/tokenGenerator';
+import tokenGen from '../helpers/tokenGenerator';
 
 const { User } = models;
-const { generateToken } = Tokenizer;
-
+const { generateToken } = tokenGen;
 
 dotenv.config();
 

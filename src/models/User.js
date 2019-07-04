@@ -1,6 +1,6 @@
 export default (sequelize) => {
-  const user = sequelize.define(
-    'user', {
+  const User = sequelize.define(
+    'User', {
       username: {
         type: String,
         unique: true,
@@ -29,6 +29,9 @@ export default (sequelize) => {
       following: {
         type: String
       },
+      socialId: {
+        type: String
+      },
       password: {
         type: String
       },
@@ -41,12 +44,15 @@ export default (sequelize) => {
         type: Date
       }
     },
-    { timestamps: false, tableName: 'User' }
+    {
+      timestamps: true,
+      tableName: 'User'
+    }
   );
 
   // eslint-disable-next-line no-unused-vars
-  user.associate = (models) => {
+  User.associate = (models) => {
     // associations can be defined here
   };
-  return user;
+  return User;
 };

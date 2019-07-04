@@ -40,7 +40,27 @@
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {
-            "description" : "OK"
+            "description" : "OK",
+    "/api/social/login/google": {
+      "get": {
+        "tags": [
+          "Social Media Login"
+        ],
+        "description": "Login using google account",
+        "parameters": [
+          {
+            "name": "google",
+            "in": "path",
+            "description": "Google email address of the client",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Google email Login"
           }
         }
       }
@@ -83,7 +103,52 @@
       "type" : "object",
       "properties" : {
         "mail" : {
-          "type" : "string"
+          "type" : "string",
+    "/api/social/login/facebook": {
+      "get": {
+        "tags": [
+          "Social Media Login"
+        ],
+        "description": "Login using Facebook account",
+        "parameters": [
+          {
+            "name": "Facebook",
+            "in": "query",
+            "description": "The facebook email id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Welcome to Author Heaven"
+          }
+        }
+      }
+    },
+    "/api/social/login/twitter": {
+      "get": {
+        "tags": [
+          "Social Media Login"
+        ],
+        "description": "Login via twitter email account",
+        "parameters": [
+          {
+            "name": "Twitter",
+            "in": "query",
+            "description": "Twitter Email Id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Welcome to Authors Heaven"
+          }
         }
       }
     }
@@ -91,4 +156,11 @@
   "host" : "virtserver.swaggerhub.com",
   "basePath" : "/Michael23/ah-jawans/1.0.0",
   "schemes" : [ "https", "http" ]
+}
+}
+}
+}
+      }
+    }
+  }
 }

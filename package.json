@@ -6,8 +6,6 @@
   "scripts": {
     "start": "npm run create && NODE_ENV=staging babel-node ./src/index.js",
     "dev": "nodemon --exec babel-node ./src/index.js",
-    "sequelize": "sequelize db:migrate",
-    "sequelizeall": "sequelize db:seed:all",
     "create": "NODE_ENV=staging sequelize db:migrate",
     "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate",
     "seqinit": "sequelize init",
@@ -59,6 +57,8 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.4.4",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "eslint": "^6.0.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.3",
