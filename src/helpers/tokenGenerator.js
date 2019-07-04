@@ -12,7 +12,6 @@ export default class Tokenizer {
 
   static async decodeToken(token) {
     const user = await jwt.verify(token, process.env.SECRET_KEY);
-
     return user;
   }
 }

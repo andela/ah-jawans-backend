@@ -1,7 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import swagger from '../swagger.json';
 import route from './routes/index';
+
 
 const app = express();
 
@@ -17,6 +20,8 @@ app.get('/', (req, res) => {
     message: 'Welcome to Authors Haven',
   });
 });
+
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swagger));
 
 app.use(route);
 
