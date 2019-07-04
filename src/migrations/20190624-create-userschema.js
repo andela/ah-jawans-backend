@@ -16,14 +16,11 @@ module.exports = {
     },
     username: {
       allowNull: false,
-      autoIncrement: false,
-      unique: true,
       type: Sequelize.STRING
     },
     email: {
       type: Sequelize.STRING,
-      unique: true,
-      allowNull: false,
+      allowNull: true,
     },
     password: {
       allowNull: true,
@@ -38,6 +35,11 @@ module.exports = {
       allowNull: true
     },
     following: {
+      type: Sequelize.STRING,
+      allowNull: true
+
+    },
+    socialId: {
       type: Sequelize.STRING,
       allowNull: true
 

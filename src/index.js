@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -5,6 +6,7 @@ import passport from 'passport';
 import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import swagger from '../swagger.json';
+// eslint-disable-next-line import/no-named-as-default
 import route from './routes/index';
 
 import './config/passport';
@@ -24,6 +26,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static(`${__dirname}/public`));
+
+app.get('/', (req, res) => {
+  res.send({
+    message: 'Welcome to Authors Haven',
+  });
+});
+
 
 app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swagger));
 

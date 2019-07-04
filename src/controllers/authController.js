@@ -1,10 +1,11 @@
 /* eslint-disable require-jsdoc */
 import bcrypt from 'bcryptjs';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'underscore';
 import UserService from '../services/userService';
-import Tokenizer from '../helpers/tokenGenerator';
+import tokenGen from '../helpers/tokenGenerator';
 
-const { generateToken } = Tokenizer;
+const { generateToken } = tokenGen;
 
 export default class AuthController {
   static async signin(req, res) {

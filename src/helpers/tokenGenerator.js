@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-class Tokenizer {
+class tokenGen {
   static async generateToken(payload) {
     const token = await jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '2 days' });
 
@@ -16,4 +16,4 @@ class Tokenizer {
     return user;
   }
 }
-export default Tokenizer;
+export default tokenGen;
