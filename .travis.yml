@@ -18,3 +18,5 @@ before_script:
   - npm run migrate
 script:
   - npm run test
+after_success:
+  - npm run coveralls

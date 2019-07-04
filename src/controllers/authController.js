@@ -26,6 +26,7 @@ export default class AuthController {
       const newUser = _.omit(user.dataValues, 'password');
       const token = await generateToken(newUser);
       return res.status(200).json({
+        message: 'Logged in successfully',
         data: {
           token,
           email: newUser.email,

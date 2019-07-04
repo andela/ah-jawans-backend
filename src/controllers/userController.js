@@ -2,11 +2,12 @@
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import SendGrid from '@sendgrid/mail';
+import _ from 'underscore';
 import models from '../models';
 import tokenGen from '../helpers/tokenGenerator';
 
-const { User } = models;
 const { generateToken } = tokenGen;
+const { User, Blacklist } = models;
 
 dotenv.config();
 
@@ -24,10 +25,12 @@ export default class UserController {
         password: hashedPasword,
       });
 
-      const generatedToken = await generateToken({ email });
+      const payload = _.omit(user.dataValues, 'password');
+      const generatedToken = await generateToken(payload);
 
       return res.status(201)
         .json({
+          message: 'Registered successfully',
           user: {
             token: generatedToken,
             username: user.username,
@@ -37,7 +40,7 @@ export default class UserController {
     } catch (error) {
       return res.status(500)
         .json({
-          Error: error
+          Error: 'Server error'
         });
     }
   }
@@ -93,6 +96,22 @@ export default class UserController {
       return res.status(500).json({
         error: 'Internal Server Error'
       });
+    }
+  }
+
+  static async signOut(req, res) {
+    try {
+      const { token } = req;
+
+      await Blacklist.create({
+        token
+      });
+
+      return res.status(200)
+        .json({ message: ' Signed out ' });
+    } catch (error) {
+      return res.status(500)
+        .json({ status: 500, Error: 'Server error' });
     }
   }
 }
