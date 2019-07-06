@@ -5,7 +5,7 @@ class CheckUser {
   static async checkUser(req, res, next) {
     try {
       const userInf = await decode.decodeToken(req.headers.token);
-      req.user = userInf;
+      req.user = userInf.payload;
       next();
     } catch (error) {
       return res.status(401).json({ message: "User not allowed to perform the task, please login or signup if you don't have an account" });

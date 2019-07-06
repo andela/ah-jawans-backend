@@ -1,5 +1,3 @@
-
-
 module.exports = { up: (queryInterface, Sequelize) => queryInterface.createTable('Articles', { id: { allowNull: false,
   autoIncrement: true,
   primaryKey: true,

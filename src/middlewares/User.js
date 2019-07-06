@@ -4,7 +4,6 @@ import Tokenizer from '../helpers/tokenGenerator';
 const { User } = models;
 const { decodeToken } = Tokenizer;
 
-
 // @middleware for decoding reset password token
 
 const decodeResetPasswordToken = async (req, res, next) => {

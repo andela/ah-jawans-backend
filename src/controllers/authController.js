@@ -1,33 +1,32 @@
 /* eslint-disable require-jsdoc */
-import bcrypt from 'bcryptjs';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import _ from 'underscore';
-import UserService from '../services/userService';
 import tokenGen from '../helpers/tokenGenerator';
+import bcrypt from '../helpers/hash';
+import models from '../models';
 
 const { generateToken } = tokenGen;
+
+const { User } = models;
 
 export default class AuthController {
   static async signin(req, res) {
     const { email, password } = req.body;
     try {
-      const user = await UserService.getUser(email);
+      const user = await User.findOne({ where: { email: String(email) } });
       if (!user) {
         return res.status(403).json({ error: 'Invalid username or password!' });
       }
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.comparePassword(password, user.password);
       if (!isPasswordValid) {
         return res.status(403).json({ error: 'Invalid username or password' });
       }
-      const newUser = _.omit(user.dataValues, 'password');
-      const token = await generateToken(newUser);
+      const token = await generateToken(user.dataValues);
       return res.status(200).json({ message: 'Logged in successfully',
         data: { token,
-          email: newUser.email,
-          username: newUser.username } });
+          email: user.email,
+          username: user.username } });
     } catch (error) {
-      return res.status(500)
-        .json({ Error: error });
+      return res.status(500).json(error);
     }
   }
 }

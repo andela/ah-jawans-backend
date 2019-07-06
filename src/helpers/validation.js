@@ -49,6 +49,19 @@ class ValidationSchema {
     errors.length = 0;
     addErrors(articleErrors);
   }
+
+  static login(data) {
+    const loginErrors = {};
+    if (!data.email || !(/^([a-zA-Z0-9_.]+)@([a-zA-Z0-9_.]+)\.([a-zA-Z]{2,5})$/.test(data.email))) {
+      loginErrors.email = 'Email is required and should look like: example@example.com!';
+    }
+
+    if (!data.password || !(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(data.password.trim()))) {
+      loginErrors.password = 'Password is required and should look like: Example1@';
+    }
+    errors.length = 0;
+    addErrors(loginErrors);
+  }
 }
 
 export default { ValidationSchema, errors };

@@ -15,6 +15,7 @@ export default (sequelize) => {
     image: { type: String },
     following: { type: String },
     socialId: { type: String },
+    verified: { type: Boolean },
     password: { type: String },
     createdAt: { allowNull: true,
       type: Date },

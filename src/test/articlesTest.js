@@ -19,10 +19,10 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.user.should.have.property('username');
-        res.body.user.should.have.property('email');
-        res.body.user.should.have.property('token');
-        tokens = res.body.user.token;
+        res.body.should.have.property('username');
+        res.body.should.have.property('email');
+        res.body.should.have.property('token');
+        tokens = res.body.token;
         done();
       });
   });
