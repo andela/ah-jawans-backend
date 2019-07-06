@@ -8,8 +8,7 @@ import UserController from '../controllers/userController';
 import AuthController from '../controllers/authController';
 // middlwares
 import { decodeResetPasswordToken, checkEmail, usernameAvailability, usernameCheck } from '../middlewares/User';
-import { bodyValidation } from '../middlewares/bodyValidation';
-import signupValidation from '../middlewares/signupValidation';
+import { bodyValidation, signinValidation } from '../middlewares/bodyValidation';
 import socialRoute from './socialTestRoute';
 import UserProfile from '../controllers/userProfile';
 import Auth from '../middlewares/Auth';
@@ -35,8 +34,7 @@ router.get('/api/social/login/facebook/redirect', passport.authenticate('faceboo
 router.get('/api/social/login/twitter', passport.authenticate('twitter', { scope: ['profile', 'email'] }));
 router.get('/api/social/login/twitter/redirect', passport.authenticate('twitter', { session: false }), twitter, socialLogin.twitterLogin);
 
-router.post('/api/users', bodyValidation, signupValidation.validateUser, UserController.createUser);
-router.post('/api/users/login', AuthController.signin);
+router.post('/api/users', bodyValidation, UserController.createUser);
 router.post('/api/users/passwordreset', UserController.passwordReset);
 router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEmail, UserController.changePassword);
 router.post('/api/users/logout', verifyToken, UserController.signOut);
@@ -48,5 +46,10 @@ router.get('/api/users/following', verifyToken, UserController.following);
 router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
 router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);
 router.get('/api/allusers/', verifyToken, UserProfile.getAllUser);
+router.post('/api/users/login', signinValidation, AuthController.signin);
+router.patch('/api/users/verification/:userToken', UserController.verifyUser);
+
+router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);
+router.get('/api/users/', verifyToken, UserProfile.getAllUser);
 
 export default router;

@@ -20,5 +20,4 @@ class ValidateUser {
   }
 }
 
-
 export default ValidateUser;
