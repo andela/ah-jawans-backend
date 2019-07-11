@@ -13,31 +13,21 @@ export default class AuthController {
     try {
       const user = await UserService.getUser(email);
       if (!user) {
-        return res.status(403).json({
-          error: 'Invalid username or password!'
-        });
+        return res.status(403).json({ error: 'Invalid username or password!' });
       }
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        return res.status(403).json({
-          error: 'Invalid username or password'
-        });
+        return res.status(403).json({ error: 'Invalid username or password' });
       }
       const newUser = _.omit(user.dataValues, 'password');
       const token = await generateToken(newUser);
-      return res.status(200).json({
-        message: 'Logged in successfully',
-        data: {
-          token,
+      return res.status(200).json({ message: 'Logged in successfully',
+        data: { token,
           email: newUser.email,
-          username: newUser.username
-        }
-      });
+          username: newUser.username } });
     } catch (error) {
       return res.status(500)
-        .json({
-          Error: error
-        });
+        .json({ Error: error });
     }
   }
 }

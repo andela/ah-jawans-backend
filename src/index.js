@@ -18,19 +18,15 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(session({
-  secret: process.env.SECRET_KEY,
-  saveUninitialized: true
-}));
+app.use(session({ secret: process.env.SECRET_KEY,
+  saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static(`${__dirname}/public`));
 
 app.get('/', (req, res) => {
-  res.send({
-    message: 'Welcome to Authors Haven',
-  });
+  res.send({ message: 'Welcome to Authors Haven', });
 });
 
 
