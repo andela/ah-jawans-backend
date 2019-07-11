@@ -2,7 +2,7 @@ module.exports = { up: (queryInterface, Sequelize) => queryInterface.createTable
   autoIncrement: true,
   primaryKey: true,
   type: Sequelize.INTEGER },
-token: { type: Sequelize.TEXT, },
+tokenGen: { type: Sequelize.TEXT, },
 createdAt: { allowNull: false,
   type: Sequelize.DATE },
 updatedAt: { allowNull: false,

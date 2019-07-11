@@ -14,7 +14,9 @@ const { generateToken } = Tokenizer;
 chai.use(chaiHttp);
 chai.should();
 
-let token;
+let tokenGen;
+let userGen;
+
 describe('users', () => {
   it('Get welcome message', (done) => {
     chai.request(app)
@@ -28,11 +30,9 @@ describe('users', () => {
   });
 
   it('A new user who filled all required data should be registered', (done) => {
-    const user = {
-      username: 'Kagabo',
+    const user = { username: 'Kagabo',
       email: 'kagabo@gmail.com',
-      password: 'Kagabo1@',
-    };
+      password: 'Kagabo1@', };
     chai.request(app)
       .post('/api/users')
       .send(user)
@@ -47,11 +47,9 @@ describe('users', () => {
   });
 
   it('A new user who filled all required data with an email that exists in the system should not signup', (done) => {
-    const user = {
-      username: 'Kagabo',
+    const user = { username: 'Kagabo',
       email: 'kagabo@gmail.com',
-      password: 'Kagabo1@',
-    };
+      password: 'Kagabo1@', };
     chai.request(app)
       .post('/api/users')
       .send(user)
@@ -64,10 +62,8 @@ describe('users', () => {
   });
 
   it('User should be able to sign in', (done) => {
-    const user = {
-      email: 'kagabo@gmail.com',
-      password: 'Kagabo1@'
-    };
+    const user = { email: 'kagabo@gmail.com',
+      password: 'Kagabo1@' };
     chai.request(app)
       .post('/api/users/login')
       .send(user)
@@ -81,10 +77,8 @@ describe('users', () => {
   });
 
   it('Invalid email', (done) => {
-    const user = {
-      email: 'kagabo1@gmail.com',
-      password: 'Kagabo1@'
-    };
+    const user = { email: 'kagabo1@gmail.com',
+      password: 'Kagabo1@' };
     chai.request(app)
       .post('/api/users/login')
       .send(user)
@@ -95,10 +89,8 @@ describe('users', () => {
   });
 
   it('Invalid Password', (done) => {
-    const user = {
-      email: 'kagabo@gmail.com',
-      password: 'Kagabo1@3'
-    };
+    const user = { email: 'kagabo@gmail.com',
+      password: 'Kagabo1@3' };
     chai.request(app)
       .post('/api/users/login')
       .send(user)
@@ -109,9 +101,7 @@ describe('users', () => {
   });
 
   it('should test when the email does not exist', (done) => {
-    const data = {
-      email: 'michfewael@andela.com'
-    };
+    const data = { email: 'michfewael@andela.com' };
     chai.request(app)
       .post('/api/users/passwordreset')
       .send(data)
@@ -127,7 +117,7 @@ describe('users', () => {
       .send({ email: 'kagabo@gmail.com' })
       .end((error, res) => {
         // eslint-disable-next-line prefer-destructuring
-        token = res.body.token;
+        tokenGen = res.body.token;
         res.should.have.status(200);
         done();
       });
@@ -135,8 +125,8 @@ describe('users', () => {
 
   it('should change the password', (done) => {
     chai.request(app)
-      .post(`/api/users/passwordreset/${token}`)
-      .send({ password: '12345678' })
+      .post(`/api/users/passwordreset/${tokenGen}`)
+      .send({ password: 'Dumnh@1425' })
       .end((error, res) => {
         res.should.have.status(200);
         res.body.should.have.property('message');
@@ -156,11 +146,9 @@ describe('users', () => {
   });
 
   it('should not signup with bad password', (done) => {
-    const data = {
-      username: 'kagabo',
+    const data = { username: 'kagabo',
       password: 'Fofo1',
-      email: 'fofo@gmail.com'
-    };
+      email: 'fofo@gmail.com' };
     chai.request(app)
       .post('/api/users')
       .send(data)
@@ -173,11 +161,9 @@ describe('users', () => {
   });
 
   it('should no signup with bad email', (done) => {
-    const data = {
-      username: 'kagabo',
+    const data = { username: 'kagabo',
       password: 'Fofo1@',
-      email: 'fofogmail.com'
-    };
+      email: 'fofogmail.com' };
     chai.request(app)
       .post('/api/users')
       .send(data)
@@ -190,11 +176,9 @@ describe('users', () => {
   });
 
   it('bad email and password on signup', (done) => {
-    const data = {
-      username: 'kagabo',
+    const data = { username: 'kagabo',
       password: 'Fofo1',
-      email: 'fofogmail.com'
-    };
+      email: 'fofogmail.com' };
     chai.request(app)
       .post('/api/users')
       .send(data)
@@ -207,11 +191,9 @@ describe('users', () => {
       });
   });
   it('should no signup with bad username', (done) => {
-    const data = {
-      username: '',
+    const data = { username: '',
       password: 'Fofo1@',
-      email: 'fofo@gmail.com'
-    };
+      email: 'fofo@gmail.com' };
     chai.request(app)
       .post('/api/users')
       .send(data)
@@ -224,12 +206,10 @@ describe('users', () => {
   });
 
   it('should no signup with bad firstName', (done) => {
-    const data = {
-      username: '',
+    const data = { username: '',
       password: 'Fofo1@',
       email: 'fofo@gmail.com',
-      firstName: 'dfrh44'
-    };
+      firstName: 'dfrh44' };
     chai.request(app)
       .post('/api/users')
       .send(data)
@@ -242,12 +222,10 @@ describe('users', () => {
   });
 
   it('should no signup with bad lastName', (done) => {
-    const data = {
-      username: 'heyefgs',
+    const data = { username: 'heyefgs',
       password: 'Fofo1@',
       email: 'fofo@gmail.com',
-      lastName: 'ghfd4'
-    };
+      lastName: 'ghfd4' };
     chai.request(app)
       .post('/api/users')
       .send(data)
@@ -260,24 +238,135 @@ describe('users', () => {
   });
 });
 
+// user Profile
+describe('User Profile view amend', () => {
+  before('Before any test, Create A new user', async () => {
+    await models.User.destroy({ where: { email: 'shaluchandwani@gmail.com' },
+      truncate: false });
+  });
+
+  it('creating new user', (done) => {
+    const user = { username: 'shaluchandwani',
+      email: 'shaluchandwani@gmail.com',
+      password: 'Shalu@1993', };
+    chai.request(app)
+      .post('/api/users')
+      .send(user)
+      .end((req, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        res.body.user.should.have.property('username');
+        res.body.user.should.have.property('email');
+        res.body.user.should.have.property('token');
+        userGen = user.username;
+        done();
+      });
+  });
+
+  it('User should be able to sign in', (done) => {
+    const user = { email: 'shaluchandwani@gmail.com',
+      password: 'Shalu@1993' };
+    chai.request(app)
+      .post('/api/users/login')
+      .send(user)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.data.should.be.an('object');
+        res.body.data.should.have.property('email');
+        res.body.data.should.have.property('token');
+        // eslint-disable-next-line prefer-destructuring
+        tokenGen = res.body.data.token;
+        done();
+      });
+  });
+
+  it('should allow user to see his/her profile after creation', (done) => {
+    chai.request(app)
+      .get(`/api/user/${userGen}`)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should throw error if the username doesnot exists', (done) => {
+    chai.request(app)
+      .get(`/api/user/${userGen}iiiiii`)
+      .end((req, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should throw error if the username is not valid', (done) => {
+    chai.request(app)
+      .get('/api/user/!!!!!!!')
+      .end((req, res) => {
+        res.should.have.status(401);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('User should be able to update his/her profile', (done) => {
+    chai.request(app)
+      .patch(`/api/users/${userGen}`)
+      .set('token', tokenGen)
+      .send({ id: 5,
+        username: 'shaluchandwani',
+        firstName: 'Shalu',
+        lastName: 'chandwani',
+        email: 'shaluchandwani@gmail.com',
+        bio: null,
+        image: 'https://lh6.googleusercontent.com/-sZOpms2mUso/AAAAAAAAAAI/AAAAAAAAAgY/qI2F0nXUaU8/photo.jpg',
+        following: null,
+        socialId: null,
+        password: 'Shalu@99999',
+        createdAt: '2019-07-11T09:30:05.618Z',
+        updatedAt: '2019-07-11T09:30:05.618Z',
+        dateOfBirth: null,
+        gender: null,
+        provider: null,
+        role: null })
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+
+  it('User should not be able to update his/her profile if token is not present', (done) => {
+    chai.request(app)
+      .patch(`/api/users/${userGen}`)
+      .send({ username: 'changename',
+        bio: 'changing bio' })
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+});
+
 describe('SignOut', () => {
   before(async () => {
-    const user = {
-      username: 'Joseph',
+    const user = { username: 'Joseph',
       email: 'joseph@gmail.com',
-      password: 'joseph@123',
-    };
+      password: 'joseph@123', };
 
     const newUser = await User.create(user);
 
-    token = await generateToken({ id: newUser.id });
+    tokenGen = await generateToken({ id: newUser.id });
   });
 
   it('user should logout with a valid token', (done) => {
     chai
       .request(app)
       .post('/api/users/logout')
-      .set('authorization', token)
+      .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.message.should.be.a('string');

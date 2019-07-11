@@ -22,6 +22,9 @@
       "requireParamDescription": false,
       "requireReturnDescription": true
     }],
+    "object-curly-newline": ["error", {
+      "ObjectExpression": "never"
+  }],
     "require-jsdoc": ["error", {
         "require": {
             "FunctionDeclaration": true,

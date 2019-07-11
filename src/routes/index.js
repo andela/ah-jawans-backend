@@ -7,14 +7,14 @@ import socialAccount from '../middlewares/socialAcctExists';
 import UserController from '../controllers/userController';
 import AuthController from '../controllers/authController';
 // middlwares
-import { decodeResetPasswordToken, checkEmail } from '../middlewares/User';
+import { decodeResetPasswordToken, checkEmail, usernameAvailability, usernameCheck } from '../middlewares/User';
 import bodyValidate from '../middlewares/bodyValidation';
 import signupValidation from '../middlewares/signupValidation';
 import socialRoute from './socialTestRoute';
 import Auth from '../middlewares/Auth';
+import userProfile from '../controllers/userProfile';
 
 const { verifyToken } = Auth;
-
 const router = express.Router();
 const { google, twitter } = socialAccount;
 
@@ -38,5 +38,7 @@ router.post('/api/users/passwordreset', UserController.passwordReset);
 router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEmail, UserController.changePassword);
 router.post('/api/users/logout', verifyToken, UserController.signOut);
 
+router.get('/api/user/:username', usernameCheck, userProfile.getProfile);
+router.patch('/api/users/:username', verifyToken, bodyValidate, usernameAvailability, userProfile.updateProfile);
 
 export default router;

@@ -19,62 +19,46 @@ export default class UserController {
 
       const hashedPasword = bcrypt.hashSync(req.body.password);
 
-      const user = await User.create({
-        username,
+      const user = await User.create({ username,
         email,
-        password: hashedPasword,
-      });
+        password: hashedPasword, });
 
       const payload = _.omit(user.dataValues, 'password');
       const generatedToken = await generateToken(payload);
 
       return res.status(201)
-        .json({
-          message: 'Registered successfully',
-          user: {
-            token: generatedToken,
+        .json({ message: 'Registered successfully',
+          user: { token: generatedToken,
             username: user.username,
-            email: user.email,
-          }
-        });
+            email: user.email, } });
     } catch (error) {
       return res.status(500)
-        .json({
-          Error: 'Server error'
-        });
+        .json({ Error: 'Server error' });
     }
   }
 
   static async passwordReset(req, res) {
     try {
-      const user = await User.findOne({
-        where: { email: req.body.email },
-      });
+      const user = await User.findOne({ where: { email: req.body.email }, });
       if (!user) {
         return res.status(404).json({ error: 'No user found with this email address.' });
       }
-      const payload = {
-        email: user.email
-      };
+      const payload = { email: user.email };
       const token = await generateToken({ payload });
       // @sends a message to an existing email in our database with the below email template
       const message = `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 
           Please click on the followoing link or paste this link in youre browser to complete this process within one hour: <Br> 
           http://localhost:3000/api/users/passwordreset/${token}. <br>If you did not request this ,please ignore this email and your password will remain unchanged.</div>`;
-      const mailOptions = {
-        from: 'ahjawans@gmail.com',
+      const mailOptions = { from: 'ahjawans@gmail.com',
         to: `${user.email}`,
         subject: 'Link to reset Password',
-        html: message
-      };
+        html: message };
       SendGrid.setApiKey(SENDGRID_API_KEY);
       SendGrid.send(mailOptions);
       return res.status(200).json({ status: 200, message: 'Check your email to reset password', token });
     } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: 'Internal Server Error'
-      });
+      return res.status(500).json({ status: 500,
+        error: 'Internal Server Error' });
     }
   }
 
@@ -82,20 +66,11 @@ export default class UserController {
     try {
       const { password } = req.body;
       const hashPassword = bcrypt.hashSync(password);
-      await User.update({ password: hashPassword }, {
-        where: {
-          id: req.userInfo.id
-        }
-      });
-
-      res.status(200).json({
-        status: 200,
-        message: 'your password has been updated successfully'
-      });
+      await User.update({ password: hashPassword }, { where: { id: req.userInfo.id } });
+      res.status(200).json({ status: 200,
+        message: 'your password has been updated successfully' });
     } catch (error) {
-      return res.status(500).json({
-        error: 'Internal Server Error'
-      });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -103,9 +78,7 @@ export default class UserController {
     try {
       const { token } = req;
 
-      await Blacklist.create({
-        token
-      });
+      await Blacklist.create({ token });
 
       return res.status(200)
         .json({ message: ' Signed out ' });

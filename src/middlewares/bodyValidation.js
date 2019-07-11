@@ -6,9 +6,7 @@ const bodyValidation = (req, res, next) => {
   if (!validations.errors[0]) {
     next();
   } else {
-    return res.status(400).json({
-      errors: validations.errors
-    });
+    return res.status(400).json({ errors: validations.errors });
   }
 };
 
