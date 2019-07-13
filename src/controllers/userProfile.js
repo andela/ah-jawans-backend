@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 /* eslint-disable no-cond-assign */
 /* eslint-disable no-else-return */
 /* eslint-disable prefer-destructuring */
@@ -7,7 +8,7 @@ const { User } = models;
 /**
   * This class contains user controllers
   */
-class userProfile {
+class UserProfile {
   /**
     * @param  {object} req
     * @param  {object} res
@@ -49,6 +50,12 @@ class userProfile {
         : res.status(404).json({ message: 'Could not find user' });
     }
   }
+
+  static async getAllUser(req, res) {
+    const usersList = await User.findAll({ attributes: ['firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
+    // eslint-disable-next-line no-unused-expressions
+    res.status(200).json({ usersList });
+  }
 }
 
-export default userProfile;
+export default UserProfile;
