@@ -116,27 +116,24 @@
       "properties" : {
         "mail" : {
           "type" : "string"
+      },
+      "login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "joseph@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "joseph@123"
+          }
         }
       }
     }
-  },
+  }
+},
   "paths" : {
-    "/user" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "Create user",
-        "operationId" : "createUser",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
-          "description" : "Created user object",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/user"
-          } } ]
-        }
-    },
       "/users": {
         "post": {
           "tags": [
@@ -393,7 +390,37 @@
          "description": "Error while fetching profile"
        }
      }
-   }	  
+    }
+   },	  
+   "/users/": {
+    "get": {
+      "tags": [
+        "Profile"
+      ],
+      "description": "List of all users",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "User's token",
+          "required": true
+        }
+      ],
+      "produces":[
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "User profile returned"
+        },
+        "404": {
+          "description": "User profile not found"
+        },
+        "500": {
+          "description": "Error while fetching profile"
+        }
+      }
+    }
   }
 }
 }

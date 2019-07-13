@@ -11,8 +11,8 @@ import { decodeResetPasswordToken, checkEmail, usernameAvailability, usernameChe
 import bodyValidate from '../middlewares/bodyValidation';
 import signupValidation from '../middlewares/signupValidation';
 import socialRoute from './socialTestRoute';
+import UserProfile from '../controllers/userProfile';
 import Auth from '../middlewares/Auth';
-import userProfile from '../controllers/userProfile';
 
 const { verifyToken } = Auth;
 const router = express.Router();
@@ -38,7 +38,8 @@ router.post('/api/users/passwordreset', UserController.passwordReset);
 router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEmail, UserController.changePassword);
 router.post('/api/users/logout', verifyToken, UserController.signOut);
 
-router.get('/api/user/:username', usernameCheck, userProfile.getProfile);
-router.patch('/api/users/:username', verifyToken, bodyValidate, usernameAvailability, userProfile.updateProfile);
+router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
+router.patch('/api/users/:username', verifyToken, bodyValidate, usernameAvailability, UserProfile.updateProfile);
+router.get('/api/users/', verifyToken, UserProfile.getAllUser);
 
 export default router;
