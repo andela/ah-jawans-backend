@@ -46,7 +46,7 @@ class UserProfile {
         { where: { id: req.body.id } },
       );
       return updatedUser.length
-        ? res.status(200).json({ user: { message: 'User Id: updated sucessfully', updatedUser } })
+        ? res.status(200).json({ user: { message: 'User updated sucessfully', updatedUser } })
         : res.status(404).json({ message: 'Could not find user' });
     }
   }

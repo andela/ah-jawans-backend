@@ -154,7 +154,7 @@ describe('users', () => {
       .send(data)
       .end((req, res) => {
         res.should.have.status(400);
-        res.body.errors[0].password.should.have.be.eql('Password is required and should look like: Example1@');
+        res.body.errors[0].password.should.have.be.eql('Your password should contain 8 characters , have a least one upper and lower case letter and symbol');
         res.should.be.json;
         done();
       });
@@ -185,7 +185,7 @@ describe('users', () => {
       .end((req, res) => {
         res.should.have.status(400);
         res.body.errors[0].email.should.be.eql('Email is required and should look like: example@example.com!');
-        res.body.errors[0].password.should.be.eql('Password is required and should look like: Example1@');
+        res.body.errors[0].password.should.be.eql('Your password should contain 8 characters , have a least one upper and lower case letter and symbol');
         res.should.be.json;
         done();
       });
@@ -314,7 +314,7 @@ describe('User Profile view amend', () => {
     chai.request(app)
       .patch(`/api/users/${userGen}`)
       .set('token', tokenGen)
-      .send({ id: 5,
+      .send({ id: 6,
         username: 'shaluchandwani',
         firstName: 'Shalu',
         lastName: 'chandwani',
