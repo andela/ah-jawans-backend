@@ -8,16 +8,19 @@ import UserController from '../controllers/userController';
 import AuthController from '../controllers/authController';
 // middlwares
 import { decodeResetPasswordToken, checkEmail, usernameAvailability, usernameCheck } from '../middlewares/User';
-import bodyValidate from '../middlewares/bodyValidation';
+import { bodyValidation } from '../middlewares/bodyValidation';
 import signupValidation from '../middlewares/signupValidation';
 import socialRoute from './socialTestRoute';
 import UserProfile from '../controllers/userProfile';
 import Auth from '../middlewares/Auth';
+import articlesRoute from './articlesRoute';
 
 const { verifyToken } = Auth;
+
 const router = express.Router();
 const { google, twitter } = socialAccount;
 
+router.use('/api', articlesRoute);
 // social route for test
 router.use('/api/social', socialRoute);
 
@@ -32,14 +35,14 @@ router.get('/api/social/login/facebook/redirect', passport.authenticate('faceboo
 router.get('/api/social/login/twitter', passport.authenticate('twitter', { scope: ['profile', 'email'] }));
 router.get('/api/social/login/twitter/redirect', passport.authenticate('twitter', { session: false }), twitter, socialLogin.twitterLogin);
 
-router.post('/api/users', bodyValidate, signupValidation.validateUser, UserController.createUser);
+router.post('/api/users', bodyValidation, signupValidation.validateUser, UserController.createUser);
 router.post('/api/users/login', AuthController.signin);
 router.post('/api/users/passwordreset', UserController.passwordReset);
 router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEmail, UserController.changePassword);
 router.post('/api/users/logout', verifyToken, UserController.signOut);
 
 router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
-router.patch('/api/users/:username', verifyToken, bodyValidate, usernameAvailability, UserProfile.updateProfile);
+router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);
 router.get('/api/users/', verifyToken, UserProfile.getAllUser);
 
 export default router;

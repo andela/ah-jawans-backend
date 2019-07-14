@@ -34,7 +34,7 @@ app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swagger));
 
 app.use(route);
 
-const server = app.listen(process.env.PORT || 3000, () => {
+const server = app.listen(process.env.PORT || 4000, () => {
   // eslint-disable-next-line no-console
   console.log(`Listening on port ${server.address().port}`);
 });

@@ -5,7 +5,7 @@
     "version" : "1.0.0",
     "title" : "Authors Haven - Jawans"
   },
-  "host" : "127.0.0.1:3000",
+  "host" : "127.0.0.1:4000",
   "basePath" : "/api",
   "tags" : [ {
     "name" : "Auth",
@@ -130,9 +130,27 @@
           }
         }
       }
+    },
+    "article": {
+      "required": [
+        "title",
+        "description",
+        "body"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
     }
   }
-},
+  },
   "paths" : {
       "/users": {
         "post": {
@@ -200,7 +218,7 @@
           "description": "Allow a user to signout from the system",
           "parameters": [
             {
-              "name": "authorization",
+              "name": "token",
               "in": "header",
               "description": "User's token",
               "required": true
@@ -257,6 +275,7 @@
               "description": "Google email Login"
         }
       }
+    }
     },
   "/passwordreset" : {
     "post" : {
@@ -270,7 +289,6 @@
         }
       }
     }
-  }
   },
   "/social/login/facebook": {
     "get": {
@@ -392,7 +410,165 @@
      }
     }
    },	  
-   "/users/": {
+  "/articles": {
+    "post": {
+      "tags": [
+        "Articles"
+      ],
+      "description": "user should be able to create an article",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "The user's token",
+          "required": true
+        },
+        {
+          "name": "Article",
+          "in": "body",
+          "description": "create an article on author's haven",
+          "schema": {
+            "$ref": "#/definitions/article"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "Article created successfully",
+          "schema": {
+            "$ref": "#/definitions/article"
+          }
+        }
+      }
+    },
+    "get": {
+      "tags": [
+        "Articles"
+      ],
+      "description": "user should be able to view all articles",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "The user's token",
+          "required": true
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Articles fetched successfully"
+        }
+      }
+    }
+  },
+  "/articles/{id}": {
+    "get": {
+      "tags": [
+        "Articles"
+      ],
+      "description": "user should be able to view a specific article",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "The user token",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The article's id",
+          "required": true
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "User profile returned"
+        },
+        "404": {
+          "description": "User profile not found"
+        },
+        "500": {
+          "description": "Single Article fetched successfully"
+        }
+      }
+    },
+    "patch": {
+      "tags": [
+        "Articles"
+      ],
+      "description": "user should be able to update his/her own article",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "The user token",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The article's id",
+          "required": true
+        },
+        {
+          "name": "Article",
+          "in": "body",
+          "description": "update your article on author's haven",
+          "schema": {
+            "$ref": "#/definitions/article"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Article updated successfully"
+        }
+      }
+    },
+    "delete": {
+      "tags": [
+        "Articles"
+      ],
+      "description": "user should be able to delete a specific article",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "The user token",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The article's id",
+          "required": true
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Article deleted successfully!"
+        }
+      }
+    }
+  }
+  },
+  "/users": {
     "get": {
       "tags": [
         "Profile"
@@ -411,17 +587,17 @@
       ],
       "responses": {
         "200": {
-          "description": "User profile returned"
+          "description": "User profile sucessfully updated"
         },
         "404": {
           "description": "User profile not found"
         },
         "500": {
-          "description": "Error while fetching profile"
+          "description": "Error while updating profile"
         }
-      }
-    }
+      }	  
   }
 }
 }
+
 

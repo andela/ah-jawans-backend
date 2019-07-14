@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable require-jsdoc */
 const errors = [];
-const addErros = (obj) => {
+const addErrors = (obj) => {
   if (Object.keys(obj).length > 0) {
     errors.push(obj);
   }
@@ -9,28 +9,45 @@ const addErros = (obj) => {
 
 class ValidationSchema {
   static signup(data) {
-    const signupErros = {};
+    const signupErrors = {};
     if (!data.email || !(/^([a-zA-Z0-9_.]+)@([a-zA-Z0-9_.]+)\.([a-zA-Z]{2,5})$/.test(data.email))) {
-      signupErros.email = 'Email is required and should look like: example@example.com!';
+      signupErrors.email = 'Email is required and should look like: example@example.com!';
     }
 
     if (!data.password || !(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(data.password.trim()))) {
-      signupErros.password = 'Password is required and should look like: Example1@';
+      signupErrors.password = 'Your password should contain 8 characters , have a least one upper and lower case letter and symbol';
     }
 
     if (!data.username || !(/^[A-Za-z_-]+$/.test(data.username))) {
-      signupErros.username = 'username is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
+      signupErrors.username = 'username is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
     }
 
     if (!(/^[A-Za-z_-]+$/.test(data.firstName))) {
-      signupErros.firstName = 'first name is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
+      signupErrors.firstName = 'first name is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
     }
 
     if (!(/^[A-Za-z_-]+$/.test(data.lastName))) {
-      signupErros.lastName = 'last name is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
+      signupErrors.lastName = 'last name is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
     }
     errors.length = 0;
-    addErros(signupErros);
+    addErrors(signupErrors);
+  }
+
+  static articleDataValidation(data) {
+    const articleErrors = {};
+    if (!data.title || !(/([^]+)(?=.{10,})/.test(data.title.trim()))) {
+      articleErrors.title = 'Title is required and should contain at least 10 characters';
+    }
+
+    if (!data.description || !(/([^]+)(?=.{10,})/.test(data.description.trim()))) {
+      articleErrors.description = 'Description is required and should contain at least 10 characters';
+    }
+
+    if (!data.body || !(/([^]+)(?=.{10,})/.test(data.body.trim()))) {
+      articleErrors.body = 'Body is required and should contain at least 10 character';
+    }
+    errors.length = 0;
+    addErrors(articleErrors);
   }
 }
 
