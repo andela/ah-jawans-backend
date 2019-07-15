@@ -5,7 +5,7 @@
     "version" : "1.0.0",
     "title" : "Authors Haven - Jawans"
   },
-  "host" : "127.0.0.1:4000",
+  "host" : "127.0.0.1:3000",
   "basePath" : "/api",
   "tags" : [ {
     "name" : "Auth",
@@ -152,35 +152,35 @@
   }
   },
   "paths" : {
-      "/users": {
-        "post": {
-          "tags": [
-            "Auth"
-          ],
-          "description": "Allow user to register himself",
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User is allowed to register himself",
-              "schema": {
-                "$ref": "#/definitions/Signup"
-              }
+    "/users": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Allow user to register himself",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User is allowed to register himself",
+            "schema": {
+              "$ref": "#/definitions/Signup"
             }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "Registered successfully",
-              "schema": {
-                "$ref": "#/definitions/Signup"
-              }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Registered successfully",
+            "schema": {
+              "$ref": "#/definitions/Signup"
             }
           }
         }
-      },
+      }
+    },
       "/users/login": {
         "post": {
           "tags": [
@@ -566,9 +566,8 @@
         }
       }
     }
-  }
   },
-  "/users": {
+  "/allusers": {
     "get": {
       "tags": [
         "Profile"
@@ -597,7 +596,110 @@
         }
       }	  
   }
+},
+"/users/{username}/follow": {
+  "patch": {
+    "tags": [
+      "Auth"
+    ],
+    "description": "Allow user to follow another user",
+    "parameters": [ 
+      {
+        "name": "username",
+        "in": "path",
+        "description": "username",
+        "required": true
+    },
+    {
+      "name": "token",
+      "in": "headers",
+      "description": "User follows another user"
+    }
+],
+"produces": [
+  "application/json"
+],
+"responses": {
+  "201": {
+    "description": "succesfully followed user"
+  }
 }
 }
-
-
+},
+"/users/{username}/unfollow": {
+"patch": {
+"tags": [
+  "Auth"
+],
+"description": "Allow to unfollow user",
+"parameters": [
+  {
+    "name": "username",
+    "in": "path",
+    "description": "username",
+    "required": true
+},
+{
+  "name": "token",
+  "in": "headers",
+  "description": "Unfollow a user"
+}
+],
+"produces": [
+  "application/json"
+],
+"responses": {
+  "201": {
+    "description": "succesfully unfollowed user"
+  }
+}
+}
+},
+"/users/followers": {
+"get": {
+"tags": [
+  "Auth"
+],
+"description": "Displays all user followers",
+"parameters": [
+  {
+    "name": "token",
+    "in": "headers",
+    "description": "User followers"
+  }
+],
+"produces": [
+  "application/json"
+],
+"responses": {
+  "200": {
+    "description": "List of all my followers"
+  }
+}
+}
+},
+"/users/following": {
+"get": {
+"tags": [
+  "Auth"
+],
+"description": "Displays all my following list",
+"parameters": [
+  {
+    "name": "token",
+    "in": "headers",
+    "description": "User following"
+  }
+],
+"produces": [
+  "application/json"
+],
+"responses": {
+  "200": {
+    "description": "Following list"
+  }
+}
+}
+}
+}
+}

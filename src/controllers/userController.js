@@ -7,7 +7,7 @@ import models from '../models';
 import tokenGen from '../helpers/tokenGenerator';
 
 const { generateToken } = tokenGen;
-const { User, Blacklist } = models;
+const { User, Blacklist, Follow } = models;
 
 dotenv.config();
 
@@ -86,5 +86,51 @@ export default class UserController {
       return res.status(500)
         .json({ status: 500, Error: 'Server error' });
     }
+  }
+
+  static async followUser(req, res) {
+    try {
+      const { username } = req.params;
+      const checkUser = await User.findOne({ where: { username: String(username) } });
+      if (checkUser.id === req.user.id) return res.status(400).json({ error: 'You can not follow yourself' });
+
+      const isUserFollowed = await Follow.findOne({ where: { followed: checkUser.id } });
+      if (isUserFollowed) return res.status(409).json(`You are already following ${username}`);
+
+      await Follow.create({ followed: checkUser.id,
+        userId: req.user.id });
+
+      return res.status(201).json({ message: `now you are following ${checkUser.username}` });
+    } catch (error) {
+      return res.status(500).json({ error: 'Server error, something went wrong' });
+    }
+  }
+
+  static async unFollowUser(req, res) {
+    const [username, user] = [req.params.username, req.user];
+    const checkUser = await User.findOne({ where: { username: String(username) } });
+    const unFollowed = Object.keys(checkUser).length
+      ? await Follow.destroy({ where: { userId: user.id, followed: checkUser.id } }) : null;
+
+    if (unFollowed && unFollowed.errors) return res.status(500).json({ errors: 'Server error! Something went wrong!' });
+    return unFollowed
+      ? res.status(201).json({ message: `you unfollowed ${username}` })
+      : res.status(400).json({ errors: { follow: `You are not following "${username}"` } });
+  }
+
+  static async followers(req, res) {
+    const followers = await Follow.findAll({ where: { followed: req.user.id } });
+    return followers.length
+      ? res.status(200).json({ message: 'Followers',
+        followers })
+      : res.status(404).json({ errors: { follows: "You don't have followers" } });
+  }
+
+  static async following(req, res) {
+    const following = await Follow.findAll({ where: { userId: req.user.id } });
+    return following.length
+      ? res.status(200).json({ message: 'Following',
+        following })
+      : res.status(404).json({ errors: { follows: "You don't follow anyone" } });
   }
 }

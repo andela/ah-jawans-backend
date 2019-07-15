@@ -40,9 +40,13 @@ router.post('/api/users/login', AuthController.signin);
 router.post('/api/users/passwordreset', UserController.passwordReset);
 router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEmail, UserController.changePassword);
 router.post('/api/users/logout', verifyToken, UserController.signOut);
+router.patch('/api/users/:username/follow', verifyToken, UserController.followUser);
+router.patch('/api/users/:username/unfollow', verifyToken, UserController.unFollowUser);
+router.get('/api/users/followers', verifyToken, UserController.followers);
+router.get('/api/users/following', verifyToken, UserController.following);
 
 router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
 router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);
-router.get('/api/users/', verifyToken, UserProfile.getAllUser);
+router.get('/api/allusers/', verifyToken, UserProfile.getAllUser);
 
 export default router;

@@ -363,8 +363,7 @@ describe('SignOut', () => {
   });
 
   it('user should logout with a valid token', (done) => {
-    chai
-      .request(app)
+    chai.request(app)
       .post('/api/users/logout')
       .set('token', tokenGen)
       .end((err, res) => {
@@ -380,6 +379,77 @@ describe('SignOut', () => {
       .set('token', ' ')
       .end((err, res) => {
         res.should.have.status(401);
+        done();
+      });
+  });
+});
+describe('FOLLOW', () => {
+  before(async () => {
+    const user = { username: 'patrick',
+      email: 'patrick@gmail.com',
+      password: 'Patrick@123', };
+    const newUser = await User.create(user);
+    tokenGen = await generateToken({ id: newUser.id });
+  });
+  it('Users should be able to follow each other', (done) => {
+    const username = 'Kagabo';
+    chai.request(app)
+      .patch(`/api/users/${username}/follow`)
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(201);
+        done();
+      });
+  });
+  it('User should not follow another user if token is missing', (done) => {
+    const username = 'Kagabo';
+    chai
+      .request(app)
+      .patch(`/api/users/${username}/follow`)
+      .set('token', ' ')
+      .end((err, res) => {
+        res.should.have.status(401);
+        done();
+      });
+  });
+  it('User should be able to unfollow user', (done) => {
+    const username = 'Kagabo';
+    chai.request(app)
+      .patch(`/api/users/${username}/unfollow`)
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(201);
+        done();
+      });
+  });
+  it('User should not unfollow another user if token is missing', (done) => {
+    const username = 'Kagabo';
+    chai
+      .request(app)
+      .patch(`/api/users/${username}/unfollow`)
+      .set('token', ' ')
+      .end((err, res) => {
+        res.should.have.status(401);
+        done();
+      });
+  });
+  it('Should not return followers', (done) => {
+    chai
+      .request(app)
+      .get('/api/users/followers')
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+  });
+  it('Should not return folloing users', (done) => {
+    chai
+      .request(app)
+      .get('/api/users/following')
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(404);
         done();
       });
   });
