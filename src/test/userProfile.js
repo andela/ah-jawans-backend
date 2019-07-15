@@ -26,7 +26,7 @@ describe('Get all Users', () => {
   it('Autenticated user should be able to get the list of all users', (done) => {
     chai
       .request(app)
-      .get('/api/users/')
+      .get('/api/allusers/')
       .set('token', token)
       .end((err, res) => {
         res.should.have.status(200);
