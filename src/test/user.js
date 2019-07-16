@@ -37,7 +37,6 @@ describe('users', () => {
       .post('/api/users')
       .send(user)
       .end((req, res) => {
-        // eslint-disable-next-line prefer-destructuring
         res.should.have.status(201);
         res.body.should.have.property('message');
         res.body.should.have.property('token');
@@ -355,7 +354,7 @@ describe('User Profile view amend', () => {
     chai.request(app)
       .patch(`/api/users/${userGen}`)
       .set('token', tokenGen)
-      .send({ id: 11,
+      .send({ id: 13,
         username: 'shaluchandwani',
         firstName: 'Shalu',
         lastName: 'chandwani',

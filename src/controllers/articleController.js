@@ -4,6 +4,8 @@
 import model from '../models';
 import searchUserHelper from './helpers/searchUserHelper';
 import searchArticlesHelper from './helpers/searchArticlesHelper';
+import eventEmitter from '../template/notifications/EventEmitter';
+import findUser from '../helpers/FindUser';
 
 const { Articles, User } = model;
 
@@ -24,11 +26,11 @@ class articleContoller {
       image,
       tags
     } = req.body;
-
     let tagList;
     tags ? (tagList = tags.split(',')) : tagList = [];
     const slug = createSlug(title);
     const user = await User.findOne({ where: { email: req.user.email } });
+    const userInfo = await findUser(req.user.username);
     let article;
     user
       ? article = await Articles.create({ slug,
@@ -39,6 +41,7 @@ class articleContoller {
         tagList,
         authorId: user.id, })
       : res.status(401).json({ message: "User not allowed to create an article, login or signin if you don't have an account" });
+    eventEmitter.emit('publishArticle', userInfo.id, slug);
     article && res.status(201).json({ message: 'The article successfully created!' });
   }
 
@@ -76,7 +79,17 @@ class articleContoller {
       if (article) return res.status(200).json({ article });
       res.status(404).json({ message: 'No article found!' });
     } catch (error) {
-      return res.status(404).json({ message: 'Article not found!', });
+      return res.status(500).json({ message: 'Internal server error', });
+    }
+  }
+
+  static async getOneArticleSlug(req, res) {
+    try {
+      const article = await Articles.findOne({ where: { slug: req.params.slug } });
+      if (article) return res.status(200).json({ article });
+      res.status(404).json({ message: 'No article found!' });
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server error', });
     }
   }
 

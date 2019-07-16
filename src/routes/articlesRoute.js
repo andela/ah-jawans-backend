@@ -16,6 +16,8 @@ articles.get('/articles', articlesController.getAllArticles);
 articles.get('/articles/:id', articlesController.getOneArticle);
 articles.delete('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.deleteArticle);
 articles.get('/article/search', articlesController.searchArticles);
+articles.get('/articles/slug/:slug', articlesController.getOneArticleSlug);
+
 
 // sharing articles
 articles.get('/articles/:slug/share/twitter', verifyToken, slugExist, shareArticle, articlesController.share);
@@ -25,5 +27,8 @@ articles.get('/articles/:slug/share/email', verifyToken, slugExist, shareArticle
 
 articles.post('/articles/:id/rating', Auth.verifyToken, ratingsController.createRatings);
 articles.get('/articles/:id/ratings', ratingsController.getAllRatings);
+articles.get('/articles', verifyToken, articlesController.getAllArticles);
+articles.get('/articles/:id', verifyToken, articlesController.getOneArticle);
+articles.delete('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.deleteArticle);
 
 export default articles;

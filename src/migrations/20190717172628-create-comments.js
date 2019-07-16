@@ -5,6 +5,7 @@ module.exports = { up: (queryInterface, Sequelize) => queryInterface.createTable
   type: Sequelize.INTEGER },
 body: { type: Sequelize.TEXT },
 articleId: { type: Sequelize.INTEGER },
+userId: { type: Sequelize.INTEGER },
 createdAt: { allowNull: false,
   type: Sequelize.DATE },
 updatedAt: { allowNull: false,

@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
 import { Op } from 'sequelize';
 import model from '../../models';
