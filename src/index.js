@@ -8,8 +8,9 @@ import swaggerUi from 'swagger-ui-express';
 import swagger from '../swagger.json';
 // eslint-disable-next-line import/no-named-as-default
 import route from './routes/index';
-
 import './config/passport';
+import SocketIO from './helpers/socketIO';
+import './template/notifications/EventListener';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 app.use(session({ secret: process.env.SECRET_KEY,
   saveUninitialized: true }));
+SocketIO(app);
 app.use(passport.initialize());
 app.use(passport.session());
 

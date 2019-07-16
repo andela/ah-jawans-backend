@@ -233,30 +233,8 @@
             }
           }
         }
-      },
-      "/social/login/google": {
-        "get": {
-          "tags": [
-            "Social Media Login"
-          ],
-          "description": "Login using google account",
-          "parameters": [
-            {
-              "name": "google",
-              "in": "path",
-              "description": "Google email address of the client",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Google email Login"
-        }
       }
-    },
+      },
     "/users/logout": {
       "post": {
         "tags": [
@@ -287,6 +265,23 @@
         }
       }
     },
+    "/passwordreset": {
+      "post": {
+        "tags": [
+          "reset password"
+        ],
+        "summary": "reset password",
+        "description": "sending a link to reset password",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/social/login/google": {
       "get": {
         "tags": [
@@ -307,23 +302,6 @@
         "responses": {
           "200": {
             "description": "Google email Login"
-          }
-        }
-      }
-    },
-    "/passwordreset": {
-      "post": {
-        "tags": [
-          "reset password"
-        ],
-        "summary": "reset password",
-        "description": "sending a link to reset password",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -817,34 +795,6 @@
     }
   }
 },
-"/articles/{slug}/share/linkedin": {
-  "get": {
-  "tags": [
-    "Social Media Article Share"
-  ],
-  "description": "Allows Sharing of articles across Linkedin",
-  "parameters": [
-    {
-      "name": "token",
-      "in": "header",
-      "description": "logged in user token"
-    },
-    {
-      "name": "slug",
-      "in": "path",
-      "description": "slug",
-      "required": true
-  }
-],"produces": [
-  "application/json"
-],
-"responses": {
-  "200": {
-    "description": "Thanks for sharing!"
-  }
-}
-  }
-},
     "/articles/{articleId}/comments": {
       "post": {
         "tags": [
@@ -1124,35 +1074,171 @@
           }
         }
       }
-    },
-    "/article/search": {
-      "get": {
+      },
+      "/optinemail": {
+        "post": {
+          "tags": [
+            "Notifications Subscription"
+          ],
+          "description": "Enable user to subscribe email notification",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "header",
+              "description": "The login token",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "You successfully subscribed to email notifications"
+            },
+            "400": {
+              "description": "You already subscribed to email notifications"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Notifications Subscription"
+          ],
+          "description": "Enable user to unsubscribe email notification",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "header",
+              "description": "The login token",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "You successfully unsubscribed to email notifications"
+            },
+            "400": {
+              "description": "You are not opted-in"
+            }
+          }
+        }
+      },
+      "/optinapp": {
+        "post": {
+          "tags": [
+            "Notifications Subscription"
+          ],
+          "description": "Enable user to subscribe Inapp notification",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "header",
+              "description": "The login token",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "You successfully subscribed to inapp notifications"
+            },
+            "400": {
+              "description": "You already subscribed to inapp notifications"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Notifications Subscription"
+          ],
+          "description": "Enable user to unsubscribe inapp notification",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "header",
+              "description": "The login token",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "You successfully unsubscribed to inapp notifications"
+            },
+            "400": {
+              "description": "You are not opted-in"
+            }
+          }
+        }
+      },
+      "/viewNotifications/{id}": {
+        "get": {
         "tags": [
-          "Articles"
+          "Notifications Subscription"
         ],
-        "description": "Displays all my following list",
+        "description": "Allows Sharing of articles across Linkedin",
         "parameters": [
           {
-            "name": "authorName",
-            "in": "query",
-            "description": "search author name"
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
           },
           {
-            "name": "keyword",
-            "in": "query",
-            "description": "search any keyword"
-          },
-          {
-            "name": "tag",
-            "in": "query",
-            "description": "search using tags"
-          },
-          {
-            "name": "title",
-            "in": "query",
-            "description": "search using title"
-          }
+            "name": "id",
+            "in": "path",
+            "description": "User Id of the user",
+            "required": true
+        }
+      ],
+        "produces": [
+          "application/json"
         ],
+        "responses": {
+          "200": {
+            "description": "Notifications"
+          },
+          "400": {
+            "description": "You don't have any notifications"
+          }
+        }
+      }
+    },
+"/article/search": {
+  "get": {
+    "tags": [
+      "Articles"
+    ],
+    "description": "Displays all my following list",
+    "parameters": [
+      {
+        "name": "authorName",
+        "in": "query",
+        "description": "search author name"
+      },
+      {
+        "name": "keyword",
+        "in": "query",
+        "description": "search any keyword"
+      },
+      {
+        "name": "tag",
+        "in": "query",
+        "description": "search using tags"
+      },
+      {
+        "name": "title",
+        "in": "query",
+        "description": "search using title"
+      }
+],
         "produces": [
           "application/json"
         ],
@@ -1162,10 +1248,7 @@
           }
         }
       }
-    }
-  }
-}
-},
+    },
 "/articles/{id}/rating": {
   "post": {
     "tags": [
@@ -1234,5 +1317,6 @@
 }	        
 }
 }
+  }
 }
 

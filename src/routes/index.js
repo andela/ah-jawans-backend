@@ -1,8 +1,5 @@
 /* eslint-disable import/no-named-as-default-member */
 import express from 'express';
-import passport from 'passport';
-import socialLogin from '../controllers/socialLogin';
-import socialAccount from '../middlewares/socialAcctExists';
 // eslint-disable-next-line import/no-named-as-default
 import UserController from '../controllers/userController';
 import AuthController from '../controllers/authController';
@@ -16,11 +13,13 @@ import articlesRoute from './articlesRoute';
 import commentRoute from './commentRoute';
 import followerRoute from './followRoute';
 import likeAndDislike from './likesAndDislikes';
+import socialAPIRoute from './socialAPIRoute';
+import optinAndOptOut from './optinAndOptOut';
 
 const { verifyToken } = Auth;
 
 const router = express.Router();
-const { google, twitter } = socialAccount;
+
 
 router.use('/api', articlesRoute);
 router.use('/api', likeAndDislike);
@@ -28,16 +27,9 @@ router.use('/api', likeAndDislike);
 router.use('/api/social', socialRoute);
 router.use('/api/articles', commentRoute);
 router.use('/api/users', followerRoute);
-// social login routes
-router.get('/api/social/login/google', passport.authenticate('google', { scope: ['profile', 'email'], }));
-router.get('/api/social/login/google/redirect', passport.authenticate('google', { session: false }), google, socialLogin.loginGoogle);
-
-
-router.get('/api/social/login/facebook', passport.authenticate('facebook', { scope: ['email'] }));
-router.get('/api/social/login/facebook/redirect', passport.authenticate('facebook', { session: false }), google, socialLogin.facebookLogin);
-
-router.get('/api/social/login/twitter', passport.authenticate('twitter', { scope: ['profile', 'email'] }));
-router.get('/api/social/login/twitter/redirect', passport.authenticate('twitter', { session: false }), twitter, socialLogin.twitterLogin);
+router.use('/api', socialAPIRoute);
+// route for optin/Optout
+router.use('/', optinAndOptOut);
 
 router.post('/api/users', bodyValidation, UserController.createUser);
 router.post('/api/users/passwordreset', UserController.passwordReset);

@@ -9,7 +9,7 @@ export default class MailSender {
   static async sendMail(email, username, token) {
     try {
       const message = { to: email,
-        from: 'patrick.ngabonziza@andela.com',
+        from: 'ahjawans@gmail.com',
         subject: 'Verification email',
         text: `Dear, ${username} Welcome to authors haven jawans`,
         html: `<div>Dear ${username},<br><strong>You have succesfully created your account.</strong><br></div>

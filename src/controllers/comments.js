@@ -1,4 +1,5 @@
 import models from '../models';
+import eventEmitter from '../template/notifications/EventEmitter';
 
 const { Comments } = models;
 /**
@@ -15,7 +16,8 @@ export default class ArticleComment {
     try {
       const { body } = req.body;
       const { articleId } = req.params;
-      const createComment = await Comments.create({ body, articleId });
+      const createComment = await Comments.create({ body, articleId, userId: req.user.id });
+      eventEmitter.emit('commentArticle', createComment.dataValues);
       return res.status(201).json({ message: 'comment created!',
         comment: createComment });
     } catch (error) {
@@ -33,10 +35,8 @@ export default class ArticleComment {
       const { articleId, commentId } = req.params;
       const findComent = await Comments.findOne({ where: { id: commentId, articleId } });
       return findComent
-        ? await Comments.update(
-          { body: req.body.body },
-          { where: { id: commentId, articleId } },
-        ) && res.status(200).json({ message: 'Comment modified!' })
+        ? await Comments.update({ body: req.body.body },
+          { where: { id: commentId, articleId } }) && res.status(200).json({ message: 'Comment modified!' })
         : res.status(404).json({ message: 'Comment not found!' });
     } catch (error) {
       return res.status(500).json(error);

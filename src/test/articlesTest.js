@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
@@ -10,8 +11,7 @@ const { generateToken } = Tokenizer;
 chai.use(chaiHttp);
 chai.should();
 
-let tokens = ' ';
-let userObject, articleObject, testUser, testArticle, tokenGen;
+let userObject, articleObject, testUser, testArticle, tokenGen, tokens;
 
 describe('Article', () => {
   it('A new user who filled all required data should be registered in order to create an article', (done) => {
@@ -31,18 +31,18 @@ describe('Article', () => {
       });
   });
 
-  it('A new user should login', (done) => {
-    const user = { username: 'ffff',
-      password: 'Fofo1@hjsd',
-      email: 'faustinkagabo1@gmail.com' };
+  it('User should be able to sign in', (done) => {
+    const user = { email: 'faustinkagabo1@gmail.com',
+      password: 'Fofo1@hjsd' };
     chai.request(app)
       .post('/api/users/login')
       .send(user)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.should.be.an('object');
+        res.body.data.should.be.an('object');
         res.body.data.should.have.property('email');
         res.body.data.should.have.property('token');
+        // eslint-disable-next-line prefer-destructuring
         tokens = res.body.data.token;
         done();
       });
@@ -219,7 +219,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('No article found!');
         done();
       });
   });
@@ -407,6 +406,30 @@ describe('share article on social media', () => {
       .send()
       .end((err, res) => {
         res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should open the article link', (done) => {
+    chai
+      .request(app)
+      .get(`/api/articles/slug/${testArticle.slug}`)
+      .send()
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not open the article link if the slug is invalid', (done) => {
+    chai
+      .request(app)
+      .get(`/api/articles/slug/${testArticle.slug}aaaaaaaa`)
+      .send()
+      .end((err, res) => {
+        res.should.have.status(404);
         res.body.should.be.an('object');
         done();
       });

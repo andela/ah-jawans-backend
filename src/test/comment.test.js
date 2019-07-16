@@ -35,6 +35,21 @@ describe('COMMENTS TEST', () => {
         done();
       });
   });
+
+  it('user should not be able to comment if there is no body', (done) => {
+    const articleId = 1;
+    const comment = { body: ' ' };
+    chai
+      .request(app)
+      .post(`/api/articles/${articleId}/comments`)
+      .set('token', token)
+      .send(comment)
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
   it('Autenticated user should be able to edit comment', (done) => {
     const articleId = 1;
     const commentId = 1;

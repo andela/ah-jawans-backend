@@ -17,10 +17,8 @@ export default async (req, res, next) => {
     const url = share('facebook', { url: `${APP_URL_FRONTEND}/api/articles/${slug}` });
     await open(`${url}`, { wait: false });
   } else if (req.url.search(/\/email/g) > 0) {
-    await open(
-      `mailto:?subject=${title}&body=${APP_URL_FRONTEND}/articles/${slug}`,
-      { wait: false }
-    );
+    await open(`mailto:?subject=${title}&body=${APP_URL_FRONTEND}/articles/${slug}`,
+      { wait: false });
   }
 
   next();
