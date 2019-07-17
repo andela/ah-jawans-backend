@@ -30,12 +30,15 @@ export default class UserController {
         email,
         password: hashedPasword,
         verified });
+
       const payload = { username: user.username,
+        id: user.id,
         email: user.email,
-        password: user.password,
         verified: user.verified };
+
       const token = await generateToken({ payload });
       const mailSend = await MailSender.sendMail(user.email, user.username, token);
+
       if (mailSend[0].statusCode === 202) {
         return res.status(201).json({ message: 'Your account has been created. You can check your email for comfirmation.',
           token,
@@ -54,7 +57,10 @@ export default class UserController {
       if (!user) {
         return res.status(404).json({ error: 'No user found with this email address.' });
       }
-      const payload = { email: user.email };
+
+      const payload = { username: user.username,
+        userId: user.id,
+        email: user.email };
       const token = await generateToken({ payload });
       // @sends a message to an existing email in our database with the below email template
       const message = `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 

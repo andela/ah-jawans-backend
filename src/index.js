@@ -29,7 +29,6 @@ app.get('/', (req, res) => {
   res.send({ message: 'Welcome to Authors Haven', });
 });
 
-
 app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swagger));
 
 app.use(route);

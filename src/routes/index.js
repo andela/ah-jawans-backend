@@ -15,6 +15,7 @@ import Auth from '../middlewares/Auth';
 import articlesRoute from './articlesRoute';
 import commentRoute from './commentRoute';
 import followerRoute from './followRoute';
+import likeAndDislike from './likesAndDislikes';
 
 const { verifyToken } = Auth;
 
@@ -22,6 +23,7 @@ const router = express.Router();
 const { google, twitter } = socialAccount;
 
 router.use('/api', articlesRoute);
+router.use('/api', likeAndDislike);
 // social route for test
 router.use('/api/social', socialRoute);
 router.use('/api/articles', commentRoute);

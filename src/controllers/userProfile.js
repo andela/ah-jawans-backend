@@ -41,10 +41,8 @@ class UserProfile {
     } else if (req.body.id !== getUsername.dataValues.id) {
       return res.status(404).json({ message: `UserId: ${req.body.id} cannot be amended, You can only amend your id` });
     } else {
-      const updatedUser = await User.update(
-        { ...body },
-        { where: { id: req.body.id } },
-      );
+      const updatedUser = await User.update({ ...body },
+        { where: { id: req.body.id } });
       return updatedUser.length
         ? res.status(200).json({ user: { message: 'User updated sucessfully', updatedUser } })
         : res.status(404).json({ message: 'Could not find user' });

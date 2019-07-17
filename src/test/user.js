@@ -355,7 +355,7 @@ describe('User Profile view amend', () => {
     chai.request(app)
       .patch(`/api/users/${userGen}`)
       .set('token', tokenGen)
-      .send({ id: 9,
+      .send({ id: 10,
         username: 'shaluchandwani',
         firstName: 'Shalu',
         lastName: 'chandwani',

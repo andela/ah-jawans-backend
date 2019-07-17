@@ -5,18 +5,17 @@
     "version": "1.0.0",
     "title": "Authors Haven - Jawans"
   },
-  "host": "127.0.0.1:3000",
-  "basePath": "/api",
-  "tags": [
-    {
-      "name": "Auth",
-      "description": "User Authentication"
-    }
-  ],
-  "schemes": [
-    "https",
-    "http"
-  ],
+  "host" : "127.0.0.1:3000",
+  "basePath" : "/api",
+  "tags" : [ {
+    "name" : "Auth",
+    "description" : "User Authentication"
+  },
+  {"name" : "Articles",
+  "description" : "User Authentication"
+}
+ ],
+  "schemes" : [ "https", "http" ],
   "consumes": [
     "application/json"
   ],
@@ -706,8 +705,114 @@
             "description": "Following list"
           }
         }
-      }
+}
+},
+"/articles/{id}/like": {
+  "post": {
+    "tags": [
+      "Articles"
+    ],
+    "description": "Allow user to like the article",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "description": "Article id",
+        "required": true
     },
+      {
+        "name": "token",
+        "in": "header",
+        "description": "User's token",
+        "required": true
+      }
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "responses": {
+      "200": {
+        "description": "Liked the article"
+      },
+      "409": {
+        "description": "You already liked this article"
+      },
+      "401": {
+        "description": " Toke is missing "
+      },
+      "500": {
+        "description": "Server Error"
+      }
+    }
+  }
+},
+"/articles/{id}/dislike": {
+  "post": {
+    "tags": [
+      "Articles"
+    ],
+    "description": "Allow user to dislike the article",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "description": "Article id",
+        "required": true
+    },
+      {
+        "name": "token",
+        "in": "header",
+        "description": "User's token",
+        "required": true
+      }
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "responses": {
+      "200": {
+        "description": "Disliked the article"
+      },
+      "409": {
+        "description": "You already Disliked this article"
+      },
+      "401": {
+        "description": " Toke is missing "
+      },
+      "500": {
+        "description": "Server Error"
+      }
+    }
+  }
+},
+"/articles/{slug}/share/linkedin": {
+  "get": {
+  "tags": [
+    "Social Media Article Share"
+  ],
+  "description": "Allows Sharing of articles across Linkedin",
+  "parameters": [
+    {
+      "name": "token",
+      "in": "header",
+      "description": "logged in user token"
+    },
+    {
+      "name": "slug",
+      "in": "path",
+      "description": "slug",
+      "required": true
+  }
+],"produces": [
+  "application/json"
+],
+"responses": {
+  "200": {
+    "description": "Thanks for sharing!"
+  }
+}
+  }
+},
     "/articles/{articleId}/comments": {
       "post": {
         "tags": [
