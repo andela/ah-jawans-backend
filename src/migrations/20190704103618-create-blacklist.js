@@ -1,4 +1,4 @@
-module.exports = { up: (queryInterface, Sequelize) => queryInterface.createTable('Blacklists', { id: { allowNull: false,
+module.exports = { up: (queryInterface, Sequelize) => queryInterface.createTable('Blacklist', { id: { allowNull: false,
   autoIncrement: true,
   primaryKey: true,
   type: Sequelize.INTEGER },
@@ -7,4 +7,4 @@ createdAt: { allowNull: false,
   type: Sequelize.DATE },
 updatedAt: { allowNull: false,
   type: Sequelize.DATE } }),
-down: queryInterface => queryInterface.dropTable('Blacklists'), };
+down: queryInterface => queryInterface.dropTable('Blacklist'), };
