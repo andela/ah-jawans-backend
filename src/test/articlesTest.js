@@ -1,12 +1,18 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
+import models from '../models';
+import Tokenizer from '../helpers/tokenGenerator';
+
+const { User, Articles } = models;
+const { generateToken } = Tokenizer;
 
 chai.use(chaiHttp);
 chai.should();
 
 let tokens = ' ';
 const tokens1 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZhdXN0aW5rYWdhYm8xMUBnbWFpbC5jb20iLCJpYXQiOjE1NjMxMDE5NTYsImV4cCI6MTU2MzI3NDc1Nn0.33LK5oq_7jD-aUbAvY6XTeWNZ-GgaFdibNivPNKQgvA';
+let userObject, articleObject, testUser, testArticle, tokenGen;
 
 describe('Article', () => {
   it('A new user who filled all required data should be registered in order to create an article', (done) => {
@@ -109,7 +115,7 @@ describe('Article', () => {
       body: 'hello man, how was the night',
       description: 'hello man, how was the night' };
     chai.request(app)
-      .post('/api/articles/')
+      .post('/api/articles')
       .set('token', tokens1)
       .send(article)
       .end((req, res) => {
@@ -206,6 +212,92 @@ describe('Article', () => {
         res.should.have.status(500);
         res.body.should.be.an('object');
         res.body.should.have.property('error').eql('Internal server error!');
+        done();
+      });
+  });
+});
+
+describe('share article on social media', () => {
+  before('Before any test, delete the table contents', async () => {
+    await models.User.destroy({ where: { email: 'pankajvaswani555@gmail.com' },
+      truncate: false });
+    await models.Articles.destroy({ where: { slug: 'lsug32344' },
+      truncate: false });
+
+    // create test user
+    userObject = { firstName: 'pankaj',
+      lastName: 'vaswani',
+      username: 'Pankaj_vaswani',
+      email: 'pankajvaswani555@gmail.com',
+      password: 'Pankaj@1993',
+      confirmPassword: 'Pankaj@1993', };
+
+    testUser = await User.create(userObject);
+
+    // generate test token
+    tokenGen = await generateToken({ id: testUser.dataValues.id });
+
+    articleObject = { title: 'How to survive at Andela',
+      body: 'this is article is supposed to have two paragraph',
+      description: 'the paragraph one has many character than before',
+      tagList: ['reactjs', 'angularjs', 'expressjs'],
+      slug: 'lsug32344',
+      authorId: testUser.dataValues.id,
+      readtime: '1 min' };
+
+    // create test article
+    testArticle = await Articles.create(articleObject);
+  });
+
+  // share article test
+  it('should share an article on twitter', (done) => {
+    chai
+      .request(app)
+      .get(`/api/articles/${testArticle.slug}/share/twitter`)
+      .set('token', tokenGen)
+      .send()
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should share an article on facebook', (done) => {
+    chai
+      .request(app)
+      .get(`/api/articles/${testArticle.slug}/share/facebook`)
+      .set('token', tokenGen)
+      .send()
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should share an article on linkedin', (done) => {
+    chai
+      .request(app)
+      .get(`/api/articles/${testArticle.slug}/share/linkedin`)
+      .set('token', tokenGen)
+      .send()
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should share an article on email', (done) => {
+    chai
+      .request(app)
+      .get(`/api/articles/${testArticle.slug}/share/email`)
+      .set('token', tokenGen)
+      .send()
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
         done();
       });
   });

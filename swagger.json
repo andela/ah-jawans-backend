@@ -612,7 +612,7 @@
     },
     {
       "name": "token",
-      "in": "headers",
+      "in": "header",
       "description": "User follows another user"
     }
 ],
@@ -641,7 +641,7 @@
 },
 {
   "name": "token",
-  "in": "headers",
+  "in": "header",
   "description": "Unfollow a user"
 }
 ],
@@ -664,7 +664,7 @@
 "parameters": [
   {
     "name": "token",
-    "in": "headers",
+    "in": "header",
     "description": "User followers"
   }
 ],
@@ -687,7 +687,7 @@
 "parameters": [
   {
     "name": "token",
-    "in": "headers",
+    "in": "header",
     "description": "User following"
   }
 ],
@@ -700,6 +700,145 @@
   }
 }
 }
-}
+},
+"/users/followers": {
+  "get": {
+  "tags": [
+    "Auth"
+  ],
+  "description": "Displays all user followers",
+  "parameters": [
+    {
+      "name": "token",
+      "in": "header",
+      "description": "User followers"
+    }
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "responses": {
+    "200": {
+      "description": "List of all my followers"
+    }
+  }
+  }
+  },
+  "/articles/{slug}/share/twitter": {
+  "get": {
+  "tags": [
+    "Social Media Article Share"
+  ],
+  "description": "Allows Sharing of articles across twitter",
+  "parameters": [
+    {
+      "name": "token",
+      "in": "header",
+      "description": "logged in user token"
+    },
+    {
+      "name": "slug",
+      "in": "path",
+      "description": "slug",
+      "required": true
+  }
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "responses": {
+    "200": {
+      "description": "Thanks for sharing!"
+    }
+  }
+  }
+  },
+  "/articles/{slug}/share/linkedin": {
+    "get": {
+    "tags": [
+      "Social Media Article Share"
+    ],
+    "description": "Allows Sharing of articles across Linkedin",
+    "parameters": [
+      {
+        "name": "token",
+        "in": "header",
+        "description": "logged in user token"
+      },
+      {
+        "name": "slug",
+        "in": "path",
+        "description": "slug",
+        "required": true
+    }
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "responses": {
+      "200": {
+        "description": "Thanks for sharing!"
+      }
+    }
+    }
+    },
+    "/articles/{slug}/share/facebook": {
+      "get": {
+      "tags": [
+        "Social Media Article Share"
+      ],
+      "description": "Allows Sharing of articles across facebook",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "logged in user token"
+        },
+        {
+          "name": "slug",
+          "in": "path",
+          "description": "slug",
+          "required": true
+      }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Thanks for sharing!"
+        }
+      }
+      }
+      },
+      "/articles/{slug}/share/mail": {
+        "get": {
+        "tags": [
+          "Social Media Article Share"
+        ],
+        "description": "Allows Sharing of articles thru email",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "slug",
+            "required": true
+        }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Thanks for sharing!"
+          }
+        }
+        }
+        }
 }
 }
