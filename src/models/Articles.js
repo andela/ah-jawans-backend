@@ -17,7 +17,9 @@ export default (sequelize, DataTypes) => {
       required: false, },
     authorId: { type: DataTypes.INTEGER,
       unique: true,
-      required: true, } },
+      required: true, },
+    tagList: { type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true } },
     { timestamps: true,
       tableName: 'Articles' }
   );

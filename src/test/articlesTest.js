@@ -11,7 +11,6 @@ chai.use(chaiHttp);
 chai.should();
 
 let tokens = ' ';
-const tokens1 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZhdXN0aW5rYWdhYm8xMUBnbWFpbC5jb20iLCJpYXQiOjE1NjMxMDE5NTYsImV4cCI6MTU2MzI3NDc1Nn0.33LK5oq_7jD-aUbAvY6XTeWNZ-GgaFdibNivPNKQgvA';
 let userObject, articleObject, testUser, testArticle, tokenGen;
 
 describe('Article', () => {
@@ -28,12 +27,46 @@ describe('Article', () => {
         res.body.should.have.property('username');
         res.body.should.have.property('email');
         res.body.should.have.property('token');
-        tokens = res.body.token;
+        done();
+      });
+  });
+
+  it('A new user should login', (done) => {
+    const user = { username: 'ffff',
+      password: 'Fofo1@hjsd',
+      email: 'faustinkagabo1@gmail.com' };
+    chai.request(app)
+      .post('/api/users/login')
+      .send(user)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        res.body.should.have.property('message');
+        res.body.data.should.have.property('email');
+        res.body.data.should.have.property('token');
+        tokens = res.body.data.token;
         done();
       });
   });
 
   it('it should create an article', (done) => {
+    const article = { title: 'hello man, how was the night',
+      body: 'hello man, how was the night',
+      description: 'hello man, how was the night',
+      tags: 'andela,study' };
+    chai.request(app)
+      .post('/api/articles')
+      .set('token', tokens)
+      .send(article)
+      .end((req, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        res.body.should.have.property('message').eql('The article successfully created!');
+        done();
+      });
+  });
+
+  it('it should create an article with no tag', (done) => {
     const article = { title: 'hello man, how was the night',
       body: 'hello man, how was the night',
       description: 'hello man, how was the night' };
@@ -100,12 +133,12 @@ describe('Article', () => {
       description: 'hello man, how was the night' };
     chai.request(app)
       .post('/api/articles')
-      .set('token', 'tokens')
+      .set('token', `${tokens}aaaa`)
       .send(article)
       .end((req, res) => {
         res.should.have.status(401);
         res.body.should.be.an('object');
-        res.body.should.have.property('message');
+        res.body.should.have.property('error');
         done();
       });
   });
@@ -116,12 +149,12 @@ describe('Article', () => {
       description: 'hello man, how was the night' };
     chai.request(app)
       .post('/api/articles')
-      .set('token', tokens1)
+      .set('token', `${tokens}aaaa`)
       .send(article)
       .end((req, res) => {
         res.should.have.status(401);
         res.body.should.be.an('object');
-        res.body.should.have.property('message');
+        res.body.should.have.property('error').eql('invalid token');
         done();
       });
   });
@@ -135,7 +168,7 @@ describe('Article', () => {
       .set('token', tokens)
       .send(article)
       .end((req, res) => {
-        res.should.have.status(201);
+        res.should.have.status(200);
         res.body.should.be.an('object');
         res.body.should.have.property('message').eql('The article successfully updated!');
         done();
@@ -149,7 +182,7 @@ describe('Article', () => {
       .set('token', tokens)
       .send(article)
       .end((req, res) => {
-        res.should.have.status(201);
+        res.should.have.status(200);
         res.body.should.be.an('object');
         res.body.should.have.property('message').eql('The article successfully updated!');
         done();
@@ -176,6 +209,84 @@ describe('Article', () => {
         res.should.have.status(200);
         res.body.should.be.an('object');
         res.body.article.should.have.property('title').eql('hello man, how was the night');
+        done();
+      });
+  });
+
+  it('It should not get an article', (done) => {
+    chai.request(app)
+      .get('/api/articles/10000')
+      .set('token', tokens)
+      .end((req, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        res.body.should.have.property('message').eql('No article found!');
+        done();
+      });
+  });
+
+  it('should find all articles with keyword', (done) => {
+    chai.request(app)
+      .get('/api/article/search?keyword=was')
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        res.body.should.have.property('data');
+        done();
+      });
+  });
+
+  it('should find all articles with author name', (done) => {
+    chai.request(app)
+      .get('/api/article/search?authorName=ffff')
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        res.body.should.have.property('data');
+        done();
+      });
+  });
+
+  it('should find all articles with author name who does not exist', (done) => {
+    chai.request(app)
+      .get('/api/article/search?keyword=wasvdejhgew')
+      .end((req, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        res.body.should.have.property('message').eql('No data found');
+        done();
+      });
+  });
+
+  it('should find all articles with title', (done) => {
+    chai.request(app)
+      .get('/api/article/search?title=was')
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        res.body.should.have.property('data');
+        done();
+      });
+  });
+
+  it('should find all articles with all data', (done) => {
+    chai.request(app)
+      .get('/api/article/search?title=kagabo have&tag=andela&keyword=the&authorName=Papwerewr')
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        res.body.should.have.property('data');
+        done();
+      });
+  });
+
+  it('should find all articles with out data', (done) => {
+    chai.request(app)
+      .get('/api/article/search')
+      .end((req, res) => {
+        res.should.have.status(400);
+        res.body.should.be.an('object');
+        res.body.should.have.property('error');
         done();
       });
   });

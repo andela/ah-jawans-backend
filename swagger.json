@@ -240,19 +240,6 @@
           }
         }
       },
-      "/passwordreset" : {
-        "post" : {
-          "tags" : [ "reset password" ],
-          "summary" : "reset password",
-          "description" : "sending a link to reset password",
-          "produces" : [ "application/json" ],
-          "responses" : {
-            "200" : {
-              "description" : "OK"
-            }
-          }
-        }
-      },
       "/social/login/google": {
         "get": {
           "tags": [
@@ -701,17 +688,32 @@
 }
 }
 },
-"/users/followers": {
+"/article/search": {
   "get": {
   "tags": [
-    "Auth"
+    "Articles"
   ],
-  "description": "Displays all user followers",
+  "description": "Displays all my following list",
   "parameters": [
     {
-      "name": "token",
-      "in": "header",
-      "description": "User followers"
+      "name": "authorName",
+      "in": "query",
+      "description": "search author name"
+    },
+    {
+      "name": "keyword",
+      "in": "query",
+      "description": "search any keyword"
+    },
+    {
+      "name": "tag",
+      "in": "query",
+      "description": "search using tags"
+    },
+    {
+      "name": "title",
+      "in": "query",
+      "description": "search using title"
     }
   ],
   "produces": [
@@ -719,17 +721,46 @@
   ],
   "responses": {
     "200": {
-      "description": "List of all my followers"
+      "description": "Article list"
     }
   }
   }
   },
-  "/articles/{slug}/share/twitter": {
+"/articles/{slug}/share/twitter": {
   "get": {
   "tags": [
     "Social Media Article Share"
   ],
   "description": "Allows Sharing of articles across twitter",
+  "parameters": [
+    {
+      "name": "token",
+      "in": "header",
+      "description": "logged in user token"
+    },
+    {
+      "name": "slug",
+      "in": "path",
+      "description": "slug",
+      "required": true
+  }
+],
+"produces": [
+  "application/json"
+],
+"responses": {
+  "200": {
+    "description": "Thanks for sharing!"
+  }
+}
+}
+},
+"/articles/{slug}/share/linkedin": {
+  "get": {
+  "tags": [
+    "Social Media Article Share"
+  ],
+  "description": "Allows Sharing of articles across Linkedin",
   "parameters": [
     {
       "name": "token",
@@ -753,12 +784,12 @@
   }
   }
   },
-  "/articles/{slug}/share/linkedin": {
+  "/articles/{slug}/share/facebook": {
     "get": {
     "tags": [
       "Social Media Article Share"
     ],
-    "description": "Allows Sharing of articles across Linkedin",
+    "description": "Allows Sharing of articles across facebook",
     "parameters": [
       {
         "name": "token",
@@ -782,12 +813,12 @@
     }
     }
     },
-    "/articles/{slug}/share/facebook": {
+    "/articles/{slug}/share/mail": {
       "get": {
       "tags": [
         "Social Media Article Share"
       ],
-      "description": "Allows Sharing of articles across facebook",
+      "description": "Allows Sharing of articles thru email",
       "parameters": [
         {
           "name": "token",
@@ -810,35 +841,6 @@
         }
       }
       }
-      },
-      "/articles/{slug}/share/mail": {
-        "get": {
-        "tags": [
-          "Social Media Article Share"
-        ],
-        "description": "Allows Sharing of articles thru email",
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "logged in user token"
-          },
-          {
-            "name": "slug",
-            "in": "path",
-            "description": "slug",
-            "required": true
-        }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "Thanks for sharing!"
-          }
-        }
-        }
-        }
+      }
 }
 }
