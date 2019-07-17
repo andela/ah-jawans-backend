@@ -10,6 +10,7 @@ env:
     - TEST_DATABASE_URL=postgres://postgres:@127.0.0.1:5432/test_database
     - SECRET_KEY=hellowolrd@1234
     - NODE_ENV=test
+    - APP_URL_FRONTEND=http://127.0.0.1:3000
 before-script:
   - npm add sequelize-cli
 before_script:

@@ -89,6 +89,11 @@ class articleContoller {
       return res.status(500).json({ message: 'The parameter should be a number!', });
     }
   }
+
+  static async share(req, res) {
+    return res.status(200).json({ message: 'Thanks for sharing!',
+      article: req.article });
+  }
 }
 
 export default articleContoller;
