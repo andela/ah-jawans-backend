@@ -2,20 +2,19 @@ import express from 'express';
 import authenticateUser from '../middlewares/AuthenticateUser';
 import articlesController from '../controllers/articleController';
 import { bodyValidationArticle } from '../middlewares/bodyValidation';
-import checkUser from '../middlewares/checkUser';
 import Auth from '../middlewares/Auth';
 import slugExist from '../middlewares/slugExists';
 import shareArticle from '../helpers/shareArticle';
 
-
-const articles = express.Router();
 const { verifyToken } = Auth;
+const articles = express.Router();
 
-articles.post('/articles', checkUser.checkUser, bodyValidationArticle, articlesController.createArticle);
-articles.patch('/articles/:id', checkUser.checkUser, authenticateUser.checkUserArticle, articlesController.updateArticle);
-articles.get('/articles', checkUser.checkUser, articlesController.getAllArticles);
-articles.get('/articles/:id', checkUser.checkUser, articlesController.getOneArticle);
-articles.delete('/articles/:id', checkUser.checkUser, authenticateUser.checkUserArticle, articlesController.deleteArticle);
+articles.post('/articles', verifyToken, bodyValidationArticle, articlesController.createArticle);
+articles.patch('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.updateArticle);
+articles.get('/articles', articlesController.getAllArticles);
+articles.get('/articles/:id', articlesController.getOneArticle);
+articles.delete('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.deleteArticle);
+articles.get('/article/search', articlesController.searchArticles);
 
 // sharing articles
 articles.get('/articles/:slug/share/twitter', verifyToken, slugExist, shareArticle, articlesController.share);

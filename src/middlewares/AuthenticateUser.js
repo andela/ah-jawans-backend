@@ -8,14 +8,11 @@ class AuthenticateUser {
   static async checkUserArticle(req, res, next) {
     try {
       const user = await User.findOne({ where: { email: req.user.email } });
-      !user && res.status(403).json({ message: 'User not found!' });
-
+      if (!user) return res.status(403).json({ message: 'User not found!' });
       const article = await Articles.findOne({ where: { id: req.params.id, } });
 
-      !article && res.status(404).json({ message: 'Article not found in the system!' });
-
+      if (!article) return res.status(404).json({ message: 'Article not found in the system!' });
       user.id !== article.authorId && res.status(403).json({ message: 'You are not allowed to perform this operation!' });
-
       req.article = article.dataValues;
       next();
     } catch (error) {

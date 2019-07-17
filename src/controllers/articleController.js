@@ -3,6 +3,8 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable require-jsdoc */
 import model from '../models';
+import searchUserHelper from './helpers/searchUserHelper';
+import searchArticlesHelper from './helpers/searchArticlesHelper';
 
 const { Articles, User } = model;
 
@@ -20,9 +22,12 @@ class articleContoller {
       title,
       body,
       description,
-      image
+      image,
+      tags
     } = req.body;
 
+    let tagList;
+    tags ? (tagList = tags.split(',')) : tagList = [];
     const slug = createSlug(title);
     const user = await User.findOne({ where: { email: req.user.email } });
     let article;
@@ -32,6 +37,7 @@ class articleContoller {
         description,
         body,
         image,
+        tagList,
         authorId: user.id, })
       : res.status(401).json({ message: "User not allowed to create an article, login or signin if you don't have an account" });
 
@@ -43,7 +49,7 @@ class articleContoller {
       title,
       body,
       description,
-      image
+      image,
     } = req.body;
 
     const slug = createSlug(title || req.article.title);
@@ -55,7 +61,7 @@ class articleContoller {
       image: image || req.article.image,
       authorId: req.user.id }, { where: { id: req.params.id } });
 
-    updatedArticle && res.status(201).json({ message: 'The article successfully updated!' });
+    updatedArticle && res.status(200).json({ message: 'The article successfully updated!' });
   }
 
   static async getAllArticles(req, res) {
@@ -70,7 +76,8 @@ class articleContoller {
   static async getOneArticle(req, res) {
     try {
       const article = await Articles.findOne({ where: { id: req.params.id } });
-      return res.status(200).json({ article });
+      if (article) return res.status(200).json({ article });
+      res.status(404).json({ message: 'No article found!' });
     } catch (error) {
       return res.status(404).json({ message: 'Article not found!', });
     }
@@ -82,7 +89,7 @@ class articleContoller {
 
       let deletedArticle;
       article && (deletedArticle = await Articles.destroy({ where: { id: req.params.id }, returning: true }));
-      deletedArticle && res.status(200).json({ message: 'Article Succesfully deleted!' });
+      if (deletedArticle) return res.status(200).json({ message: 'Article Succesfully deleted!' });
 
       return res.status(404).json({ message: 'Article not found!', });
     } catch (error) {
@@ -94,6 +101,18 @@ class articleContoller {
     return res.status(200).json({ message: 'Thanks for sharing!',
       article: req.article });
   }
-}
 
+  static async searchArticles(req, res) {
+    Object.keys(req.query).length === 0 && res.status(400).json({ error: req.query });
+    const { authorName, tag, keyword, title } = req.query;
+
+    if (!authorName && !tag && !keyword && !title) return res.status(400).json({ error: 'Bad request' });
+
+    let user = [];
+    if (authorName) user = await searchUserHelper(authorName);
+    const data = await searchArticlesHelper(tag, keyword, title, user);
+
+    return data.length ? res.status(200).json({ data }) : res.status(404).json({ message: 'No data found' });
+  }
+}
 export default articleContoller;
