@@ -40,7 +40,6 @@ class articleContoller {
         tagList,
         authorId: user.id, })
       : res.status(401).json({ message: "User not allowed to create an article, login or signin if you don't have an account" });
-
     article && res.status(201).json({ message: 'The article successfully created!' });
   }
 
@@ -60,7 +59,6 @@ class articleContoller {
       body: body || req.article.body,
       image: image || req.article.image,
       authorId: req.user.id }, { where: { id: req.params.id } });
-
     updatedArticle && res.status(200).json({ message: 'The article successfully updated!' });
   }
 

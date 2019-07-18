@@ -12,7 +12,7 @@
     "build": "npm run clear && babel src --out-dir build",
     "clear": "rm -rf build",
     "coveralls": "npm run test  && nyc report --reporter=text-lcov | coveralls",
-    "test": "NODE_ENV=test npm run migrate && NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register --timeout 50000 ./src/test/*.js --exit",
+    "test": "NODE_ENV=test npm run migrate && NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register --timeout 3000 ./src/test/*.js --exit",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
     "seed-test": "sequelize db:seed:undo:all --env test && sequelize db:seed:all --env test",

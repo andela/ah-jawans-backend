@@ -36,5 +36,4 @@ provider: { type: Sequelize.STRING,
   allowNull: true },
 role: { type: Sequelize.STRING,
   allowNull: true }, }),
-// eslint-disable-next-line no-unused-vars
-down: (queryInterface, Sequelize) => queryInterface.dropTable('User') };
+down: queryInterface => queryInterface.dropTable('User') };

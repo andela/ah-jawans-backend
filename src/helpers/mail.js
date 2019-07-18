@@ -14,8 +14,7 @@ export default class MailSender {
         text: `Dear, ${username} Welcome to authors haven jawans`,
         html: `<div>Dear ${username},<br><strong>You have succesfully created your account.</strong><br></div>
         <a href="http://localhost:3000/api/users/verification/${token}">Please click here to verify your account</a>` };
-      const mailSend = await sendGridMail.send(message);
-      return mailSend;
+      return await sendGridMail.send(message);
     } catch (error) {
       return 'Email was not sent use a valid email';
     }
