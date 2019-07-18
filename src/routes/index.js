@@ -13,6 +13,8 @@ import socialRoute from './socialTestRoute';
 import UserProfile from '../controllers/userProfile';
 import Auth from '../middlewares/Auth';
 import articlesRoute from './articlesRoute';
+import commentRoute from './commentRoute';
+import followerRoute from './followRoute';
 
 const { verifyToken } = Auth;
 
@@ -22,7 +24,8 @@ const { google, twitter } = socialAccount;
 router.use('/api', articlesRoute);
 // social route for test
 router.use('/api/social', socialRoute);
-
+router.use('/api/articles', commentRoute);
+router.use('/api/users', followerRoute);
 // social login routes
 router.get('/api/social/login/google', passport.authenticate('google', { scope: ['profile', 'email'], }));
 router.get('/api/social/login/google/redirect', passport.authenticate('google', { session: false }), google, socialLogin.loginGoogle);
@@ -38,10 +41,6 @@ router.post('/api/users', bodyValidation, UserController.createUser);
 router.post('/api/users/passwordreset', UserController.passwordReset);
 router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEmail, UserController.changePassword);
 router.post('/api/users/logout', verifyToken, UserController.signOut);
-router.patch('/api/users/:username/follow', verifyToken, UserController.followUser);
-router.patch('/api/users/:username/unfollow', verifyToken, UserController.unFollowUser);
-router.get('/api/users/followers', verifyToken, UserController.followers);
-router.get('/api/users/following', verifyToken, UserController.following);
 
 router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
 router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);

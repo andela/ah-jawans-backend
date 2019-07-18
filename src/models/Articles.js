@@ -15,9 +15,6 @@ export default (sequelize, DataTypes) => {
     image: { type: String,
       unique: false,
       required: false, },
-    authorId: { type: DataTypes.INTEGER,
-      unique: true,
-      required: true, },
     tagList: { type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true } },
     { timestamps: true,
@@ -25,7 +22,7 @@ export default (sequelize, DataTypes) => {
   );
 
   Articles.associate = (models) => {
-    // associations can be defined here
+  // associations can be defined here
     Articles.belongsTo(models.User, { as: 'author',
       fareignkey: 'authorId',
       targetkey: 'id',

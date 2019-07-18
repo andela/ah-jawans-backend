@@ -62,6 +62,15 @@ class ValidationSchema {
     errors.length = 0;
     addErrors(loginErrors);
   }
+
+  static comment(data) {
+    const commentErrors = {};
+    if (!data.body || !(/([^]+)(?=.{1,})/.test(data.body.trim()))) {
+      commentErrors.body = 'Body is required and should contain at least 1 character';
+    }
+    errors.length = 0;
+    addErrors(commentErrors);
+  }
 }
 
 export default { ValidationSchema, errors };

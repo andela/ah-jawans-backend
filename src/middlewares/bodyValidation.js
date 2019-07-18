@@ -18,10 +18,14 @@ const signinValidation = (req, res, next) => {
   validations.ValidationSchema.login(req.body);
   return validations.errors.length ? res.status(400).json({ errors: validations.errors }) : next();
 };
-
+const commentValidation = (req, res, next) => {
+  validations.ValidationSchema.comment(req.body);
+  return validations.errors.length ? res.status(400).json({ errors: validations.errors }) : next();
+};
 
 export {
   bodyValidation,
   bodyValidationArticle,
-  signinValidation
+  signinValidation,
+  commentValidation
 };

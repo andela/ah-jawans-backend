@@ -1,45 +1,50 @@
 {
-  "swagger" : "2.0",
-  "info" : {
-    "description" : "A Social platform for the creative at heart.\n",
-    "version" : "1.0.0",
-    "title" : "Authors Haven - Jawans"
+  "swagger": "2.0",
+  "info": {
+    "description": "A Social platform for the creative at heart.\n",
+    "version": "1.0.0",
+    "title": "Authors Haven - Jawans"
   },
-  "host" : "127.0.0.1:3000",
-  "basePath" : "/api",
-  "tags" : [ {
-    "name" : "Auth",
-    "description" : "User Authentication"
-  } ],
-  "schemes" : [ "https", "http" ],
+  "host": "127.0.0.1:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User Authentication"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
   "consumes": [
     "application/json"
   ],
   "produces": [
     "application/json"
- ],
-  "definitions" : {
-    "user" : {
-      "type" : "object",
-      "properties" : {
-        "id" : {
-          "type" : "integer",
-          "format" : "int64"
+  ],
+  "definitions": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
         },
-        "username" : {
-          "type" : "string"
+        "username": {
+          "type": "string"
         },
-        "firstName" : {
-          "type" : "string"
+        "firstName": {
+          "type": "string"
         },
-        "lastName" : {
-          "type" : "string"
+        "lastName": {
+          "type": "string"
         },
-        "email" : {
-          "type" : "string"
+        "email": {
+          "type": "string"
         },
-        "bio" : {
-          "type" : "string"
+        "bio": {
+          "type": "string"
         },
         "image": {
           "type": "String"
@@ -50,8 +55,8 @@
         "socialId": {
           "type": "String"
         },
-        "password" : {
-          "type" : "string"
+        "password": {
+          "type": "string"
         },
         "createdAt": {
           "type": "Date"
@@ -80,24 +85,24 @@
         "in": "header"
       }
     },
-    "Signup" : {
+    "Signup": {
       "required": [
         "username",
         "email",
         "password"
       ],
-      "properties" : {
-        "username" : {
-          "type" : "string"
+      "properties": {
+        "username": {
+          "type": "string"
         },
-        "email" : {
-          "type" : "string"
+        "email": {
+          "type": "string"
         },
-        "password" : {
-          "type" : "string"
+        "password": {
+          "type": "string"
         }
       }
-  },
+    },
     "login": {
       "type": "object",
       "properties": {
@@ -111,47 +116,58 @@
         }
       }
     },
-    "passwordReset" : {
-      "type" : "object",
-      "properties" : {
-        "mail" : {
-          "type" : "string"
+    "passwordReset": {
+      "type": "object",
+      "properties": {
+        "mail": {
+          "type": "string"
+        },
+        "login": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "joseph@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "joseph@123"
+            }
+          }
+        }
       },
-      "login": {
-        "type": "object",
+      "article": {
+        "required": [
+          "title",
+          "description",
+          "body"
+        ],
         "properties": {
-          "email": {
-            "type": "string",
-            "example": "joseph@gmail.com"
+          "title": {
+            "type": "string"
           },
-          "password": {
-            "type": "string",
-            "example": "joseph@123"
+          "description": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        }
+      },
+      "comment": {
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "properties": {
+          "body": {
+            "type": "string"
           }
         }
       }
-    },
-    "article": {
-      "required": [
-        "title",
-        "description",
-        "body"
-      ],
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "body": {
-          "type": "string"
-        }
-      }
     }
-  }
   },
-  "paths" : {
+  "paths": {
     "/users": {
       "post": {
         "tags": [
@@ -181,666 +197,834 @@
         }
       }
     },
-      "/users/login": {
-        "post": {
-          "tags": [
-            "Auth"
-          ],
-          "description": "Allow user to login",
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User is allowed to login",
-              "schema": {
-                "$ref": "#/definitions/login"
-              }
+    "/users/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Allow user to login",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User is allowed to login",
+            "schema": {
+              "$ref": "#/definitions/login"
             }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "successfully logged in",
-              "schema": {
-                "$ref": "#/definitions/login"
-              }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "successfully logged in",
+            "schema": {
+              "$ref": "#/definitions/login"
+            }
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Allow a user to signout from the system",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed out"
+          },
+          "401": {
+            "description": " Invalid token "
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/social/login/google": {
+      "get": {
+        "tags": [
+          "Social Media Login"
+        ],
+        "description": "Login using google account",
+        "parameters": [
+          {
+            "name": "google",
+            "in": "path",
+            "description": "Google email address of the client",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Google email Login"
+          }
+        }
+      }
+    },
+    "/passwordreset": {
+      "post": {
+        "tags": [
+          "reset password"
+        ],
+        "summary": "reset password",
+        "description": "sending a link to reset password",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/social/login/facebook": {
+      "get": {
+        "tags": [
+          "Social Media Login"
+        ],
+        "description": "Login using Facebook account",
+        "parameters": [
+          {
+            "name": "Facebook",
+            "in": "query",
+            "description": "The facebook email id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Welcome to Author Heaven"
+          }
+        }
+      }
+    },
+    "/social/login/twitter": {
+      "get": {
+        "tags": [
+          "Social Media Login"
+        ],
+        "description": "Login via twitter email account",
+        "parameters": [
+          {
+            "name": "Twitter",
+            "in": "query",
+            "description": "Twitter Email Id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Welcome to Authors Heaven"
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "patch": {
+        "tags": [
+          "Update User Profile"
+        ],
+        "description": "User profile update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "token",
+            "required": true
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The username to update",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Object containing user information to update",
+            "schema": "#/definitions/user"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
+          }
+        }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": [
+          "Profile Inquiry"
+        ],
+        "description": "Get user profile",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "Username of user to view",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile returned"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while fetching profile"
+          }
+        }
+      }
+    },
+    "/articles": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "user should be able to create an article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user's token",
+            "required": true
+          },
+          {
+            "name": "Article",
+            "in": "body",
+            "description": "create an article on author's haven",
+            "schema": {
+              "$ref": "#/definitions/article"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Article created successfully",
+            "schema": {
+              "$ref": "#/definitions/article"
             }
           }
         }
       },
-      "/users/logout": {
-        "post": {
-          "tags": [
-            "Auth"
-          ],
-          "description": "Allow a user to signout from the system",
-          "parameters": [
-            {
-              "name": "token",
-              "in": "header",
-              "description": "User's token",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Signed out"
-            },
-            "401": {
-              "description": " Invalid token "
-            },
-            "500": {
-              "description": "Server Error"
-            }
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "user should be able to view all articles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user's token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Articles fetched successfully"
+          }
+        }
+      }
+    },
+    "/articles/{id}": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "user should be able to view a specific article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The article's id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile returned"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Single Article fetched successfully"
           }
         }
       },
-      "/social/login/google": {
-        "get": {
-          "tags": [
-            "Social Media Login"
-          ],
-          "description": "Login using google account",
-          "parameters": [
-            {
-              "name": "google",
-              "in": "path",
-              "description": "Google email address of the client",
-              "required": true
+      "patch": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "user should be able to update his/her own article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The article's id",
+            "required": true
+          },
+          {
+            "name": "Article",
+            "in": "body",
+            "description": "update your article on author's haven",
+            "schema": {
+              "$ref": "#/definitions/article"
             }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Google email Login"
-        }
-      }
-    }
-    },
-  "/passwordreset" : {
-    "post" : {
-      "tags" : [ "reset password" ],
-      "summary" : "reset password",
-      "description" : "sending a link to reset password",
-      "produces" : [ "application/json" ],
-      "responses" : {
-        "200" : {
-          "description" : "OK"
-        }
-      }
-    }
-  },
-  "/social/login/facebook": {
-    "get": {
-      "tags": [
-        "Social Media Login"
-      ],
-      "description": "Login using Facebook account",
-      "parameters": [
-        {
-          "name": "Facebook",
-          "in": "query",
-          "description": "The facebook email id",
-          "required": true
-        }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Welcome to Author Heaven"
-        }
-      }
-    }
-  },
-  "/social/login/twitter": {
-    "get": {
-      "tags": [
-        "Social Media Login"
-      ],
-      "description": "Login via twitter email account",
-      "parameters": [
-        {
-          "name": "Twitter",
-          "in": "query",
-          "description": "Twitter Email Id",
-          "required": true
-        }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Welcome to Authors Heaven"
-        }
-      }
-    }
-  },
-  "/users/{username}": {
-    "patch": {
-      "tags": [
-        "Update User Profile"
-      ],
-      "description": "User profile update",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "token",
-          "required": true
-        },
-        {
-          "name":"username",
-          "in": "path",
-          "description" :"The username to update",
-          "required":true
-        },
-        {
-          "name": "user",
-          "in": "body",
-          "description": "Object containing user information to update",
-          "schema": "#/definitions/user"
-        }
-      ],
-      "produces":[
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "User profile sucessfully updated"
-        },
-        "404": {
-          "description": "User profile not found"
-        },
-        "500": {
-          "description": "Error while updating profile"
-        }
-      }
-    }
-  },
-  "/user/{username}": {
-   "get": {
-     "tags": [
-       "Profile Inquiry"
-     ],
-     "description": "Get user profile",
-     "parameters": [
-       {
-         "name": "username",
-         "in": "path",
-         "description": "Username of user to view",
-         "required": true
-       }
-     ],
-     "produces":[
-       "application/json"
-     ],
-     "responses": {
-       "200": {
-         "description": "User profile returned"
-       },
-       "404": {
-         "description": "User profile not found"
-       },
-       "500": {
-         "description": "Error while fetching profile"
-       }
-     }
-    }
-   },	  
-  "/articles": {
-    "post": {
-      "tags": [
-        "Articles"
-      ],
-      "description": "user should be able to create an article",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "The user's token",
-          "required": true
-        },
-        {
-          "name": "Article",
-          "in": "body",
-          "description": "create an article on author's haven",
-          "schema": {
-            "$ref": "#/definitions/article"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Article updated successfully"
           }
         }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "201": {
-          "description": "Article created successfully",
-          "schema": {
-            "$ref": "#/definitions/article"
-          }
-        }
-      }
-    },
-    "get": {
-      "tags": [
-        "Articles"
-      ],
-      "description": "user should be able to view all articles",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "The user's token",
-          "required": true
-        }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Articles fetched successfully"
-        }
-      }
-    }
-  },
-  "/articles/{id}": {
-    "get": {
-      "tags": [
-        "Articles"
-      ],
-      "description": "user should be able to view a specific article",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "The user token",
-          "required": true
-        },
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The article's id",
-          "required": true
-        }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "User profile returned"
-        },
-        "404": {
-          "description": "User profile not found"
-        },
-        "500": {
-          "description": "Single Article fetched successfully"
-        }
-      }
-    },
-    "patch": {
-      "tags": [
-        "Articles"
-      ],
-      "description": "user should be able to update his/her own article",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "The user token",
-          "required": true
-        },
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The article's id",
-          "required": true
-        },
-        {
-          "name": "Article",
-          "in": "body",
-          "description": "update your article on author's haven",
-          "schema": {
-            "$ref": "#/definitions/article"
-          }
-        }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Article updated successfully"
-        }
-      }
-    },
-    "delete": {
-      "tags": [
-        "Articles"
-      ],
-      "description": "user should be able to delete a specific article",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "The user token",
-          "required": true
-        },
-        {
-          "name": "id",
-          "in": "path",
-          "description": "The article's id",
-          "required": true
-        }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Article deleted successfully!"
-        }
-      }
-    }
-  },
-  "/allusers": {
-    "get": {
-      "tags": [
-        "Profile"
-      ],
-      "description": "List of all users",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "User's token",
-          "required": true
-        }
-      ],
-      "produces":[
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "User profile sucessfully updated"
-        },
-        "404": {
-          "description": "User profile not found"
-        },
-        "500": {
-          "description": "Error while updating profile"
-        }
-      }	  
-  }
-},
-"/users/{username}/follow": {
-  "patch": {
-    "tags": [
-      "Auth"
-    ],
-    "description": "Allow user to follow another user",
-    "parameters": [ 
-      {
-        "name": "username",
-        "in": "path",
-        "description": "username",
-        "required": true
-    },
-    {
-      "name": "token",
-      "in": "header",
-      "description": "User follows another user"
-    }
-],
-"produces": [
-  "application/json"
-],
-"responses": {
-  "201": {
-    "description": "succesfully followed user"
-  }
-}
-}
-},
-"/users/{username}/unfollow": {
-"patch": {
-"tags": [
-  "Auth"
-],
-"description": "Allow to unfollow user",
-"parameters": [
-  {
-    "name": "username",
-    "in": "path",
-    "description": "username",
-    "required": true
-},
-{
-  "name": "token",
-  "in": "header",
-  "description": "Unfollow a user"
-}
-],
-"produces": [
-  "application/json"
-],
-"responses": {
-  "201": {
-    "description": "succesfully unfollowed user"
-  }
-}
-}
-},
-"/users/followers": {
-"get": {
-"tags": [
-  "Auth"
-],
-"description": "Displays all user followers",
-"parameters": [
-  {
-    "name": "token",
-    "in": "header",
-    "description": "User followers"
-  }
-],
-"produces": [
-  "application/json"
-],
-"responses": {
-  "200": {
-    "description": "List of all my followers"
-  }
-}
-}
-},
-"/users/following": {
-"get": {
-"tags": [
-  "Auth"
-],
-"description": "Displays all my following list",
-"parameters": [
-  {
-    "name": "token",
-    "in": "header",
-    "description": "User following"
-  }
-],
-"produces": [
-  "application/json"
-],
-"responses": {
-  "200": {
-    "description": "Following list"
-  }
-}
-}
-},
-"/article/search": {
-  "get": {
-  "tags": [
-    "Articles"
-  ],
-  "description": "Displays all my following list",
-  "parameters": [
-    {
-      "name": "authorName",
-      "in": "query",
-      "description": "search author name"
-    },
-    {
-      "name": "keyword",
-      "in": "query",
-      "description": "search any keyword"
-    },
-    {
-      "name": "tag",
-      "in": "query",
-      "description": "search using tags"
-    },
-    {
-      "name": "title",
-      "in": "query",
-      "description": "search using title"
-    }
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "responses": {
-    "200": {
-      "description": "Article list"
-    }
-  }
-  }
-  },
-"/articles/{slug}/share/twitter": {
-  "get": {
-  "tags": [
-    "Social Media Article Share"
-  ],
-  "description": "Allows Sharing of articles across twitter",
-  "parameters": [
-    {
-      "name": "token",
-      "in": "header",
-      "description": "logged in user token"
-    },
-    {
-      "name": "slug",
-      "in": "path",
-      "description": "slug",
-      "required": true
-  }
-],
-"produces": [
-  "application/json"
-],
-"responses": {
-  "200": {
-    "description": "Thanks for sharing!"
-  }
-}
-}
-},
-"/articles/{slug}/share/linkedin": {
-  "get": {
-  "tags": [
-    "Social Media Article Share"
-  ],
-  "description": "Allows Sharing of articles across Linkedin",
-  "parameters": [
-    {
-      "name": "token",
-      "in": "header",
-      "description": "logged in user token"
-    },
-    {
-      "name": "slug",
-      "in": "path",
-      "description": "slug",
-      "required": true
-  }
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "responses": {
-    "200": {
-      "description": "Thanks for sharing!"
-    }
-  }
-  }
-  },
-  "/articles/{slug}/share/facebook": {
-    "get": {
-    "tags": [
-      "Social Media Article Share"
-    ],
-    "description": "Allows Sharing of articles across facebook",
-    "parameters": [
-      {
-        "name": "token",
-        "in": "header",
-        "description": "logged in user token"
       },
-      {
-        "name": "slug",
-        "in": "path",
-        "description": "slug",
-        "required": true
-    }
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "responses": {
-      "200": {
-        "description": "Thanks for sharing!"
+      "delete": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "user should be able to delete a specific article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The article's id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Article deleted successfully!"
+          }
+        }
       }
-    }
-    }
+    },
+    "/allusers": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "description": "List of all users",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
+          }
+        }
+      }
+    },
+    "/users/{username}/follow": {
+      "patch": {
+        "tags": [
+          "Follower"
+        ],
+        "description": "Allow user to follow another user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User follows another user"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Followed user"
+          }
+        }
+      }
+    },
+    "/users/{username}/unfollow": {
+      "patch": {
+        "tags": [
+          "Follower"
+        ],
+        "description": "Allow to unfollow user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Unfollow a user"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "succesfully unfollowed user"
+          }
+        }
+      }
+    },
+    "/users/followers": {
+      "get": {
+        "tags": [
+          "Follower"
+        ],
+        "description": "Displays all user followers",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User followers"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Followers list"
+          }
+        }
+      }
+    },
+    "/users/following": {
+      "get": {
+        "tags": [
+          "Follower"
+        ],
+        "description": "Displays all my following list",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User following"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Following list"
+          }
+        }
+      }
+    },
+    "/articles/{articleId}/comments": {
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Allow user to comment on article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "Comment-body",
+            "in": "body",
+            "description": "Write your comment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/comment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment on article"
+          },
+          "404": {
+            "description": "Article not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Get article's comment",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "Comment id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all comment"
+          },
+          "404": {
+            "description": "Comments not found"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/share/twitter": {
+      "get": {
+        "tags": [
+          "Social Media Article Share"
+        ],
+        "description": "Allows Sharing of articles across twitter",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "slug",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Thanks for sharing!"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/share/linkedin": {
+      "get": {
+        "tags": [
+          "Social Media Article Share"
+        ],
+        "description": "Allows Sharing of articles across Linkedin",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "slug",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Thanks for sharing!"
+          }
+        }
+      }
+    },
+    "/articles/{slug}/share/facebook": {
+      "get": {
+        "tags": [
+          "Social Media Article Share"
+        ],
+        "description": "Allows Sharing of articles across facebook",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "slug",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Thanks for sharing!"
+          }
+        }
+      }
     },
     "/articles/{slug}/share/mail": {
       "get": {
-      "tags": [
-        "Social Media Article Share"
-      ],
-      "description": "Allows Sharing of articles thru email",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "logged in user token"
-        },
-        {
-          "name": "slug",
-          "in": "path",
-          "description": "slug",
-          "required": true
-      }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Thanks for sharing!"
+        "tags": [
+          "Social Media Article Share"
+        ],
+        "description": "Allows Sharing of articles thru email",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "slug",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Thanks for sharing!"
+          }
         }
       }
+    },
+    "/articles/{articleId}/comments/{commentId}": {
+      "patch": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Allow user to edit a comment",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "Comment id",
+            "required": true
+          },
+          {
+            "name": "Comment-body",
+            "in": "body",
+            "description": "Edit your comment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/comment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Edit comment"
+          },
+          "404": {
+            "description": "Comment not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Get article's comment",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "Comment id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": " delete a comment"
+          },
+          "404": {
+            "description": "Comment not found"
+          }
+        }
       }
+    },
+    "/article/search": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "Displays all my following list",
+        "parameters": [
+          {
+            "name": "authorName",
+            "in": "query",
+            "description": "search author name"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "search any keyword"
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "search using tags"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "search using title"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Article list"
+          }
+        }
       }
-}
+    }
+  }
 }

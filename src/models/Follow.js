@@ -2,14 +2,10 @@ export default (sequelize, DataTypes) => {
   const Follow = sequelize.define(
     'Follow', { userId: { type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      references: { model: 'User',
-        key: 'id' },
-      followed: { type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        references: { model: 'User',
-          key: 'id' } }, } },
+      primaryKey: true },
+    followed: { type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true } },
     { timestamps: true,
       tableName: 'Follow' }
   );
