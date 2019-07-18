@@ -28,6 +28,7 @@ export default (sequelize, DataTypes) => {
       targetkey: 'id',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE' });
+    Articles.hasMany(models.Rating, { foreignKey: 'articleId', allowNull: false });
   };
   return Articles;
 };

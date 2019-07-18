@@ -166,7 +166,17 @@
       }
     }
   },
-  "paths": {
+  "ratings": {
+    "required": [
+      "rating"
+    ],
+    "properties": {
+      "rating": {
+        "type": "integer"
+      }
+    }
+},
+  "paths" : {
     "/users": {
       "post": {
         "tags": [
@@ -222,6 +232,28 @@
               "$ref": "#/definitions/login"
             }
           }
+        }
+      },
+      "/social/login/google": {
+        "get": {
+          "tags": [
+            "Social Media Login"
+          ],
+          "description": "Login using google account",
+          "parameters": [
+            {
+              "name": "google",
+              "in": "path",
+              "description": "Google email address of the client",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Google email Login"
         }
       }
     },
@@ -1133,3 +1165,74 @@
     }
   }
 }
+},
+"/articles/{id}/rating": {
+  "post": {
+    "tags": [
+      "Articles"
+    ],
+    "description": "Allows other users to rate an article",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "description": "Article id",
+        "required": true
+    },
+      {
+        "name": "token",
+        "in": "header",
+        "description": "User's token",
+        "required": true
+      },
+      {
+        "name": "rating",
+        "in": "body",
+        "description": "User is allowed rate article",
+        "schema": {
+          "$ref": "#/definitions/ratings"
+        }
+      }
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "responses": {
+      "200": {
+        "description": "rated the article"
+      }
+}
+}
+ },
+"/articles/{id}/ratings": {
+  "get": {
+    "tags": [
+      "Articles"
+    ],
+    "description": "Fetches ratings of an article",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "description": "Fetch ratings",
+        "require": true,
+        "schema": {
+          "$ref": "#/definitions/fecthratings"
+        }
+      }
+    ],
+    "produces":[ 
+    "application/json"
+    ],
+   "responses": {
+    "200": {
+    "description": "Ratings",
+    "schema": {
+      "$ref": "#/definitions/fecthratings"
+    }
+  }
+}	        
+}
+}
+}
+

@@ -5,6 +5,7 @@ import { bodyValidationArticle } from '../middlewares/bodyValidation';
 import Auth from '../middlewares/Auth';
 import slugExist from '../middlewares/slugExists';
 import shareArticle from '../helpers/shareArticle';
+import ratingsController from '../controllers/ratingsController';
 
 const { verifyToken } = Auth;
 const articles = express.Router();
@@ -22,5 +23,7 @@ articles.get('/articles/:slug/share/facebook', verifyToken, slugExist, shareArti
 articles.get('/articles/:slug/share/linkedin', verifyToken, slugExist, shareArticle, articlesController.share);
 articles.get('/articles/:slug/share/email', verifyToken, slugExist, shareArticle, articlesController.share);
 
+articles.post('/articles/:id/rating', Auth.verifyToken, ratingsController.createRatings);
+articles.get('/articles/:id/ratings', ratingsController.getAllRatings);
 
 export default articles;

@@ -41,7 +41,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('message');
         res.body.data.should.have.property('email');
         res.body.data.should.have.property('token');
         tokens = res.body.data.token;
