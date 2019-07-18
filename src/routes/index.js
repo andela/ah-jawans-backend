@@ -15,12 +15,15 @@ import followerRoute from './followRoute';
 import likeAndDislike from './likesAndDislikes';
 import socialAPIRoute from './socialAPIRoute';
 import optinAndOptOut from './optinAndOptOut';
+import bookmarkRoute from './bookmarksRoutes';
 
 const { verifyToken } = Auth;
 
 const router = express.Router();
 
 
+router.use('/api', bookmarkRoute);
+// article routes
 router.use('/api', articlesRoute);
 router.use('/api', likeAndDislike);
 // social route for test

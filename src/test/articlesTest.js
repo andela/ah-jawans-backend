@@ -48,6 +48,24 @@ describe('Article', () => {
       });
   });
 
+  it('login for creating article', (done) => {
+    const user = { username: 'ffff',
+      password: 'Fofo1@hjsd',
+      email: 'faustinkagabo1@gmail.com' };
+    chai.request(app)
+      .post('/api/users/login')
+      .send(user)
+      .end((req, res) => {
+        res.should.have.status(200);
+        // res.body.should.be.an('object');
+        // res.body.should.have.property('username');
+        // res.body.should.have.property('email');
+        // res.body.should.have.property('token');
+        tokens = res.body.data.token;
+        done();
+      });
+  });
+
   it('it should create an article', (done) => {
     const article = { title: 'hello man, how was the night',
       body: 'hello man, how was the night',
@@ -137,7 +155,7 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(401);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
+        res.body.should.have.property('error').eql('invalid token');
         done();
       });
   });
