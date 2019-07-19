@@ -1,10 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
   const Comments = sequelize.define('Comments', { body: DataTypes.TEXT,
     articleId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER }, {});
+    userId: { type: DataTypes.INTEGER,
+      allowNull: true,
+      references: { model: 'User',
+        key: 'id' },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE' } }, { timestamps: true });
   Comments.associate = (models) => {
-    // associations can be defined here
     Comments.belongsTo(models.Articles, { foreignKey: 'articleId',
+      onDelete: 'CASCADE' });
+    Comments.belongsTo(models.User, { foreignKey: 'userId',
       onDelete: 'CASCADE' });
   };
   return Comments;

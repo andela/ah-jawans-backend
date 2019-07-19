@@ -19,8 +19,10 @@ export default (sequelize) => {
     { timestamps: true, tableName: 'User' });
 
   User.associate = (models) => {
-    // associations can be defined here
     User.hasMany(models.Rating, { foreignKey: 'articleId',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE' });
+    User.hasMany(models.Comments, { foreignKey: 'userId',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE' });
   };

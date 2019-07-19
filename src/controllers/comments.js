@@ -1,7 +1,7 @@
 import models from '../models';
 import eventEmitter from '../template/notifications/EventEmitter';
 
-const { Comments } = models;
+const { Comments, Articles, User } = models;
 /**
  * @description CRUD for comments
  * @author: Patrick Ngabonziza
@@ -21,7 +21,37 @@ export default class ArticleComment {
       return res.status(201).json({ message: 'comment created!',
         comment: createComment });
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json(error.message);
+    }
+  }
+
+  /**
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} Create threaded comments
+   */
+  static async createThreadComment(req, res) {
+    try {
+      const { body } = req.body;
+      const { articleId, commentId } = req.params;
+      const userId = req.user.id;
+
+      const checkIfArticleExists = await Articles.findByPk(articleId);
+      if (!checkIfArticleExists) return res.status(404).json({ error: 'Article does not exist' });
+      const checkIfCommentExists = await Comments.findByPk(commentId);
+      if (!checkIfCommentExists) return res.status(404).json({ error: 'Comment does not exist' });
+      const checkUser = await User.findByPk(userId);
+      if (!checkUser) return res.status().json({ error: 'User not found' });
+
+      const newThreadedComment = await Comments.create({ userId,
+        articleId,
+        body,
+        parentId: commentId });
+      return res.status(201).json({ message: 'Commented under this thread!',
+        newThreadedComment });
+    } catch (error) {
+      return res.status(500).json(error.message);
     }
   }
 
@@ -36,10 +66,10 @@ export default class ArticleComment {
       const findComent = await Comments.findOne({ where: { id: commentId, articleId } });
       return findComent
         ? await Comments.update({ body: req.body.body },
-          { where: { id: commentId, articleId } }) && res.status(200).json({ message: 'Comment modified!' })
+          { where: { id: commentId, articleId, userId: req.user.id } }) && res.status(200).json({ message: 'Comment modified!' })
         : res.status(404).json({ message: 'Comment not found!' });
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json(error.message);
     }
   }
 
@@ -50,13 +80,14 @@ export default class ArticleComment {
  */
   static async deleteComment(req, res) {
     try {
+      const userId = req.user.id;
       const { articleId, commentId } = req.params;
-      const removeComment = await Comments.destroy({ where: { id: commentId, articleId } });
+      const removeComment = await Comments.destroy({ where: { id: commentId, articleId, userId } });
       return removeComment
         ? res.status(204).json({ message: 'comment deleted' })
         : res.status(404).json({ message: 'comment not found!' });
     } catch (error) {
-      return res.status(500).json({ error: 'server error, something went wrong!!' });
+      return res.status(500).json(error.message);
     }
   }
 

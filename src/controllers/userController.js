@@ -110,7 +110,7 @@ export default class UserController {
     try {
       const decode = await decodeToken(req.params.userToken);
       if (!decode.payload.email || decode.payload.verified) {
-        return (!decode.payload.email && res.status(409).json({ error: `Email:${decode.payload.email} does not exist in the database` })) || (decode.payload.verified && res.status(409).json({ error: 'Your account is already verified' }));
+        return (!decode.payload.email && res.status(404).json({ error: `Email:${decode.payload.email} does not exist in the database` })) || (decode.payload.verified && res.status(409).json({ error: 'Your account is already verified' }));
       }
       await User.update({ verified: true }, { where: { email: decode.payload.email } });
       return res.status(200).json({ message: 'Your account is now verified you can login with your email', });

@@ -45,11 +45,56 @@ describe('COMMENTS TEST', () => {
       .set('token', token)
       .send(comment)
       .end((err, res) => {
+        res.should.have.status(400);
         res.body.should.be.an('object');
         done();
       });
   });
-
+  it('Autenticated user should be able to create an comment thread', (done) => {
+    const articleId = 2;
+    const commentId = 1;
+    const comment = { body: 'This my thread comment' };
+    chai
+      .request(app)
+      .post(`/api/articles/${articleId}/comments/${commentId}`)
+      .set('token', token)
+      .send(comment)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+  it('Fail to create an comment thread if articleId not found', (done) => {
+    const articleId = 1;
+    const commentId = 1;
+    const comment = { body: 'This my thread comment' };
+    chai
+      .request(app)
+      .post(`/api/articles/${articleId}/comments/${commentId}`)
+      .set('token', token)
+      .send(comment)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+  it('Fail to create an comment thread if commentId not found', (done) => {
+    const articleId = 1;
+    const commentId = 100;
+    const comment = { body: 'This my thread comment' };
+    chai
+      .request(app)
+      .post(`/api/articles/${articleId}/comments/${commentId}`)
+      .set('token', token)
+      .send(comment)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
   it('Autenticated user should be able to edit comment', (done) => {
     const articleId = 1;
     const commentId = 1;

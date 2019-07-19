@@ -27,9 +27,8 @@ class articleContoller {
       image,
       tags
     } = req.body;
-    let tagList;
     const ReadTime = readTime(req.body.body);
-    tags ? (tagList = tags.split(',')) : tagList = [];
+    const tagList = tags ? tags.split(',') : [];
     const slug = createSlug(title);
     const user = await User.findOne({ where: { email: req.user.email } });
     const userInfo = await findUser(req.user.username);
@@ -54,7 +53,9 @@ class articleContoller {
       body,
       description,
       image,
+      tags
     } = req.body;
+    const tagList = tags ? tags.split(',') : [];
     if (req.body.body) {
       const slug = createSlug(title || req.article.title);
       const newReadTime = readTime(req.body.body);
@@ -65,6 +66,7 @@ class articleContoller {
         body: body || req.article.body,
         image: image || req.article.image,
         readtime: newReadTime,
+        tagList,
         authorId: req.user.id }, { where: { id: req.params.id } });
       updatedArticle && res.status(200).json({ message: 'The article successfully updated!' });
     } else {
