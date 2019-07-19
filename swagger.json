@@ -1517,58 +1517,52 @@
   }
   }
 },
-"/bookmarks/{articleId}": {
+  "/{articleId}/comments/{commentId}": {
     "post": {
-    "tags": [
-      "Bookmark article"
-    ],
-    "description": "Create bookmark",
-    "parameters": [
-      {
-        "name": "token",
-        "in": "header",
-        "description": "logged in user token"
-      },
-      {
-        "name": "articleId",
-        "in": "path",
-        "description": "Article Id",
-        "required": true
-    }
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "responses": {
-      "201": {
-        "description": "bookmark data"
+      "tags": [
+        "Comments"
+      ],
+      "description": "Allow user to thread a comment",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "header",
+          "description": "User's token",
+          "required": true
+        },
+        {
+          "name": "articleId",
+          "in": "path",
+          "description": "Article id",
+          "required": true
+        },
+        {
+          "name": "commentId",
+          "in": "path",
+          "description": "comment id",
+          "required": true
+        },
+        {
+          "name": "Comment-body",
+          "in": "body",
+          "description": "Write your threaded comment",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/comment"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Comment on article"
+        },
+        "404": {
+          "description": "Article not found"
+        }
       }
-    }
-    }
-  },
-  "/bookmarks": {
-    "get": {
-    "tags": [
-      "Bookmark article"
-    ],
-    "description": "Get bookmarks",
-    "parameters": [
-      {
-        "name": "token",
-        "in": "header",
-        "description": "logged in user token"
-      }
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "responses": {
-      "200": {
-        "description": "bookmark data"
-      }
-    }
     }
   }
-  }
-}
-
+  }}

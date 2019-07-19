@@ -8,6 +8,7 @@ const { verifyToken } = Auth;
 
 const router = express.Router();
 
+router.post('/:articleId/comments/:commentId', verifyToken, commentValidation, Comments.createThreadComment);
 router.post('/:articleId/comments', verifyToken, commentValidation, Comments.createComment);
 router.delete('/:articleId/comments/:commentId', verifyToken, Comments.deleteComment);
 router.get('/:articleId/comments', verifyToken, Comments.getAllcomments);
