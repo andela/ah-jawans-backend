@@ -1,5 +1,3 @@
-
-
 module.exports = { up: (queryInterface, Sequelize) => queryInterface.createTable('LikeAndDislike', { id: { allowNull: false,
   autoIncrement: true,
   primaryKey: true,
@@ -8,6 +6,7 @@ userId: { type: Sequelize.INTEGER },
 likes: { type: Sequelize.BOOLEAN },
 dislikes: { type: Sequelize.BOOLEAN },
 articleId: { type: Sequelize.INTEGER },
+commentId: { type: Sequelize.INTEGER },
 createdAt: { allowNull: false,
   type: Sequelize.DATE },
 updatedAt: { allowNull: false,

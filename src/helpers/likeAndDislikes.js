@@ -1,5 +1,4 @@
 /* eslint-disable require-jsdoc */
-
 import Sequelize from 'sequelize';
 import model from '../models';
 
