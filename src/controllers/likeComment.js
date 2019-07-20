@@ -1,15 +1,5 @@
 import model from '../models';
-import { countCommentDislikes,
-  countCommentLikes,
-  undoLikeOrDislikeComments,
-  findCommentLikes,
-  ChangeFromLikeToDisLike,
-  ChangeFromDislikeToLike,
-  findDisliked,
-  findLikedComment,
-  findDislikedComment,
-  userLikedOrDiskedComment,
-  findOneComment } from './helpers/likeCommentHelper';
+import { countCommentDislikes, countCommentLikes, undoLikeOrDislikeComments, findCommentLikes, ChangeFromLikeToDisLike, ChangeFromDislikeToLike, findDisliked, findLikedComment, findDislikedComment, userLikedOrDiskedComment, findOneComment } from './helpers/likeCommentHelper';
 
 const { LikeAndDislike } = model;
 /**

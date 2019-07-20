@@ -235,30 +235,6 @@
         }
       }
     },
-      "/social/login/google": {
-        "get": {
-          "tags": [
-            "Social Media Login"
-          ],
-          "description": "Login using google account",
-          "parameters": [
-            {
-              "name": "google",
-              "in": "path",
-              "description": "Google email address of the client",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Google email Login"
-        }
-      }
-    }
-  },
     "/users/logout": {
       "post": {
         "tags": [

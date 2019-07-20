@@ -6,6 +6,7 @@ import searchUserHelper from './helpers/searchUserHelper';
 import searchArticlesHelper from './helpers/searchArticlesHelper';
 import eventEmitter from '../template/notifications/EventEmitter';
 import findUser from '../helpers/FindUser';
+import readTime from './helpers/read_time';
 
 const { Articles, User } = model;
 
@@ -27,6 +28,7 @@ class articleContoller {
       tags
     } = req.body;
     let tagList;
+    const ReadTime = readTime(req.body.body);
     tags ? (tagList = tags.split(',')) : tagList = [];
     const slug = createSlug(title);
     const user = await User.findOne({ where: { email: req.user.email } });
@@ -39,6 +41,7 @@ class articleContoller {
         body,
         image,
         tagList,
+        readtime: ReadTime,
         authorId: user.id, })
       : res.status(401).json({ message: "User not allowed to create an article, login or signin if you don't have an account" });
     eventEmitter.emit('publishArticle', userInfo.id, slug);
@@ -52,16 +55,21 @@ class articleContoller {
       description,
       image,
     } = req.body;
-
-    const slug = createSlug(title || req.article.title);
-    const updatedArticle = await Articles.update({ id: req.article.id,
-      slug,
-      title: title || req.article.title,
-      description: description || req.article.description,
-      body: body || req.article.body,
-      image: image || req.article.image,
-      authorId: req.user.id }, { where: { id: req.params.id } });
-    updatedArticle && res.status(200).json({ message: 'The article successfully updated!' });
+    if (req.body.body) {
+      const slug = createSlug(title || req.article.title);
+      const newReadTime = readTime(req.body.body);
+      const updatedArticle = await Articles.update({ id: req.article.id,
+        slug,
+        title: title || req.article.title,
+        description: description || req.article.description,
+        body: body || req.article.body,
+        image: image || req.article.image,
+        readtime: newReadTime,
+        authorId: req.user.id }, { where: { id: req.params.id } });
+      updatedArticle && res.status(200).json({ message: 'The article successfully updated!' });
+    } else {
+      res.status(404).json({ message: 'article doenot have either title, description or body' });
+    }
   }
 
   static async getAllArticles(req, res) {

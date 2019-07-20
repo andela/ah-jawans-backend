@@ -49,6 +49,7 @@ const searchArticlesHelper = async (tag, keyword, title, user) => {
       'description',
       'body',
       'tagList',
+      'readtime',
       'updatedAt',
       'createdAt'
     ] });

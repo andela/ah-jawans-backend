@@ -15,7 +15,9 @@ export default (sequelize, DataTypes) => {
     unique: false,
     required: false, },
   tagList: { type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: true } },
+    allowNull: true },
+  readtime: { type: DataTypes.STRING,
+    allowNull: false }, },
   { timestamps: true,
     tableName: 'Articles' });
 

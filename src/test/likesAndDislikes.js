@@ -28,7 +28,8 @@ describe('Likes and Deslikes', () => {
       body: 'This articles goes to all my freinds',
       description: 'This articles goes to all my freinds',
       slug: 'slug100000',
-      authorId: newUser.dataValues.id, };
+      authorId: newUser.dataValues.id,
+      readtime: 'less than a minute' };
 
     await Articles.create(articleObject);
 
