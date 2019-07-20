@@ -134,7 +134,8 @@
             }
           }
         }
-      },
+      }
+    },
       "article": {
         "required": [
           "title",
@@ -164,8 +165,7 @@
           }
         }
       }
-    }
-  },
+    },
   "ratings": {
     "required": [
       "rating"
@@ -234,7 +234,31 @@
           }
         }
       }
-      },
+    },
+      "/social/login/google": {
+        "get": {
+          "tags": [
+            "Social Media Login"
+          ],
+          "description": "Login using google account",
+          "parameters": [
+            {
+              "name": "google",
+              "in": "path",
+              "description": "Google email address of the client",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Google email Login"
+        }
+      }
+    }
+  },
     "/users/logout": {
       "post": {
         "tags": [
@@ -1245,6 +1269,72 @@
         "responses": {
           "200": {
             "description": "Article list"
+          }
+        }
+      }
+    },
+    "/articles/comments/{commentParamsId}/likes": {
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Allow user to like a comment",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "commentParamsId",
+            "in": "path",
+            "description": "Comment id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "liked comment successfiully"
+          },
+          "404": {
+            "description": "Comment not found"
+          }
+        }
+      }
+    },
+    "/articles/comments/{commentParamsId}/dislikes": {
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Allow user to dislike a comment",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "commentParamsId",
+            "in": "path",
+            "description": "Comment id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "disliked comment successfiully"
+          },
+          "404": {
+            "description": "Comment not found"
           }
         }
       }

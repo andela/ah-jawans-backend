@@ -1,6 +1,7 @@
 import express from 'express';
 import Comments from '../controllers/comments';
 import Auth from '../middlewares/Auth';
+import LikeComment from '../controllers/likeComment';
 import { commentValidation } from '../middlewares/bodyValidation';
 
 const { verifyToken } = Auth;
@@ -11,4 +12,7 @@ router.post('/:articleId/comments', verifyToken, commentValidation, Comments.cre
 router.delete('/:articleId/comments/:commentId', verifyToken, Comments.deleteComment);
 router.get('/:articleId/comments', verifyToken, Comments.getAllcomments);
 router.patch('/:articleId/comments/:commentId', verifyToken, commentValidation, Comments.updateComment);
+
+router.post('/comments/:commentParamsId/likes', verifyToken, LikeComment.likeComment);
+router.post('/comments/:commentParamsId/dislikes', verifyToken, LikeComment.DislikeComment);
 export default router;
