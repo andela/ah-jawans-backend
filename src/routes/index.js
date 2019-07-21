@@ -16,6 +16,7 @@ import likeAndDislike from './likesAndDislikes';
 import socialAPIRoute from './socialAPIRoute';
 import optinAndOptOut from './optinAndOptOut';
 import bookmarkRoute from './bookmarksRoutes';
+import readerStatsRoute from './readerStatsRoute';
 
 const { verifyToken } = Auth;
 
@@ -31,6 +32,7 @@ router.use('/api/social', socialRoute);
 router.use('/api/articles', commentRoute);
 router.use('/api/users', followerRoute);
 router.use('/api', socialAPIRoute);
+router.use('/api', readerStatsRoute);
 // route for optin/Optout
 router.use('/', optinAndOptOut);
 
