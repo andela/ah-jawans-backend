@@ -35,7 +35,7 @@ describe('Rating an article', () => {
     article = await Articles.create(articleObject);
   });
 
-  it('User should not be able to fetch all ratings from articles', (done) => {
+  it('User should not be able to fetch ratings from articles', (done) => {
     chai.request(app)
       .get(`/api/articles/${article.id}/rating`)
       .set('token', tokenGen)
@@ -44,8 +44,17 @@ describe('Rating an article', () => {
         done();
       });
   });
+  it('should not be able to fetch ratings from articles because they have not been rated', (done) => {
+    chai.request(app)
+      .get(`/api/articles/${article.id}/ratings`)
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+  });
 
-  it('User shoud not be able to fetch all ratings from bad article articles', (done) => {
+  it('User shoud not be able to fetch ratings from non existing articles', (done) => {
     chai.request(app)
       .get('/api/articles/10000/rating')
       .set('token', tokenGen)
@@ -73,13 +82,13 @@ describe('Rating an article', () => {
       .set('token', tokenGen)
       .send({ rating: 3 })
       .end((err, res) => {
-        res.should.have.status(204);
+        res.should.have.status(200);
         res.should.be.an('object');
         done();
       });
   });
 
-  it('User shoud be able to fetch all ratings of an article', (done) => {
+  it('User should be able to fetch all ratings of an article', (done) => {
     chai.request(app)
       .get(`/api/articles/${article.id}/ratings`)
       .set('token', tokenGen)
@@ -96,6 +105,16 @@ describe('Rating an article', () => {
       .end((err, res) => {
         res.should.have.status(400);
         res.should.have.property('error');
+        done();
+      });
+  });
+  it(' should not have an empty rating', (done) => {
+    chai.request(app)
+      .post(`/api/articles/${article.id}/rating`)
+      .set('token', tokenGen)
+      .send({ rating: '' })
+      .end((err, res) => {
+        res.should.have.status(400);
         done();
       });
   });

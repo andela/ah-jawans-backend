@@ -6,6 +6,7 @@ import passport from 'passport';
 import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import swagger from '../swagger.json';
+
 // eslint-disable-next-line import/no-named-as-default
 import route from './routes/index';
 import './config/passport';

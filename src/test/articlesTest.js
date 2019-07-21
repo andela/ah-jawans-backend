@@ -138,7 +138,7 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(401);
         res.body.should.be.an('object');
-        res.body.should.have.property('error').eql('invalid token');
+        res.body.should.have.property('error');
         done();
       });
   });
@@ -154,7 +154,7 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(401);
         res.body.should.be.an('object');
-        res.body.should.have.property('error').eql('invalid token');
+        res.body.should.have.property('error');
         done();
       });
   });
