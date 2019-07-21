@@ -7,16 +7,10 @@ import searchArticlesHelper from './helpers/searchArticlesHelper';
 import eventEmitter from '../template/notifications/EventEmitter';
 import findUser from '../helpers/FindUser';
 import readTime from './helpers/read_time';
+import createSlug from './helpers/createSluge';
+import { getAllArticles, articlePagination } from './helpers/getAllArticlesHelper';
 
 const { Articles, User } = model;
-
-const createSlug = (text) => {
-  let gen = `${text} ${(Math.floor(Math.random() * Math.floor(100000)))}`;
-  while (gen.match(/ /g)) {
-    gen = gen.replace(' ', '-');
-  }
-  return gen;
-};
 
 class articleContoller {
   static async createArticle(req, res) {
@@ -74,15 +68,6 @@ class articleContoller {
     }
   }
 
-  static async getAllArticles(req, res) {
-    try {
-      const articles = await Articles.findAll();
-      articles && res.status(200).json({ articles });
-    } catch (error) {
-      return res.status(404).json({ error: 'No article found' });
-    }
-  }
-
   static async getOneArticle(req, res) {
     try {
       const article = await Articles.findOne({ where: { id: req.params.id } });
@@ -133,6 +118,11 @@ class articleContoller {
     const data = await searchArticlesHelper(tag, keyword, title, user);
 
     return data.length ? res.status(200).json({ data }) : res.status(404).json({ message: 'No data found' });
+  }
+
+
+  static async getArticles(req, res) {
+    (req.query.offset && req.query.limit) ? articlePagination(req, res) : getAllArticles(req, res);
   }
 }
 export default articleContoller;
