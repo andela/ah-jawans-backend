@@ -8,8 +8,6 @@ module.exports = { up: (queryInterface, Sequelize) => queryInterface.createTable
 followed: { type: Sequelize.INTEGER,
   allowNull: false,
   primaryKey: true,
-  onUpdate: 'CASCADE',
-  onDelete: 'CASCADE',
   references: { model: 'User',
     key: 'id' } },
 createdAt: { allowNull: false,

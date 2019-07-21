@@ -5,17 +5,22 @@
     "version": "1.0.0",
     "title": "Authors Haven - Jawans"
   },
-  "host" : "127.0.0.1:3000",
-  "basePath" : "/api",
-  "tags" : [ {
-    "name" : "Auth",
-    "description" : "User Authentication"
-  },
-  {"name" : "Articles",
-  "description" : "User Authentication"
-}
- ],
-  "schemes" : [ "https", "http" ],
+  "host": "127.0.0.1:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User Authentication"
+    },
+    {
+      "name": "Articles",
+      "description": "User Authentication"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
   "consumes": [
     "application/json"
   ],
@@ -136,36 +141,36 @@
         }
       }
     },
-      "article": {
-        "required": [
-          "title",
-          "description",
-          "body"
-        ],
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          }
-        }
-      },
-      "comment": {
-        "type": "object",
-        "required": [
-          "body"
-        ],
-        "properties": {
-          "body": {
-            "type": "string"
-          }
+    "article": {
+      "required": [
+        "title",
+        "description",
+        "body"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
         }
       }
     },
+    "comment": {
+      "type": "object",
+      "required": [
+        "body"
+      ],
+      "properties": {
+        "body": {
+          "type": "string"
+        }
+      }
+    }
+  },
   "ratings": {
     "required": [
       "rating"
@@ -175,8 +180,8 @@
         "type": "integer"
       }
     }
-},
-  "paths" : {
+  },
+  "paths": {
     "/users": {
       "post": {
         "tags": [
@@ -721,86 +726,86 @@
             "description": "Following list"
           }
         }
-}
-},
-"/articles/{id}/like": {
-  "post": {
-    "tags": [
-      "Articles"
-    ],
-    "description": "Allow user to like the article",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "description": "Article id",
-        "required": true
+      }
     },
-      {
-        "name": "token",
-        "in": "header",
-        "description": "User's token",
-        "required": true
+    "/articles/{id}/like": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "Allow user to like the article",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Liked the article"
+          },
+          "409": {
+            "description": "You already liked this article"
+          },
+          "401": {
+            "description": " Toke is missing "
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
       }
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "responses": {
-      "200": {
-        "description": "Liked the article"
-      },
-      "409": {
-        "description": "You already liked this article"
-      },
-      "401": {
-        "description": " Toke is missing "
-      },
-      "500": {
-        "description": "Server Error"
-      }
-    }
-  }
-},
-"/articles/{id}/dislike": {
-  "post": {
-    "tags": [
-      "Articles"
-    ],
-    "description": "Allow user to dislike the article",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "description": "Article id",
-        "required": true
     },
-      {
-        "name": "token",
-        "in": "header",
-        "description": "User's token",
-        "required": true
+    "/articles/{id}/dislike": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "Allow user to dislike the article",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Disliked the article"
+          },
+          "409": {
+            "description": "You already Disliked this article"
+          },
+          "401": {
+            "description": " Toke is missing "
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
       }
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "responses": {
-      "200": {
-        "description": "Disliked the article"
-      },
-      "409": {
-        "description": "You already Disliked this article"
-      },
-      "401": {
-        "description": " Toke is missing "
-      },
-      "500": {
-        "description": "Server Error"
-      }
-    }
-  }
-},
+    },
     "/articles/{articleId}/comments": {
       "post": {
         "tags": [
@@ -1080,113 +1085,113 @@
           }
         }
       }
-      },
-      "/optinemail": {
-        "post": {
-          "tags": [
-            "Notifications Subscription"
-          ],
-          "description": "Enable user to subscribe email notification",
-          "parameters": [
-            {
-              "name": "token",
-              "in": "header",
-              "description": "The login token",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "You successfully subscribed to email notifications"
-            },
-            "400": {
-              "description": "You already subscribed to email notifications"
-            }
+    },
+    "/optinemail": {
+      "post": {
+        "tags": [
+          "Notifications Subscription"
+        ],
+        "description": "Enable user to subscribe email notification",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The login token",
+            "required": true
           }
-        },
-        "delete": {
-          "tags": [
-            "Notifications Subscription"
-          ],
-          "description": "Enable user to unsubscribe email notification",
-          "parameters": [
-            {
-              "name": "token",
-              "in": "header",
-              "description": "The login token",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "You successfully unsubscribed to email notifications"
-            },
-            "400": {
-              "description": "You are not opted-in"
-            }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "You successfully subscribed to email notifications"
+          },
+          "400": {
+            "description": "You already subscribed to email notifications"
           }
         }
       },
-      "/optinapp": {
-        "post": {
-          "tags": [
-            "Notifications Subscription"
-          ],
-          "description": "Enable user to subscribe Inapp notification",
-          "parameters": [
-            {
-              "name": "token",
-              "in": "header",
-              "description": "The login token",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "You successfully subscribed to inapp notifications"
-            },
-            "400": {
-              "description": "You already subscribed to inapp notifications"
-            }
+      "delete": {
+        "tags": [
+          "Notifications Subscription"
+        ],
+        "description": "Enable user to unsubscribe email notification",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The login token",
+            "required": true
           }
-        },
-        "delete": {
-          "tags": [
-            "Notifications Subscription"
-          ],
-          "description": "Enable user to unsubscribe inapp notification",
-          "parameters": [
-            {
-              "name": "token",
-              "in": "header",
-              "description": "The login token",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "You successfully unsubscribed to inapp notifications"
-            },
-            "400": {
-              "description": "You are not opted-in"
-            }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "You successfully unsubscribed to email notifications"
+          },
+          "400": {
+            "description": "You are not opted-in"
+          }
+        }
+      }
+    },
+    "/optinapp": {
+      "post": {
+        "tags": [
+          "Notifications Subscription"
+        ],
+        "description": "Enable user to subscribe Inapp notification",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The login token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "You successfully subscribed to inapp notifications"
+          },
+          "400": {
+            "description": "You already subscribed to inapp notifications"
           }
         }
       },
-      "/viewNotifications/{id}": {
-        "get": {
+      "delete": {
+        "tags": [
+          "Notifications Subscription"
+        ],
+        "description": "Enable user to unsubscribe inapp notification",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The login token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "You successfully unsubscribed to inapp notifications"
+          },
+          "400": {
+            "description": "You are not opted-in"
+          }
+        }
+      }
+    },
+    "/viewNotifications/{id}": {
+      "get": {
         "tags": [
           "Notifications Subscription"
         ],
@@ -1202,8 +1207,8 @@
             "in": "path",
             "description": "User Id of the user",
             "required": true
-        }
-      ],
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -1217,34 +1222,34 @@
         }
       }
     },
-"/article/search": {
-  "get": {
-    "tags": [
-      "Articles"
-    ],
-    "description": "Displays all my following list",
-    "parameters": [
-      {
-        "name": "authorName",
-        "in": "query",
-        "description": "search author name"
-      },
-      {
-        "name": "keyword",
-        "in": "query",
-        "description": "search any keyword"
-      },
-      {
-        "name": "tag",
-        "in": "query",
-        "description": "search using tags"
-      },
-      {
-        "name": "title",
-        "in": "query",
-        "description": "search using title"
-      }
-],
+    "/article/search": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "Displays all my following list",
+        "parameters": [
+          {
+            "name": "authorName",
+            "in": "query",
+            "description": "search author name"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "search any keyword"
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "search using tags"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "search using title"
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -1270,7 +1275,7 @@
             "in": "path",
             "description": "Bookmark Id",
             "required": true
-        }
+          }
         ],
         "produces": [
           "application/json"
@@ -1280,7 +1285,7 @@
             "description": "deleted"
           }
         }
-        }
+      }
     },
     "/articles/comments/{commentParamsId}/likes": {
       "post": {
@@ -1417,123 +1422,188 @@
             }
           }
         ],
-        "produces":[ 
-        "application/json"
+        "produces": [
+          "application/json"
         ],
-       "responses": {
-        "200": {
-        "description": "Ratings",
-        "schema": {
-          "$ref": "#/definitions/fecthratings"
-        }
-      }
-    }	        
-    }
-    },
-"/bookmarks/{bookmarkId}": {
-  "get": {
-  "tags": [
-    "Bookmark article"
-  ],
-  "description": "Get one bookmark",
-  "parameters": [
-    {
-      "name": "token",
-      "in": "header",
-      "description": "logged in user token"
-    },
-    {
-      "name": "bookmarkId",
-      "in": "path",
-      "description": "Bookmark Id",
-      "required": true
-  }
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "responses": {
-    "200": {
-      "description": "bookmark data"
-    }
-  }
-},
-"delete": {
-  "tags": [
-    "Bookmark article"
-  ],
-  "description": "Delete one bookmark",
-  "parameters": [
-    {
-      "name": "token",
-      "in": "header",
-      "description": "logged in user token"
-    },
-    {
-      "name": "bookmarkId",
-      "in": "path",
-      "description": "Bookmark Id",
-      "required": true
-  }
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "responses": {
-    "204": {
-      "description": "deleted"
-    }
-  }
-  }
-},
-  "/{articleId}/comments/{commentId}": {
-    "post": {
-      "tags": [
-        "Comments"
-      ],
-      "description": "Allow user to thread a comment",
-      "parameters": [
-        {
-          "name": "token",
-          "in": "header",
-          "description": "User's token",
-          "required": true
-        },
-        {
-          "name": "articleId",
-          "in": "path",
-          "description": "Article id",
-          "required": true
-        },
-        {
-          "name": "commentId",
-          "in": "path",
-          "description": "comment id",
-          "required": true
-        },
-        {
-          "name": "Comment-body",
-          "in": "body",
-          "description": "Write your threaded comment",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/comment"
+        "responses": {
+          "200": {
+            "description": "Ratings",
+            "schema": {
+              "$ref": "#/definitions/fecthratings"
+            }
           }
         }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Comment on article"
-        },
-        "404": {
-          "description": "Article not found"
+      }
+    },
+    "/bookmarks/{bookmarkId}": {
+      "get": {
+        "tags": [
+          "Bookmark article"
+        ],
+        "description": "Get one bookmark",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "bookmarkId",
+            "in": "path",
+            "description": "Bookmark Id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "bookmark data"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Bookmark article"
+        ],
+        "description": "Delete one bookmark",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "bookmarkId",
+            "in": "path",
+            "description": "Bookmark Id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "deleted"
+          }
+        }
+      }
+    },
+    "/{articleId}/comments/{commentId}": {
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Allow user to thread a comment",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "comment id",
+            "required": true
+          },
+          {
+            "name": "Comment-body",
+            "in": "body",
+            "description": "Write your threaded comment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/comment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment on article"
+          },
+          "404": {
+            "description": "Article not found"
+          }
+        }
+      }
+    },
+    "/readerstats/{articleId}": {
+      "get": {
+        "tags": [
+          "ReadingStats"
+        ],
+        "description": "Allow user get users who read  an article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "recorded stats"
+          },
+          "404": {
+            "description": "Article not found"
+          }
+        }
+      }
+    },
+    "/readerstats/comments/{articleId}": {
+      "get": {
+        "tags": [
+          "ReadingStats"
+        ],
+        "description": "Allow user get a number comments on an article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "reading stats"
+          },
+          "404": {
+            "description": "Article not found"
+          }
         }
       }
     }
   }
-  }}
-
-
+}

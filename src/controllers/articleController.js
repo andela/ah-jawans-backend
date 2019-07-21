@@ -9,6 +9,7 @@ import findUser from '../helpers/FindUser';
 import readTime from './helpers/read_time';
 import createSlug from './helpers/createSluge';
 import { getAllArticles, articlePagination } from './helpers/getAllArticlesHelper';
+import ReadingStatsHelper from './helpers/readingStatsHelper';
 
 const { Articles, User } = model;
 
@@ -68,17 +69,20 @@ class articleContoller {
     }
   }
 
-  static async getOneArticle(req, res) {
+  static async getArticle(req, res) {
     try {
       const article = await Articles.findOne({ where: { id: req.params.id } });
-      if (article) return res.status(200).json({ article });
+      if (article) {
+        await ReadingStatsHelper.updateStatistic(req.params.id);
+        return res.status(200).json({ article });
+      }
       res.status(404).json({ message: 'No article found!' });
     } catch (error) {
-      return res.status(500).json({ message: 'Internal server error', });
+      return res.status(500).json(error.message);
     }
   }
 
-  static async getOneArticleSlug(req, res) {
+  static async getArticleSlug(req, res) {
     try {
       const article = await Articles.findOne({ where: { slug: req.params.slug } });
       if (article) return res.status(200).json({ article });

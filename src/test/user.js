@@ -90,7 +90,7 @@ describe('users', () => {
   });
 
   it('Invalid email', (done) => {
-    const user3 = { email: 'kagabo1@gmail.com',
+    const user3 = { email: 'kagabo11@gmail.com',
       password: 'Kagabo1@' };
     chai.request(app)
       .post('/api/users/login')
@@ -354,7 +354,7 @@ describe('User Profile view amend', () => {
     chai.request(app)
       .patch(`/api/users/${userGen}`)
       .set('token', tokenGen)
-      .send({ id: 15,
+      .send({ id: 16,
         username: 'shaluchandwani',
         firstName: 'Shalu',
         lastName: 'chandwani',
