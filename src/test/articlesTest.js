@@ -15,9 +15,9 @@ let userObject, articleObject, testUser, testArticle, tokenGen, tokens;
 
 describe('Article', () => {
   it('A new user who filled all required data should be registered in order to create an article', (done) => {
-    const user = { username: 'ffff',
-      password: 'Fofo1@hjsd',
-      email: 'faustinkagabo1@gmail.com' };
+    const user = { username: 'princia',
+      password: 'Princia@2006',
+      email: 'kagaboprince@gmail.com' };
     chai.request(app)
       .post('/api/users')
       .send(user)
@@ -32,8 +32,9 @@ describe('Article', () => {
   });
 
   it('User should be able to sign in', (done) => {
-    const user = { email: 'faustinkagabo1@gmail.com',
-      password: 'Fofo1@hjsd' };
+    const user = { username: 'princia',
+      password: 'Princia@2006',
+      email: 'kagaboprince@gmail.com' };
     chai.request(app)
       .post('/api/users/login')
       .send(user)
@@ -43,24 +44,6 @@ describe('Article', () => {
         res.body.data.should.have.property('email');
         res.body.data.should.have.property('token');
         // eslint-disable-next-line prefer-destructuring
-        tokens = res.body.data.token;
-        done();
-      });
-  });
-
-  it('login for creating article', (done) => {
-    const user = { username: 'ffff',
-      password: 'Fofo1@hjsd',
-      email: 'faustinkagabo1@gmail.com' };
-    chai.request(app)
-      .post('/api/users/login')
-      .send(user)
-      .end((req, res) => {
-        res.should.have.status(200);
-        // res.body.should.be.an('object');
-        // res.body.should.have.property('username');
-        // res.body.should.have.property('email');
-        // res.body.should.have.property('token');
         tokens = res.body.data.token;
         done();
       });
@@ -211,7 +194,30 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('It should get all articles on a given pageNumber and page size', (done) => {
+    chai.request(app)
+      .get('/api/articles?offset=0&limit=2')
+      .set('token', tokens)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
         res.body.articles[0].should.have.property('title').eql('hello man, how was the night');
+        done();
+      });
+  });
+
+  it('It should not get an article with bad page number', (done) => {
+    chai.request(app)
+      .get('/api/articles?offset=20&limit=5')
+      .set('token', tokens)
+      .end((req, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        res.body.should.have.property('message').eql('page not found');
         done();
       });
   });
@@ -252,7 +258,7 @@ describe('Article', () => {
 
   it('should find all articles with author name', (done) => {
     chai.request(app)
-      .get('/api/article/search?authorName=ffff')
+      .get('/api/article/search?authorName=princ')
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
