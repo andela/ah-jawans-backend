@@ -1,4 +1,4 @@
-{
+  {
   "swagger": "2.0",
   "info": {
     "description": "A Social platform for the creative at heart.\n",
@@ -169,8 +169,7 @@
           "type": "string"
         }
       }
-    }
-  },
+    },
   "ratings": {
     "required": [
       "rating"
@@ -180,7 +179,8 @@
         "type": "integer"
       }
     }
-  },
+  }
+},
   "paths": {
     "/users": {
       "post": {

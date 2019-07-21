@@ -19,9 +19,16 @@ const checkRateRange = async (rate) => {
 
   return ratingRange;
 };
-
+//
+const rateValidation = (value) => {
+  if (!value || value === '') {
+    return true;
+  }
+  return false;
+};
 export {
   findRatings,
   checkRateRange,
-  findArticle
+  findArticle,
+  rateValidation
 };

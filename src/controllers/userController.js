@@ -36,7 +36,7 @@ export default class UserController {
         email: user.email,
         verified: user.verified };
 
-      const token = await generateToken({ payload });
+      const token = await generateToken(payload);
       const mailSend = await MailSender.sendMail(user.email, user.username, token);
 
       if (mailSend[0].statusCode === 202) {
@@ -61,7 +61,7 @@ export default class UserController {
       const payload = { username: user.username,
         userId: user.id,
         email: user.email };
-      const token = await generateToken({ payload });
+      const token = await generateToken(payload);
       // @sends a message to an existing email in our database with the below email template
       const message = `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 
           Please click on the followoing link or paste this link in youre browser to complete this process within one hour: <Br> 
@@ -109,10 +109,10 @@ export default class UserController {
   static async verifyUser(req, res) {
     try {
       const decode = await decodeToken(req.params.userToken);
-      if (!decode.payload.email || decode.payload.verified) {
-        return (!decode.payload.email && res.status(404).json({ error: `Email:${decode.payload.email} does not exist in the database` })) || (decode.payload.verified && res.status(409).json({ error: 'Your account is already verified' }));
+      if (!decode.email || decode.verified) {
+        return (!decode.email && res.status(409).json({ error: `Email:${decode.email} does not exist in the database` })) || (decode.verified && res.status(409).json({ error: 'Your account is already verified' }));
       }
-      await User.update({ verified: true }, { where: { email: decode.payload.email } });
+      await User.update({ verified: true }, { where: { email: decode.email } });
       return res.status(200).json({ message: 'Your account is now verified you can login with your email', });
     } catch (error) {
       return res.status(500).json(error.message);
