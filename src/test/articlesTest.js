@@ -176,7 +176,7 @@ describe('Article', () => {
       });
   });
 
-  it('it should not update an article', (done) => {
+  it('it should update an article', (done) => {
     const article = { title: 'hello man, how was the night',
       body: 'hello man, how was the night',
       description: 'hello man, how was the night' };
@@ -187,7 +187,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('The article successfully updated!');
         done();
       });
   });
@@ -199,9 +198,8 @@ describe('Article', () => {
       .set('token', tokens)
       .send(article)
       .end((req, res) => {
-        res.should.have.status(200);
+        res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('The article successfully updated!');
         done();
       });
   });

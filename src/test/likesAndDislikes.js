@@ -5,13 +5,14 @@ import app from '../index';
 import models from '../models';
 import Tokenizer from '../helpers/tokenGenerator';
 
-const { User, Articles } = models;
+const { User, Articles, Comments } = models;
 const { generateToken } = Tokenizer;
 
 chai.use(chaiHttp);
 chai.should();
 
 let tokenGen;
+let comment;
 
 describe('Likes and Deslikes', () => {
   before(async () => {
@@ -27,10 +28,14 @@ describe('Likes and Deslikes', () => {
       body: 'This articles goes to all my freinds',
       description: 'This articles goes to all my freinds',
       slug: 'slug100000',
-      authorId: newUser.dataValues.id, };
+      authorId: newUser.dataValues.id,
+      readtime: 'less than a minute' };
 
-    // create test article
     await Articles.create(articleObject);
+
+    const commentObject = { body: 'Good' };
+
+    comment = await Comments.create(commentObject);
   });
 
   it('User should be able to like the article', (done) => {
@@ -84,6 +89,42 @@ describe('Likes and Deslikes', () => {
   it('Article already disliked', (done) => {
     chai.request(app)
       .post('/api/articles/2/dislike')
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('dislikes');
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('User should be able to like a comment', (done) => {
+    chai.request(app)
+      .post(`/api/articles/comments/${comment.id}/likes`)
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('likes');
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('Comment not found', (done) => {
+    chai.request(app)
+      .post('/api/articles/comments/9/likes')
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.have.property('message');
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('User should be able to dislike a comment', (done) => {
+    chai.request(app)
+      .post(`/api/articles/comments/${comment.id}/dislikes`)
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);

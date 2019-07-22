@@ -28,7 +28,8 @@ describe('Rating an article', () => {
       body: 'This should be a good example of an article',
       description: 'This should be a good example of an article',
       slug: 'slug111111',
-      authorId: newUser.dataValues.id, };
+      authorId: newUser.dataValues.id,
+      readtime: 'less than a minute' };
 
     // create test article
     article = await Articles.create(articleObject);
