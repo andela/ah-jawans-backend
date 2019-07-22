@@ -1268,10 +1268,37 @@
         ],
         "responses": {
           "200": {
-            "description": "Article list"
+            "description": "bookmark data"
           }
         }
-      }
+      },
+      "delete": {
+        "tags": [
+          "Bookmark article"
+        ],
+        "description": "Delete one bookmark",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "bookmarkId",
+            "in": "path",
+            "description": "Bookmark Id",
+            "required": true
+        }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "deleted"
+          }
+        }
+        }
     },
     "/articles/comments/{commentParamsId}/likes": {
       "post": {
@@ -1339,6 +1366,58 @@
         }
       }
     },
+ "/bookmarks/{articleId}": {
+          "post": {
+          "tags": [
+            "Bookmark article"
+          ],
+          "description": "Create bookmark",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "header",
+              "description": "logged in user token"
+            },
+            {
+              "name": "articleId",
+              "in": "path",
+              "description": "Article Id",
+              "required": true
+          }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "bookmark data"
+            }
+          }
+          }
+        },
+        "/bookmarks": {
+          "get": {
+          "tags": [
+            "Bookmark article"
+          ],
+          "description": "Get bookmarks",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "header",
+              "description": "logged in user token"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "bookmark data"
+            }
+          }
+          }
+        },
 "/articles/{id}/rating": {
   "post": {
     "tags": [
@@ -1406,7 +1485,114 @@
   }
 }	        
 }
-}
+},"/bookmarks/{bookmarkId}": {
+  "get": {
+  "tags": [
+    "Bookmark article"
+  ],
+  "description": "Get one bookmark",
+  "parameters": [
+    {
+      "name": "token",
+      "in": "header",
+      "description": "logged in user token"
+    },
+    {
+      "name": "bookmarkId",
+      "in": "path",
+      "description": "Bookmark Id",
+      "required": true
+  }
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "responses": {
+    "200": {
+      "description": "bookmark data"
+    }
+  }
+},
+"delete": {
+  "tags": [
+    "Bookmark article"
+  ],
+  "description": "Delete one bookmark",
+  "parameters": [
+    {
+      "name": "token",
+      "in": "header",
+      "description": "logged in user token"
+    },
+    {
+      "name": "bookmarkId",
+      "in": "path",
+      "description": "Bookmark Id",
+      "required": true
+  }
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "responses": {
+    "204": {
+      "description": "deleted"
+    }
+  }
+  }
+},
+"/bookmarks/{articleId}": {
+    "post": {
+    "tags": [
+      "Bookmark article"
+    ],
+    "description": "Create bookmark",
+    "parameters": [
+      {
+        "name": "token",
+        "in": "header",
+        "description": "logged in user token"
+      },
+      {
+        "name": "articleId",
+        "in": "path",
+        "description": "Article Id",
+        "required": true
+    }
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "responses": {
+      "201": {
+        "description": "bookmark data"
+      }
+    }
+    }
+  },
+  "/bookmarks": {
+    "get": {
+    "tags": [
+      "Bookmark article"
+    ],
+    "description": "Get bookmarks",
+    "parameters": [
+      {
+        "name": "token",
+        "in": "header",
+        "description": "logged in user token"
+      }
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "responses": {
+      "200": {
+        "description": "bookmark data"
+      }
+    }
+    }
+  }
   }
 }
 
