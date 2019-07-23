@@ -13,18 +13,10 @@ const userLikedOrDiskedComment = async (id, commentId) => {
   return userReacted;
 };
 
-const findDislikedComment = async (id, commentId) => {
-  const dislikedComment = await LikeAndDislike.findAll({ where: { userId: id,
-    commentId,
-    [Op.or]: [{ likes: false }, { dislikes: true }] } });
-
-  return dislikedComment;
-};
-
-const findLikedComment = async (id, commentId) => {
+const findLikedOrDislikedComment = async (id, commentId, object1, object2) => {
   const unlikedArticle = await LikeAndDislike.findAll({ where: { userId: id,
     commentId,
-    [Op.or]: [{ dislikes: false }, { likes: true }] } });
+    [Op.or]: [object1, object2] } });
 
   return unlikedArticle;
 };
@@ -37,16 +29,9 @@ const findDisliked = async (id, commentId) => {
   return disliked;
 };
 
-const ChangeFromDislikeToLike = async (dislikeId) => {
-  const updateFromDislikeToLike = await LikeAndDislike.update({ dislikes: false, likes: true },
-    { where: { id: dislikeId } });
-
-  return updateFromDislikeToLike;
-};
-
-const ChangeFromLikeToDisLike = async (dislikeId) => {
-  const updateFromDislikeToLike = await LikeAndDislike.update({ dislikes: true, likes: false },
-    { where: { id: dislikeId } });
+const ChangeLikeOrDislikeStatus = async (object, likesDislikeId) => {
+  const updateFromDislikeToLike = await LikeAndDislike.update(object,
+    { where: { id: likesDislikeId } });
 
   return updateFromDislikeToLike;
 };
@@ -66,29 +51,17 @@ const undoLikeOrDislikeComments = async (commentLike) => {
   return unlikeComment;
 };
 
-const countCommentLikes = async (commentId) => {
-  const likes = await LikeAndDislike.count({ where: { commentId,
-    likes: true } });
-
-  return likes;
-};
-
-const countCommentDislikes = async (commentId) => {
-  const dislikes = await LikeAndDislike.count({ where: { commentId,
-    dislikes: true } });
-
-  return dislikes;
+const countArticleDisikesLikes = async (object) => {
+  const likesDislikes = await LikeAndDislike.count(object);
+  return likesDislikes;
 };
 
 export {
-  countCommentDislikes,
-  countCommentLikes,
+  countArticleDisikesLikes,
   undoLikeOrDislikeComments,
   findCommentLikes,
-  ChangeFromLikeToDisLike,
-  ChangeFromDislikeToLike,
   findDisliked,
-  findLikedComment,
-  findDislikedComment,
+  ChangeLikeOrDislikeStatus,
+  findLikedOrDislikedComment,
   userLikedOrDiskedComment
 };
