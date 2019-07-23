@@ -4,6 +4,26 @@ import model from '../models';
 import { ArticleOwner, findArticle, findBookmark } from './helpers/findArticleOwner';
 
 const { Bookmarks, Articles, User } = model;
+const bookmarkInclude = { as: 'article',
+  model: Articles,
+  attributes: [
+    'slug',
+    'title',
+    'description',
+    'body',
+    'updatedAt',
+    'createdAt'],
+  include: [
+    { as: 'author',
+      model: User,
+      attributes: [
+        'username',
+        'bio',
+        'email',
+        'image'] }
+  ] };
+
+
 class BookmarksController {
   static async bookmarkArticle(req, res) {
     try {
@@ -22,26 +42,7 @@ class BookmarksController {
   static async getAllBookmarks(req, res) {
     try {
       const bookmarks = await Bookmarks.findAll({ where: { userId: req.user.id },
-        include: [
-          { as: 'article',
-            model: Articles,
-            attributes: [
-              'slug',
-              'title',
-              'description',
-              'body',
-              'updatedAt',
-              'createdAt'],
-            include: [
-              { as: 'author',
-                model: User,
-                attributes: [
-                  'username',
-                  'bio',
-                  'email',
-                  'image'] }
-            ] }
-        ] });
+        include: [bookmarkInclude] });
       return bookmarks.length ? res.status(200).json({ bookmarks }) : res.status(404).json({ message: 'You do not have bookmark articles' });
     } catch (error) {
       return res.status(500).json({ error: 'Internal server error' });
@@ -52,26 +53,7 @@ class BookmarksController {
     try {
       const id = req.params.bookmarkId;
       const bookmarks = await Bookmarks.findOne({ where: { userId: req.user.id, id },
-        include: [
-          { as: 'article',
-            model: Articles,
-            attributes: [
-              'slug',
-              'title',
-              'description',
-              'body',
-              'updatedAt',
-              'createdAt'],
-            include: [
-              { as: 'author',
-                model: User,
-                attributes: [
-                  'username',
-                  'bio',
-                  'email',
-                  'image'] }
-            ] }
-        ] });
+        include: [bookmarkInclude] });
       return bookmarks ? res.status(200).json({ bookmarks }) : res.status(404).json({ message: 'Bookmark not found!' });
     } catch (error) {
       return res.status(500).json({ error: 'Internal server error' });

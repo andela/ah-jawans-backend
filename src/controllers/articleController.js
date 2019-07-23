@@ -11,6 +11,7 @@ import createSlug from './helpers/createSluge';
 import { getAllArticles, articlePagination } from './helpers/getAllArticlesHelper';
 import ReadingStatsHelper from './helpers/readingStatsHelper';
 
+
 const { Articles, User } = model;
 
 class articleContoller {
@@ -50,8 +51,8 @@ class articleContoller {
       image,
       tags
     } = req.body;
-    const tagList = tags ? tags.split(',') : [];
     if (req.body.body) {
+      const tagList = tags ? tags.split(',') : [];
       const slug = createSlug(title || req.article.title);
       const newReadTime = readTime(req.body.body);
       const updatedArticle = await Articles.update({ id: req.article.id,
@@ -126,7 +127,7 @@ class articleContoller {
 
 
   static async getArticles(req, res) {
-    (req.query.offset && req.query.limit) ? articlePagination(req, res) : getAllArticles(req, res);
+    (req.query.offset && req.query.limit) ? await articlePagination(req, res) : await getAllArticles(req, res);
   }
 }
 export default articleContoller;
