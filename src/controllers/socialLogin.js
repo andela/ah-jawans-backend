@@ -3,7 +3,7 @@ import tokenGeneration from '../helpers/tokenGenerator';
 
 const { User } = models;
 
-const displayOutput = async (newUser, res, displayName) => {
+const createUser = async (newUser, res, displayName) => {
   if (newUser) {
     const {
       dataValues: {
@@ -16,26 +16,24 @@ const displayOutput = async (newUser, res, displayName) => {
   }
 };
 
-const userInfo = { async loginGoogle(req, res) {
-  const { displayName } = req.user;
+const displayOutput = async (req, res, displayName) => {
   const newUser = await User.create({ firstName: req.user.name.givenName,
     lastName: req.user.name.familyName,
     username: req.user.name.givenName || req.user.name.familyName,
     email: req.user.emails[0].value,
     image: req.user.photos[0].value,
     provider: req.user.provider, });
-  await displayOutput(newUser, res, displayName);
+  await createUser(newUser, res, displayName);
+};
+
+const userInfo = { async loginGoogle(req, res) {
+  const { displayName } = req.user;
+  await displayOutput(req, res, displayName);
 },
 
 async facebookLogin(req, res) {
   const { displayName } = req.user;
-  const newUser = await User.create({ firstName: req.user.name.givenName,
-    lastName: req.user.name.familyName,
-    username: req.user.name.givenName || req.user.name.familyName,
-    email: req.user.emails[0].value,
-    image: req.user.photos[0].value,
-    provider: req.user.provider, });
-  await displayOutput(newUser, res, displayName);
+  await displayOutput(req, res, displayName);
 },
 
 async twitterLogin(req, res) {
@@ -47,7 +45,7 @@ async twitterLogin(req, res) {
     image: req.user.photos[0].value,
     provider: req.user.provider,
     socialId: req.user.id });
-  await displayOutput(newUser, res, displayName);
+  await createUser(newUser, res, displayName);
 }, };
 
 export default userInfo;

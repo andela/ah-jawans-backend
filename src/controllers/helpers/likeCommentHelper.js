@@ -4,13 +4,7 @@ import model from '../../models';
 
 const { Op } = Sequelize;
 
-const { LikeAndDislike, Comments } = model;
-
-const findOneComment = async (commentId) => {
-  const foundComment = await Comments.findOne({ where: { id: commentId } });
-
-  return foundComment;
-};
+const { LikeAndDislike } = model;
 
 const userLikedOrDiskedComment = async (id, commentId) => {
   const userReacted = await LikeAndDislike.findAll({ where: { userId: id,
@@ -20,11 +14,11 @@ const userLikedOrDiskedComment = async (id, commentId) => {
 };
 
 const findDislikedComment = async (id, commentId) => {
-  const unlikedArticle = await LikeAndDislike.findAll({ where: { userId: id,
+  const dislikedComment = await LikeAndDislike.findAll({ where: { userId: id,
     commentId,
     [Op.or]: [{ likes: false }, { dislikes: true }] } });
 
-  return unlikedArticle;
+  return dislikedComment;
 };
 
 const findLikedComment = async (id, commentId) => {
@@ -96,6 +90,5 @@ export {
   findDisliked,
   findLikedComment,
   findDislikedComment,
-  userLikedOrDiskedComment,
-  findOneComment
+  userLikedOrDiskedComment
 };

@@ -1,16 +1,11 @@
 /* eslint-disable require-jsdoc */
 import Sequelize from 'sequelize';
-import model from '../models';
+import model from '../../models';
 
 const { Op } = Sequelize;
 
-const { Articles, LikeAndDislike } = model;
+const { LikeAndDislike } = model;
 class LikesDislikesHelpers {
-  static async findOneArticle(findArticleId) {
-    const oneArticle = await Articles.findOne({ where: { id: findArticleId } });
-    return oneArticle;
-  }
-
   static async findArticleLikes(id, findArticleId) {
     const liked = await LikeAndDislike.findAll({ where: { userId: id,
       articleId: findArticleId,
@@ -26,18 +21,10 @@ class LikesDislikesHelpers {
     return userReacted;
   }
 
-  static async findUnlikedArticle(id, findArticleId) {
+  static async findUnlikedArticle(id, findArticleId, object1, object2) {
     const unlikedArticle = await LikeAndDislike.findAll({ where: { userId: id,
       articleId: findArticleId,
-      [Op.or]: [{ dislikes: false }, { dislikes: null }] } });
-
-    return unlikedArticle;
-  }
-
-  static async findDislikedArticle(id, findArticleId) {
-    const unlikedArticle = await LikeAndDislike.findAll({ where: { userId: id,
-      articleId: findArticleId,
-      [Op.or]: [{ likes: false }, { likes: null }] } });
+      [Op.or]: [object1, object2] } });
 
     return unlikedArticle;
   }
@@ -46,7 +33,6 @@ class LikesDislikesHelpers {
     const disliked = await LikeAndDislike.findAll({ where: { userId: id,
       articleId: findArticleId,
       dislikes: true } });
-
     return disliked;
   }
 
@@ -64,30 +50,29 @@ class LikesDislikesHelpers {
     return updateDislike;
   }
 
-  static async ChangeFromDislikeToLike(likesDislikeId) {
-    const updateFromDislikeToLike = await LikeAndDislike.update({ dislikes: false, likes: true },
+  static async ChangeLikeStatus(object, likesDislikeId) {
+    const updateFromDislikeToLike = await LikeAndDislike.update(object,
       { where: { id: likesDislikeId } });
 
     return updateFromDislikeToLike;
   }
 
-  static async ChangeFromLikeToDislike(likesDislikeId) {
-    const updateFromDislikeToLike = await LikeAndDislike.update({ dislikes: true, likes: false },
-      { where: { id: likesDislikeId } });
+  // static async countArticleLikes(articleId) {
+  //   const likes = await LikeAndDislike.count({ where: { articleId,
+  //     likes: true } });
 
-    return updateFromDislikeToLike;
-  }
+  //   return likes;
+  // }
 
-  static async countArticleLikes(articleId) {
-    const likes = await LikeAndDislike.count({ where: { articleId,
-      likes: true } });
+  // static async countArticleDisikes(articleId) {
+  //   const dislikes = await LikeAndDislike.count({ where: { articleId,
+  //     dislikes: true } });
 
-    return likes;
-  }
+  //   return dislikes;
+  // }
 
-  static async countArticleDisikes(articleId) {
-    const dislikes = await LikeAndDislike.count({ where: { articleId,
-      dislikes: true } });
+  static async countArticleDisikesLikes(object) {
+    const dislikes = await LikeAndDislike.count(object);
 
     return dislikes;
   }

@@ -82,8 +82,8 @@ export default class ArticleComment {
     try {
       const userId = req.user.id;
       const { articleId, commentId } = req.params;
-      const removeComment = await Comments.destroy({ where: { id: commentId, articleId, userId } });
-      return removeComment
+      const deleteComment = await Comments.destroy({ where: { id: commentId, articleId, userId } });
+      return deleteComment
         ? res.status(204).json({ message: 'comment deleted' })
         : res.status(404).json({ message: 'comment not found!' });
     } catch (error) {

@@ -10,6 +10,7 @@ import readTime from './helpers/read_time';
 import createSlug from './helpers/createSluge';
 import { getAllArticles, articlePagination } from './helpers/getAllArticlesHelper';
 
+
 const { Articles, User } = model;
 
 class articleContoller {
@@ -49,8 +50,8 @@ class articleContoller {
       image,
       tags
     } = req.body;
-    const tagList = tags ? tags.split(',') : [];
     if (req.body.body) {
+      const tagList = tags ? tags.split(',') : [];
       const slug = createSlug(title || req.article.title);
       const newReadTime = readTime(req.body.body);
       const updatedArticle = await Articles.update({ id: req.article.id,
@@ -77,6 +78,7 @@ class articleContoller {
       return res.status(500).json({ message: 'Internal server error', });
     }
   }
+
 
   static async getOneArticleSlug(req, res) {
     try {
@@ -122,7 +124,7 @@ class articleContoller {
 
 
   static async getArticles(req, res) {
-    (req.query.offset && req.query.limit) ? articlePagination(req, res) : getAllArticles(req, res);
+    (req.query.offset && req.query.limit) ? await articlePagination(req, res) : await getAllArticles(req, res);
   }
 }
 export default articleContoller;

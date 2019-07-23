@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../index';
@@ -49,6 +50,7 @@ describe('Article', () => {
       .post('/api/users')
       .send(user)
       .end((req, res) => {
+        console.log(res.body);
         res.should.have.status(201);
         res.body.should.be.an('object');
         res.body.should.have.property('username');
