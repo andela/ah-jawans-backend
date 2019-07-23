@@ -1,14 +1,11 @@
 import model from '../models';
 import findComment from './helpers/findComment';
-import { countCommentDislikes,
-  countCommentLikes,
+import { countArticleDisikesLikes,
   undoLikeOrDislikeComments,
   findCommentLikes,
-  ChangeFromLikeToDisLike,
-  ChangeFromDislikeToLike,
   findDisliked,
-  findLikedComment,
-  findDislikedComment,
+  ChangeLikeOrDislikeStatus,
+  findLikedOrDislikedComment,
   userLikedOrDiskedComment, } from './helpers/likeCommentHelper';
 
 const { LikeAndDislike } = model;
@@ -30,7 +27,8 @@ class LikeComment {
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
     const userReacted = await userLikedOrDiskedComment(id, commentId);
-    const dislikedComment = await findDislikedComment(id, commentId);
+    const dislikedComment = await findLikedOrDislikedComment(id, commentId,
+      { likes: false }, { dislikes: true });
     const liked = await findCommentLikes(id, commentId);
 
     if (!userReacted[0]) {
@@ -38,21 +36,24 @@ class LikeComment {
         commentId: comment.id,
         likes: true,
         dislikes: false });
-      const likes = await countCommentLikes(comment.id);
+      const likes = await countArticleDisikesLikes({ where: { commentId,
+        likes: true } });
 
       return res.status(200).json({ likes });
     }
 
     if (liked[0]) {
       await undoLikeOrDislikeComments(liked[0].id);
-      const likes = await countCommentLikes(comment.id);
+      const likes = await countArticleDisikesLikes({ where: { commentId,
+        likes: true } });
 
       return res.status(200).json({ likes });
     }
 
     if (dislikedComment[0]) {
-      await ChangeFromDislikeToLike(dislikedComment[0].id);
-      const likes = await countCommentLikes(comment.id);
+      await ChangeLikeOrDislikeStatus({ dislikes: false, likes: true }, dislikedComment[0].id);
+      const likes = await countArticleDisikesLikes({ where: { commentId,
+        likes: true } });
 
       return res.status(200).json({ likes });
     }
@@ -72,7 +73,8 @@ class LikeComment {
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
     const userReacted = await userLikedOrDiskedComment(id, commentId);
-    const likedComment = await findLikedComment(id, commentId);
+    const likedComment = await findLikedOrDislikedComment(id, commentId,
+      { dislikes: false }, { likes: true });
     const dislikedComment = await findDisliked(id, commentId);
 
     if (!userReacted[0]) {
@@ -80,41 +82,22 @@ class LikeComment {
         commentId: comment.id,
         likes: false,
         dislikes: true });
-      const dislikes = await countCommentDislikes(comment.id);
+      const dislikes = await countArticleDisikesLikes({ where: { commentId,
+        dislikes: true } });
       return res.status(200).json({ dislikes });
     }
 
     if (likedComment[0]) {
-      await ChangeFromLikeToDisLike(likedComment[0].id);
-      const dislikes = await countCommentDislikes(comment.id);
+      await ChangeLikeOrDislikeStatus({ dislikes: true, likes: false }, likedComment[0].id);
+      const dislikes = await countArticleDisikesLikes({ where: { commentId,
+        dislikes: true } });
       return res.status(200).json({ dislikes });
     }
 
     if (dislikedComment[0]) {
       await undoLikeOrDislikeComments(dislikedComment[0].id);
-      const dislikes = await countCommentDislikes(comment.id);
-      return res.status(200).json({ dislikes });
-    }
-
-    if (dislikedComment[0]) {
-      await undoLikeOrDislikeComments(dislikedComment[0].id);
-      const dislikes = await countCommentDislikes(comment.id);
-      return res.status(200).json({ dislikes });
-    }
-
-    if (dislikedComment[0]) {
-      await undoLikeOrDislikeComments(dislikedComment[0].id);
-      const dislikes = await countCommentDislikes(comment.id);
-      return res.status(200).json({ dislikes });
-    }
-    if (dislikedComment[0]) {
-      await undoLikeOrDislikeComments(dislikedComment[0].id);
-      const dislikes = await countCommentDislikes(comment.id);
-      return res.status(200).json({ dislikes });
-    }
-    if (dislikedComment[0]) {
-      await undoLikeOrDislikeComments(dislikedComment[0].id);
-      const dislikes = await countCommentDislikes(comment.id);
+      const dislikes = await countArticleDisikesLikes({ where: { commentId,
+        dislikes: true } });
       return res.status(200).json({ dislikes });
     }
   }

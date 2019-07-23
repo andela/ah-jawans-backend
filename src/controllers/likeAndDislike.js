@@ -22,15 +22,15 @@ class LikesAndDislikes {
     if (!article) return res.status(404).json({ message: 'Article not found' });
 
     const liked = await LikesDislikesHelpers.findArticleLikes(id, articleId);
-    const disliked = await LikesDislikesHelpers.findDisliked(id, articleId);
     const unlikedArticle = await LikesDislikesHelpers.findUnlikedArticle(id,
-      articleId, { dislikes: false }, { dislikes: null });
+      articleId, { dislikes: true }, { likes: false });
     const userReacted = await LikesDislikesHelpers.userLikedOrDiskedArticle(id, articleId);
 
     if (!userReacted[0]) {
       await LikeAndDislike.create({ userId: id,
         articleId: article.id,
-        likes: true });
+        likes: true,
+        dislikes: false });
       const likes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId,
         likes: true } });
       return res.status(200).json({ likes });
@@ -50,14 +50,6 @@ class LikesAndDislikes {
         likes: true } });
       return res.status(200).json({ likes });
     }
-
-    if (disliked[0]) {
-      await LikesDislikesHelpers.ChangeLikeStatus({ dislikes: false, likes: true },
-        disliked[0].id);
-      const likes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId,
-        likes: true } });
-      return res.status(200).json({ likes });
-    }
   }
 
   /**
@@ -72,16 +64,16 @@ class LikesAndDislikes {
 
     if (!article) return res.status(404).json({ message: 'Article not found' });
 
-    const dislikedArticle = await LikesDislikesHelpers.findUnlikedArticle(id,
-      articleId, { likes: false }, { likes: null });
+    const undislikedArticle = await LikesDislikesHelpers.findUnlikedArticle(id,
+      articleId, { likes: true }, { dislikes: false });
     const disliked = await LikesDislikesHelpers.findDisliked(id, articleId);
-    const liked = await LikesDislikesHelpers.findArticleLikes(id, articleId);
     const userReacted = await LikesDislikesHelpers.userLikedOrDiskedArticle(id, articleId);
 
     if (!userReacted[0]) {
       await LikeAndDislike.create({ userId: id,
         articleId: article.id,
-        dislikes: true });
+        dislikes: true,
+        likes: true });
       const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes(article.dataValues.id,
         { dislikes: true });
       return res.status(200).json({ dislikes });
@@ -93,17 +85,10 @@ class LikesAndDislikes {
         dislikes: true } });
       return res.status(200).json({ dislikes });
     }
-    if (dislikedArticle[0]) {
-      await LikesDislikesHelpers.ChangeLikeStatus({ dislikes: true, likes: false },
-        dislikedArticle[0].id);
-      const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId,
-        dislikes: true } });
-      return res.status(200).json({ dislikes });
-    }
 
-    if (liked[0]) {
+    if (undislikedArticle[0]) {
       await LikesDislikesHelpers.ChangeLikeStatus({ dislikes: true, likes: false },
-        liked[0].id);
+        undislikedArticle[0].id);
       const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId,
         dislikes: true } });
       return res.status(200).json({ dislikes });
