@@ -2,6 +2,32 @@ import models from '../models';
 
 const { Opt, Notification } = models;
 
+const optInCreate = async (req, res, Type) => {
+  const optedin = await Opt.findOne({ where: { userId: req.user.id,
+    type: Type } });
+  if (optedin) {
+    return res.status(400).json({ message: 'You are already opted-in' });
+  }
+  const newOpt = await Opt.create({ userId: req.user.id,
+    type: Type });
+  if (newOpt) {
+    res.status(201).json({ message: `You are now opted-in to ${Type} notifications`,
+      data: newOpt });
+  }
+};
+
+const optOutCreate = async (req, res, Type) => {
+  const optedin = await Opt.findOne({ where: { userId: req.user.id,
+    type: Type } });
+  if (optedin) {
+    await Opt.destroy({ where: { userId: req.user.id,
+      type: Type } });
+
+    return res.json({ message: 'You are now opted-out!' });
+  }
+  res.status(400).json({ message: `You are not yet opted in with ${Type}` });
+};
+
 /**
   * @class
   */
@@ -13,17 +39,8 @@ class OptController {
     * @returns {Object} Response object
     */
   static async OptInApp(req, res) {
-    const optedin = await Opt.findOne({ where: { userId: req.user.id,
-      type: 'inapp' } });
-    if (optedin) {
-      return res.status(400).json({ message: 'You are already opted-in' });
-    }
-    const newOpt = await Opt.create({ userId: req.user.id,
-      type: 'inapp' });
-    if (newOpt) {
-      res.status(201).json({ message: 'You are now opted-in to in-app notifications',
-        data: newOpt });
-    }
+    const Type = 'inapp';
+    await optInCreate(req, res, Type);
   }
 
   /**
@@ -33,18 +50,8 @@ class OptController {
    * @returns {Object} Response object
    */
   static async OptInEmail(req, res) {
-    const optedin = await Opt.findOne({ where: { userId: req.user.id,
-      type: 'email' } });
-    if (optedin) {
-      return res.status(400).json({ message: 'You are already opted in' });
-    }
-
-    const newOpt = await Opt.create({ userId: req.user.id,
-      type: 'email' });
-    if (newOpt) {
-      res.status(201).json({ message: 'You are now opted-in for receiving email notifications',
-        data: newOpt });
-    }
+    const Type = 'email';
+    await optInCreate(req, res, Type);
   }
 
   /**
@@ -54,14 +61,8 @@ class OptController {
     * @returns {Object} Response object
     */
   static async optOutApp(req, res) {
-    const optedin = await Opt.findOne({ where: { userId: req.user.id,
-      type: 'inapp' } });
-    if (optedin) {
-      await Opt.destroy({ where: { userId: req.user.id,
-        type: 'inapp' } });
-      return res.json({ message: 'You are now opted-out!' });
-    }
-    res.status(400).json({ message: 'You are not opted-in with in-app' });
+    const Type = 'inapp';
+    await optOutCreate(req, res, Type);
   }
 
   /**
@@ -71,15 +72,8 @@ class OptController {
     * @returns {Object} Response object
     */
   static async optOutEmail(req, res) {
-    const optedin = await Opt.findOne({ where: { userId: req.user.id,
-      type: 'email' } });
-    if (optedin) {
-      await Opt.destroy({ where: { userId: req.user.id,
-        type: 'email' } });
-
-      return res.json({ message: 'You are now opted-out!' });
-    }
-    res.status(400).json({ message: 'You are not yet opted in with email' });
+    const Type = 'email';
+    await optOutCreate(req, res, Type);
   }
 
   /**
