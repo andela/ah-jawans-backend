@@ -6,32 +6,32 @@ const { Op } = Sequelize;
 
 const { LikeAndDislike } = model;
 class LikesDislikesHelpers {
-  static async findArticleLikes(id, findArticleId) {
+  static async findArticleLikes(id, articleId) {
     const liked = await LikeAndDislike.findAll({ where: { userId: id,
-      articleId: findArticleId,
+      articleId,
       likes: true } });
 
     return liked;
   }
 
-  static async userLikedOrDiskedArticle(id, findArticleId) {
+  static async userLikedOrDiskedArticle(id, articleId) {
     const userReacted = await LikeAndDislike.findAll({ where: { userId: id,
-      articleId: findArticleId } });
+      articleId } });
 
     return userReacted;
   }
 
-  static async findUnlikedArticle(id, findArticleId, object1, object2) {
+  static async findUnlikedArticle(id, articleId, object1, object2) {
     const unlikedArticle = await LikeAndDislike.findAll({ where: { userId: id,
-      articleId: findArticleId,
+      articleId,
       [Op.or]: [object1, object2] } });
 
     return unlikedArticle;
   }
 
-  static async findDisliked(id, findArticleId) {
+  static async findDisliked(id, articleId) {
     const disliked = await LikeAndDislike.findAll({ where: { userId: id,
-      articleId: findArticleId,
+      articleId,
       dislikes: true } });
     return disliked;
   }
@@ -57,24 +57,9 @@ class LikesDislikesHelpers {
     return updateFromDislikeToLike;
   }
 
-  // static async countArticleLikes(articleId) {
-  //   const likes = await LikeAndDislike.count({ where: { articleId,
-  //     likes: true } });
-
-  //   return likes;
-  // }
-
-  // static async countArticleDisikes(articleId) {
-  //   const dislikes = await LikeAndDislike.count({ where: { articleId,
-  //     dislikes: true } });
-
-  //   return dislikes;
-  // }
-
   static async countArticleDisikesLikes(object) {
-    const dislikes = await LikeAndDislike.count(object);
-
-    return dislikes;
+    const likesDislikes = await LikeAndDislike.count(object);
+    return likesDislikes;
   }
 }
 
