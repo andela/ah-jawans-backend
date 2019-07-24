@@ -179,6 +179,22 @@
         "type": "integer"
       }
     }
+  },
+  "reports": {
+    "required": [
+      "reportType",
+      "comment"
+    ],
+    "properties": {
+      "reportType": {
+        "type": "string",
+        "example":"some text"
+      },
+      "comment": {
+        "type": "string",
+        "example":"some text"
+      }
+    }
   }
 },
   "paths": {
@@ -1598,6 +1614,143 @@
         "responses": {
           "200": {
             "description": "reading stats"
+          },
+          "404": {
+            "description": "Article not found"
+          }
+        }
+      }
+    },
+    "/reports/{articleId}": {
+      "post": {
+        "tags": [
+          "Report article"
+        ],
+        "description": "Allow super user get reported article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "comment",
+            "in": "body",
+            "description": "context of reporting this article",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reports"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Article reported"
+          },
+          "404": {
+            "description": "Article not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Report article"
+        ],
+        "description": "Allow user get a number comments on an article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Reported articles"
+          },
+          "404": {
+            "description": "Article report not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Report article"
+        ],
+        "description": "Allow user delete article report",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "report deleted"
+          },
+          "404": {
+            "description": "Article not found"
+          }
+        }
+      }
+    },
+    "/reports/article/{articleId}": {
+      "get": {
+        "tags": [
+          "Report article"
+        ],
+        "description": "Allow user get a number comments on an article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Article reported"
           },
           "404": {
             "description": "Article not found"
