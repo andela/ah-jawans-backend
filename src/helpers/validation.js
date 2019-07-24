@@ -71,6 +71,17 @@ class ValidationSchema {
     errors.length = 0;
     addErrors(commentErrors);
   }
-}
 
+  static reportArticle(data) {
+    const reportErrors = {};
+    if (!data.comment || !(/([^]+)(?=.{10,})/.test(data.comment.trim()))) {
+      reportErrors.comment = 'Body is required and should contain at least 10 characters';
+    }
+    if (!data.reportType || !(/([^]+)(?=.{3,})/.test(data.reportType.trim()))) {
+      reportErrors.reportType = 'Body is required and should contain at least 3 characters';
+    }
+    errors.length = 0;
+    addErrors(reportErrors);
+  }
+}
 export default { ValidationSchema, errors };

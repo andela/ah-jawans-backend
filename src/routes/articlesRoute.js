@@ -29,5 +29,4 @@ articles.post('/articles/:id/rating', Auth.verifyToken, ratingsController.create
 articles.get('/articles/:id/ratings', ratingsController.getAllRatings);
 articles.delete('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.deleteArticle);
 
-
 export default articles;

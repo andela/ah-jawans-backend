@@ -110,8 +110,8 @@ export default class ArticleComment {
   static async getAllcomments(req, res) {
     try {
       const allComments = await Comments.findAll({ where: { articleId: req.params.articleId } });
-      return allComments ? res.status(200).json({ message: 'All Comments', allComments })
-        : res.status(404).json({ message: 'No comments found!' });
+      return allComments.length ? res.status(200).json({ message: 'All Comments', allComments })
+        : res.status(404).json({ error: 'No comments found!' });
     } catch (error) {
       return res.status(500).json(error.message);
     }

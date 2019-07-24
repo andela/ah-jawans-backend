@@ -17,7 +17,6 @@ describe('COMMENTS TEST', () => {
     const user = { username: 'Joseph',
       email: 'joseph@gmail.com',
       password: 'joe@123' };
-
     const newUser = await User.create(user);
     token = await generateToken({ id: newUser.id });
   });
@@ -178,6 +177,21 @@ describe('COMMENTS TEST', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
+        res.body.should.have.property('message');
+        done();
+      });
+  });
+  it('Fail to get all article\'s comments if not found', (done) => {
+    const articleId = 5;
+
+    chai
+      .request(app)
+      .get(`/api/articles/${articleId}/comments`)
+      .set('token', token)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        res.body.should.have.property('error');
         done();
       });
   });
