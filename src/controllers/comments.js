@@ -1,7 +1,15 @@
 import models from '../models';
 import eventEmitter from '../template/notifications/EventEmitter';
 
-const { Comments, Articles, User } = models;
+const { Comments, Articles, User, CommentsHistories } = models;
+
+const commentHistoryCreate = async (req, findComent) => {
+  CommentsHistories.create({ userId: req.user.id,
+    editedComment: findComent.dataValues.body,
+    commentId: findComent.dataValues.id });
+  return commentHistoryCreate;
+};
+
 /**
  * @description CRUD for comments
  * @author: Patrick Ngabonziza
@@ -66,7 +74,9 @@ export default class ArticleComment {
       const findComent = await Comments.findOne({ where: { id: commentId, articleId } });
       return findComent
         ? await Comments.update({ body: req.body.body },
-          { where: { id: commentId, articleId, userId: req.user.id } }) && res.status(200).json({ message: 'Comment modified!' })
+          { where: { id: commentId, articleId, userId: req.user.id } })
+           && await commentHistoryCreate(req, findComent)
+           && res.status(200).json({ message: 'Comment modified!' })
         : res.status(404).json({ message: 'Comment not found!' });
     } catch (error) {
       return res.status(500).json(error.message);
@@ -105,5 +115,21 @@ export default class ArticleComment {
     } catch (error) {
       return res.status(500).json(error.message);
     }
+  }
+
+
+  /**
+   * @description - Users should be able to track edit history
+   * @param {Object} req - Request Object
+   * @param {Object} res  - Response Object
+   * @returns {Object} - Response object
+   */
+  static async commentHistory(req, res) {
+    const { commentId } = req.params;
+    const { id } = req.user;
+    const findHistory = await CommentsHistories.findAll({ where: { commentId } });
+    return findHistory.length
+      ? (findHistory[0].dataValues.userId === id) && res.status(200).json({ data: { findHistory } })
+      : res.status(404).json({ message: 'No edit history for this comment!' });
   }
 }
