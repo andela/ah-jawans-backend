@@ -1604,6 +1604,32 @@
           }
         }
       }
+    },
+    "/articles/comments/{commentId}/history": {
+      "get": {
+        "tags": [
+          "comment"
+        ],
+        "description": "Authors Haven users should be able track their comments edit history",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "Comment Id",
+            "required": true
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      }
     }
   }
 }

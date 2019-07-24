@@ -16,4 +16,5 @@ router.patch('/:articleId/comments/:commentId', verifyToken, commentValidation, 
 
 router.post('/comments/:commentParamsId/likes', verifyToken, LikeComment.likeComment);
 router.post('/comments/:commentParamsId/dislikes', verifyToken, LikeComment.DislikeComment);
+router.get('/comments/:commentId/history', verifyToken, Comments.commentHistory);
 export default router;

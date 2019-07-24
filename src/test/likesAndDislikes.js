@@ -49,6 +49,61 @@ describe('Likes and Deslikes', () => {
         done();
       });
   });
+  //  opt inn user for email notifications
+
+  it('Should opt-in a user for email notifications', (done) => {
+    chai.request(app)
+      .post('/api/optinemail')
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('Autenticated user should be able to comment on an article', (done) => {
+    const articleId = 2;
+    const comments = { body: 'This is comment for opt in mail' };
+    chai
+      .request(app)
+      .post(`/api/articles/${articleId}/comments`)
+      .set('token', tokenGen)
+      .send(comments)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  // opt inn user for in app notification
+
+  it('Should opt-in a user for in-app notifications', (done) => {
+    chai.request(app)
+      .post('/api/optinapp')
+      .set('token', tokenGen)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('Autenticated user should be able to comment on an article', (done) => {
+    const articleId = 2;
+    const comments = { body: 'This is comment for opt in app' };
+    chai
+      .request(app)
+      .post(`/api/articles/${articleId}/comments`)
+      .set('token', tokenGen)
+      .send(comments)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
 
   it('Article not found', (done) => {
     chai.request(app)
