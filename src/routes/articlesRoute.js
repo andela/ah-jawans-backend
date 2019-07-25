@@ -6,6 +6,7 @@ import Auth from '../middlewares/Auth';
 import slugExist from '../middlewares/slugExists';
 import shareArticle from '../helpers/shareArticle';
 import ratingsController from '../controllers/ratingsController';
+import Highlighter from '../controllers/highlighterController';
 
 const { verifyToken } = Auth;
 const articles = express.Router();
@@ -28,5 +29,6 @@ articles.get('/articles/:slug/share/email', verifyToken, slugExist, shareArticle
 articles.post('/articles/:id/rating', Auth.verifyToken, ratingsController.createRatings);
 articles.get('/articles/:id/ratings', ratingsController.getAllRatings);
 articles.delete('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.deleteArticle);
+articles.post('/articles/:articleId/highlights', verifyToken, Highlighter.createHighlight);
 
 export default articles;

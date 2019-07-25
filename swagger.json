@@ -213,6 +213,24 @@
         "example":"some text"
       }
     }
+  },
+  "highlighting": {
+    "required": [
+      "indexStart",
+      "indexEnd",
+      "comment"
+    ],
+    "properties": {
+      "indexStart": {
+        "type": "integer"
+      },
+      "indexEnd": {
+        "type": "integer"
+      },
+      "comment": {
+        "type": "text"
+      }
+    }
   }
 },
   "paths": {
@@ -1346,7 +1364,7 @@
         ],
         "responses": {
           "200": {
-            "description": "liked comment successfiully"
+            "description": "liked comment successfully"
           },
           "404": {
             "description": "Comment not found"
@@ -1379,7 +1397,7 @@
         ],
         "responses": {
           "200": {
-            "description": "disliked comment successfiully"
+            "description": "disliked comment successfully"
           },
           "404": {
             "description": "Comment not found"
@@ -1687,52 +1705,26 @@
         "description": "Allow user get a number comments on an article",
         "parameters": [
           {
-            "name": "token",
-            "in": "header",
-            "description": "User's token",
-            "required": true
-          },
-          {
-            "name": "articleId",
+          "name": "articleId",
             "in": "path",
             "description": "Article id",
             "required": true
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "201": {
-            "description": "Reported articles"
-          },
-          "404": {
-            "description": "Article report not found"
-          }
-        }
+        },
+        {
+          "name": "token",
+          "in": "header",
+          "description": "User's token",
+          "required": true
+        }]
       },
       "delete": {
         "tags": [
           "Report article"
         ],
         "description": "Allow user delete article report",
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "User's token",
-            "required": true
+          "200": {
+            "description": "rated the article"
           },
-          {
-            "name": "articleId",
-            "in": "path",
-            "description": "Article id",
-            "required": true
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
         "responses": {
           "201": {
             "description": "report deleted"
@@ -1741,14 +1733,52 @@
             "description": "Article not found"
           }
         }
+     }
+    },
+    "/articles/{id}/rating": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "Allows other users to rate an article",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+        },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "rating",
+            "in": "body",
+            "description": "User is allowed rate article",
+            "schema": {
+              "$ref": "#/definitions/ratings"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Rated successfuly"
+          }
+        }
       }
     },
-    "/reports/article/{articleId}": {
-      "get": {
+    "/articles/{articleId}/highlights": {
+      "post": {
         "tags": [
-          "Report article"
+          "Articles"
         ],
-        "description": "Allow user get a number comments on an article",
+        "description": "Allow user to comment on highlighted text",
         "parameters": [
           {
             "name": "token",
@@ -1761,19 +1791,30 @@
             "in": "path",
             "description": "Article id",
             "required": true
+          },
+          {
+            "name": "Highlight",
+            "in": "body",
+            "description": "Comment on highlighted text",
+            "schema": {
+              "$ref": "#/definitions/highlighting"
+            }
           }
         ],
         "produces": [
           "application/json"
         ],
         "responses": {
-          "201": {
-            "description": "Article reported"
-          },
-          "404": {
-            "description": "Article not found"
-          }
+        "200": {
+          "description": "Commented on highlighted text"
+        },
+        "404": {
+          "description": "Article not found"
+        },
+        "409": {
+          "description": "Already highlighted"
         }
+      }
       }
     },
     "/articles/comments/{commentId}/history": {

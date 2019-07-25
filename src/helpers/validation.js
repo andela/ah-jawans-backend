@@ -72,6 +72,20 @@ class ValidationSchema {
     addErrors(commentErrors);
   }
 
+  static highlight(data) {
+    const highlightErrors = {};
+    if (!data.comment || !(/([^]+)(?=.{1,})/.test(data.comment.trim()))) {
+      highlightErrors.comment = 'Comment is required and should contain at least 1 character';
+    }
+
+    if (!data.indexStart || !data.indexEnd || typeof data.indexStart !== 'number' || typeof data.indexEnd !== 'number' || data.indexStart < 0 || data.indexEnd < 0) {
+      highlightErrors.indexStart = 'Start and End index is required and should be a positive number';
+    }
+
+    errors.length = 0;
+    addErrors(highlightErrors);
+  }
+
   static reportArticle(data) {
     const reportErrors = {};
     if (!data.comment || !(/([^]+)(?=.{10,})/.test(data.comment.trim()))) {

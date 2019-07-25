@@ -44,8 +44,7 @@ class UserProfile {
       const updatedUser = await User.update({ ...body },
         { where: { id: req.body.id } });
       return updatedUser.length
-        ? res.status(200).json({ user: { message: 'User updated sucessfully', updatedUser } })
-        : res.status(404).json({ message: 'Could not find user' });
+        && res.status(200).json({ user: { message: 'User updated sucessfully', updatedUser } });
     }
   }
 

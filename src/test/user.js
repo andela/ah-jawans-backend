@@ -354,7 +354,7 @@ describe('User Profile view amend', () => {
     chai.request(app)
       .patch(`/api/users/${userGen}`)
       .set('token', tokenGen)
-      .send({ id: 20,
+      .send({ id: 21,
         username: 'shaluchandwani',
         firstName: 'Shalu',
         lastName: 'chandwani',
@@ -376,7 +376,6 @@ describe('User Profile view amend', () => {
         done();
       });
   });
-
 
   it('User should not be able to update his/her profile if token is not present', (done) => {
     chai.request(app)
