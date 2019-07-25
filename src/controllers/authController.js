@@ -24,7 +24,8 @@ export default class AuthController {
 
       const payload = { username: user.username,
         id: user.id,
-        email: user.email };
+        email: user.email,
+        roles: user.roles };
 
       const token = await generateToken(payload);
       return res.status(200).json({ message: 'Logged in successfully',

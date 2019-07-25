@@ -7,4 +7,7 @@ user2: { firstName: 'james',
   lastName: 'bond',
   email: 'jamesbond@ahjawans.com',
   username: 'james_bond',
-  password: 'James@12345', } };
+  password: 'James@12345', },
+userAdmin: { username: 'john',
+  password: 'Kagabo1@',
+  email: 'faustin.kagabo@andela.com' } };

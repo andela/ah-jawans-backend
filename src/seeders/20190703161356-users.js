@@ -5,6 +5,7 @@ module.exports = { up: queryInterface => queryInterface.bulkInsert('User', [{ us
   password: 'hashing',
   following: true,
   bio: 'bios',
-  image: 'image' }], {}),
+  image: 'image',
+  roles: ['normalUser'] }], {}),
 
 down: queryInterface => queryInterface.bulkDelete('User', null, {}) };
