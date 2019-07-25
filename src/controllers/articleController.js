@@ -8,6 +8,7 @@ import eventEmitter from '../template/notifications/EventEmitter';
 import findUser from '../helpers/FindUser';
 import readTime from './helpers/read_time';
 import createSlug from './helpers/createSluge';
+import { getHightlights, updateHightlights } from './helpers/highlightHelper';
 import { getAllArticles, articlePagination } from './helpers/getAllArticlesHelper';
 import ReadingStatsHelper from './helpers/readingStatsHelper';
 
@@ -73,8 +74,13 @@ class articleContoller {
   static async getArticle(req, res) {
     try {
       const article = await Articles.findOne({ where: { id: req.params.id } });
+      const highlight = await getHightlights(req.params.id);
       if (article) {
         await ReadingStatsHelper.updateStatistic(req.params.id);
+        if (highlight) {
+          await updateHightlights(req.params.id);
+          return res.status(200).json({ article, highlight });
+        }
         return res.status(200).json({ article });
       }
       res.status(404).json({ message: 'No article found!' });
