@@ -7,7 +7,7 @@
     "start": "npm run create && NODE_ENV=staging babel-node ./src/index.js",
     "dev": "nodemon --exec babel-node ./src/index.js",
     "create": "NODE_ENV=staging sequelize db:migrate",
-    "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate",
+    "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
     "seqinit": "sequelize init",
     "build": "npm run clear && babel src --out-dir build",
     "clear": "rm -rf build",

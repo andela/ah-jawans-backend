@@ -18,11 +18,13 @@ import optinAndOptOut from './optinAndOptOut';
 import bookmarkRoute from './bookmarksRoutes';
 import readerStatsRoute from './readerStatsRoute';
 import reportArticle from './ReportRoute';
+import role from './roleRoutes';
 
 const { verifyToken } = Auth;
 
 const router = express.Router();
 
+router.use('/api', role);
 
 router.use('/api', bookmarkRoute);
 // article routes
@@ -51,5 +53,6 @@ router.patch('/api/users/verification/:userToken', UserController.verifyUser);
 
 router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);
 router.get('/api/users/', verifyToken, UserProfile.getAllUser);
+
 
 export default router;

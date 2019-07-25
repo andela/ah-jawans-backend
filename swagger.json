@@ -159,6 +159,24 @@
         }
       }
     },
+    "roles": {
+      "required": [
+        "actions",
+        "tablesAllowed",
+        "role"
+      ],
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "string"
+        },
+        "tablesAllowed": {
+          "type": "string"
+        }
+      }
+    },
     "comment": {
       "type": "object",
       "required": [
@@ -1776,6 +1794,136 @@
             "in": "path",
             "description": "Comment Id",
             "required": true
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/role": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      },
+      "delete": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/role"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "204": {}
+        }
+      },
+      "patch": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/role"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      },
+      "post": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/role"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/addrole/{id}": {
+      "patch": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven role update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/role"
+            }
           }
         ],
         "produces": ["application/json"],

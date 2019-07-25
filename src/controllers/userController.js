@@ -29,12 +29,14 @@ export default class UserController {
       const user = await User.create({ username,
         email,
         password: hashedPasword,
-        verified });
+        verified,
+        roles: ['normalUser'] });
 
       const payload = { username: user.username,
         id: user.id,
         email: user.email,
-        verified: user.verified };
+        verified: user.verified,
+        roles: user.roles };
 
       const token = await generateToken(payload);
       const mailSend = await MailSender.sendMail(user.email, user.username, token);
@@ -60,7 +62,8 @@ export default class UserController {
 
       const payload = { username: user.username,
         userId: user.id,
-        email: user.email };
+        email: user.email,
+        role: user.role };
       const token = await generateToken(payload);
       // @sends a message to an existing email in our database with the below email template
       const message = `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 

@@ -34,6 +34,6 @@ gender: { type: Sequelize.STRING,
   allowNull: true },
 provider: { type: Sequelize.STRING,
   allowNull: true },
-role: { type: Sequelize.STRING,
+roles: { type: Sequelize.ARRAY(Sequelize.STRING),
   allowNull: true }, }),
 down: queryInterface => queryInterface.dropTable('User') };
