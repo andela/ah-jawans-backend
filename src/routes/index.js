@@ -4,7 +4,7 @@ import express from 'express';
 import UserController from '../controllers/userController';
 import AuthController from '../controllers/authController';
 // middlwares
-import { decodeResetPasswordToken, checkEmail, usernameAvailability, usernameCheck } from '../middlewares/User';
+import { decodeResetPasswordToken, checkEmail, usernameCheck } from '../middlewares/User';
 import { bodyValidation, signinValidation } from '../middlewares/bodyValidation';
 import socialRoute from './socialTestRoute';
 import UserProfile from '../controllers/userProfile';
@@ -19,6 +19,8 @@ import bookmarkRoute from './bookmarksRoutes';
 import readerStatsRoute from './readerStatsRoute';
 import reportArticle from './ReportRoute';
 import role from './roleRoutes';
+import checkAction from '../middlewares/roleCheck';
+
 
 const { verifyToken } = Auth;
 
@@ -46,13 +48,13 @@ router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEm
 router.post('/api/users/logout', verifyToken, UserController.signOut);
 
 router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
-router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);
 router.get('/api/allusers/', verifyToken, UserProfile.getAllUser);
 router.post('/api/users/login', signinValidation, AuthController.signin);
 router.patch('/api/users/verification/:userToken', UserController.verifyUser);
 
-router.patch('/api/users/:username', verifyToken, bodyValidation, usernameAvailability, UserProfile.updateProfile);
-router.get('/api/users/', verifyToken, UserProfile.getAllUser);
+router.patch('/api/users', verifyToken, UserProfile.updateProfile);
+router.get('/api/users', verifyToken, UserProfile.getAllUser);
 
+router.delete('/api/users/:id', verifyToken, checkAction('User'), UserController.deleteUser);
 
 export default router;

@@ -8,8 +8,6 @@ const role = express.Router();
 
 const { verifyToken } = Auth;
 
-// role.use('/', );
-
 role.post('/role', verifyToken, checkAction('Permissions'), roles.createRole);
 role.delete('/role', verifyToken, checkAction('Permissions'), roles.deleteRole);
 role.get('/role', verifyToken, checkAction('Permissions'), roles.getAllRoles);

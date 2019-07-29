@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import checkRole from './helpers/checkRole';
-import findUser from './helpers/findUser';
+import { findUser } from './helpers/findUser';
 import model from '../models';
 
 const { Permissions, User } = model;

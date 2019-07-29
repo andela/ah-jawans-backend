@@ -5,6 +5,7 @@ import models from '../models';
 import tokenGen from '../helpers/tokenGenerator';
 import bcrypt from '../helpers/hash';
 import MailSender from '../helpers/mail';
+import { findUserData } from './helpers/findUser';
 
 const { User, Blacklist } = models;
 const { generateToken, decodeToken } = tokenGen;
@@ -116,6 +117,19 @@ export default class UserController {
       return res.status(200).json({ message: 'Your account is now verified you can login with your email', });
     } catch (error) {
       return res.status(500).json(error.message);
+    }
+  }
+
+  static async deleteUser(req, res) {
+    try {
+      const { id } = req.params;
+      const userData = await findUserData({ where: { id } });
+      if (!userData) return res.status(404).json({ error: 'User does not exist' });
+      if (userData.dataValues.roles.includes('superAdmin')) return res.status(403).json({ error: 'Not allowed to delete super admin' });
+
+      return (await User.destroy({ where: { id } })) && res.status(200).json({ message: 'User successfully deleted' });
+    } catch (error) {
+      return res.status(500).json({ error: 'Server error!' });
     }
   }
 }

@@ -134,6 +134,21 @@ describe('Article', () => {
       });
   });
 
+  it('it should not bookmark a bad article', (done) => {
+    const article = { title: 'hello man, how was the night',
+      body: 'hello man, how was the night',
+      description: 'hello man, how was the night' };
+    chai.request(app)
+      .post('/api/bookmarks/100')
+      .set('token', tokens1)
+      .send(article)
+      .end((req, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
   it('it should find all bookmarks', (done) => {
     const article = { title: 'hello man, how was the night',
       body: 'hello man, how was the night',
