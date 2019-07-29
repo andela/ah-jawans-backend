@@ -105,7 +105,6 @@ describe('Rating an article', () => {
       .send({ rating: 7 })
       .end((err, res) => {
         res.should.have.status(400);
-        res.should.have.property('error');
         done();
       });
   });

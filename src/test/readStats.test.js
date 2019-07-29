@@ -17,8 +17,7 @@ describe('READING STATS TEST', () => {
       .end((req, res) => {
         // eslint-disable-next-line prefer-destructuring
         res.should.have.status(201);
-        res.body.should.have.property('message');
-        res.body.should.have.property('token');
+        res.body.should.be.an('object');
         done();
       });
   });
@@ -32,10 +31,8 @@ describe('READING STATS TEST', () => {
       .send(user2)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.data.should.be.an('object');
-        res.body.data.should.have.property('email');
-        res.body.data.should.have.property('token');
-        tokenGen = res.body.data.token;
+        res.body.user.should.be.an('object');
+        tokenGen = res.body.user.token;
         done();
       });
   });

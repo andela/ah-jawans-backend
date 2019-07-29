@@ -10,7 +10,7 @@ const slugExist = async (req, res, next) => {
     next();
   } else {
     return res.status(404).send({ status: 404,
-      error: { message: 'The article does not exist!!!' } });
+      message: 'The article does not exist!!!' });
   }
 };
 

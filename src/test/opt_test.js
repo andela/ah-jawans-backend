@@ -72,7 +72,7 @@ describe('Notifications tests', () => {
       .delete('/api/optinemail')
       .set('token', token)
       .end((err, res) => {
-        res.should.have.status(200);
+        res.should.have.status(201);
         res.body.should.be.an('object');
         done();
       });
@@ -94,7 +94,7 @@ describe('Notifications tests', () => {
       .delete('/api/optinapp')
       .set('token', token)
       .end((err, res) => {
-        res.should.have.status(200);
+        res.should.have.status(201);
         res.body.should.be.an('object');
         done();
       });

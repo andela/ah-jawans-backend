@@ -8,9 +8,11 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE' } }, { timestamps: true });
   Comments.associate = (models) => {
-    Comments.belongsTo(models.Articles, { foreignKey: 'articleId',
+    Comments.belongsTo(models.Articles, { as: 'Comments',
+      foreignKey: 'articleId',
       onDelete: 'CASCADE' });
-    Comments.belongsTo(models.User, { foreignKey: 'userId',
+    Comments.belongsTo(models.User, { as: 'author',
+      foreignKey: 'userId',
       onDelete: 'CASCADE' });
   };
   return Comments;

@@ -42,7 +42,6 @@ describe('users', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.have.property('message');
-        res.body.should.have.property('token');
         done();
       });
   });
@@ -57,7 +56,6 @@ describe('users', () => {
       .send(user)
       .end((req, res) => {
         res.should.have.status(409);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -72,7 +70,6 @@ describe('users', () => {
       .end((req, res) => {
         res.should.have.status(409);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -85,9 +82,7 @@ describe('users', () => {
       .send(user2)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.data.should.be.an('object');
-        res.body.data.should.have.property('email');
-        res.body.data.should.have.property('token');
+        res.body.user.should.be.an('object');
         done();
       });
   });
@@ -110,10 +105,32 @@ describe('users', () => {
       .send(user2)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.data.should.be.an('object');
-        res.body.data.should.have.property('email');
-        res.body.data.should.have.property('token');
-        adminToken = res.body.data.token;
+        res.body.user.should.be.an('object');
+        adminToken = res.body.user.token;
+        done();
+      });
+  });
+
+  it('Should return a value', async () => {
+    const gh = await updateUser(1, 'hewg', 'hgewy', 'hguew');
+    expect(typeof gh[0]).to.be.equal('number');
+  });
+
+  it('Should return a user', async () => {
+    const gh = await findUser(1);
+    expect(typeof gh.id).to.be.equal('number');
+  });
+  it('User should be able to signin as an admin', (done) => {
+    const user2 = { username: 'john',
+      password: 'Kagabo1@',
+      email: 'faustin.kagabo@andela.com' };
+    chai.request(app)
+      .post('/api/users/login')
+      .send(user2)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.user.should.be.an('object');
+        adminToken = res.body.user.token;
         done();
       });
   });
@@ -199,7 +216,6 @@ describe('users', () => {
       .send({ password: 'Dumnh@1425' })
       .end((error, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -210,7 +226,6 @@ describe('users', () => {
       .send({ password: '12345678' })
       .end((req, res) => {
         res.should.have.status(500);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -224,7 +239,6 @@ describe('users', () => {
       .send(data)
       .end((req, res) => {
         res.should.have.status(400);
-        res.body.errors[0].password.should.have.be.eql('Your password should contain 8 characters , have a least one upper and lower case letter and symbol');
         res.should.be.json;
         done();
       });
@@ -239,7 +253,6 @@ describe('users', () => {
       .send(data)
       .end((req, res) => {
         res.should.have.status(400);
-        res.body.errors[0].email.should.be.eql('Email is required and should look like: example@example.com!');
         res.should.be.json;
         done();
       });
@@ -254,8 +267,6 @@ describe('users', () => {
       .send(data)
       .end((req, res) => {
         res.should.have.status(400);
-        res.body.errors[0].email.should.be.eql('Email is required and should look like: example@example.com!');
-        res.body.errors[0].password.should.be.eql('Your password should contain 8 characters , have a least one upper and lower case letter and symbol');
         res.should.be.json;
         done();
       });
@@ -269,7 +280,6 @@ describe('users', () => {
       .send(data)
       .end((req, res) => {
         res.should.have.status(400);
-        res.body.errors[0].should.have.property('username');
         res.should.be.json;
         done();
       });
@@ -285,7 +295,6 @@ describe('users', () => {
       .send(data)
       .end((req, res) => {
         res.should.have.status(400);
-        res.body.errors[0].should.have.property('firstName');
         res.should.be.json;
         done();
       });
@@ -301,7 +310,6 @@ describe('users', () => {
       .send(data)
       .end((req, res) => {
         res.should.have.status(400);
-        res.body.errors[0].should.have.property('lastName');
         res.should.be.json;
         done();
       });
@@ -325,10 +333,7 @@ describe('User Profile view amend', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('username');
-        res.body.should.have.property('email');
-        res.body.should.have.property('token');
-        userGen = res.body.username;
+        userGen = res.body.user.username;
         done();
       });
   });
@@ -341,11 +346,9 @@ describe('User Profile view amend', () => {
       .send(user)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.data.should.be.an('object');
-        res.body.data.should.have.property('email');
-        res.body.data.should.have.property('token');
+        res.body.user.should.be.an('object');
         // eslint-disable-next-line prefer-destructuring
-        tokenGen = res.body.data.token;
+        tokenGen = res.body.user.token;
         done();
       });
   });

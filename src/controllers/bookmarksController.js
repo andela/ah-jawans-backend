@@ -29,12 +29,12 @@ class BookmarksController {
     try {
       const article = await findArticle(req.params.articleId);
 
-      if (!article) return res.status(404).json({ error: 'No Article found!' });
-      if (await ArticleOwner(req.params.articleId, req.user.id)) return res.status(403).json({ error: 'Not allowed to bookmark your article' });
+      if (!article) return res.status(404).json({ status: 404, message: 'No Article found!' });
+      if (await ArticleOwner(req.params.articleId, req.user.id)) return res.status(403).json({ status: 403, message: 'Not allowed to bookmark your article' });
       return (await Bookmarks.create({ userId: req.user.id,
-        articleId: article.dataValues.id })) && res.status(201).json({ message: 'Article added to bookmarks' });
+        articleId: article.dataValues.id })) && res.status(201).json({ status: 201, message: 'Article added to bookmarks' });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ status: 500, message: 'Internal server error' });
     }
   }
 
@@ -42,9 +42,9 @@ class BookmarksController {
     try {
       const bookmarks = await Bookmarks.findAll({ where: { userId: req.user.id },
         include: [bookmarkInclude] });
-      return bookmarks.length ? res.status(200).json({ bookmarks }) : res.status(404).json({ message: 'You do not have bookmark articles' });
+      return bookmarks.length ? res.status(200).json({ status: 200, bookmarks }) : res.status(404).json({ status: 404, message: 'You do not have bookmark articles' });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ status: 500, message: 'Internal server error' });
     }
   }
 
@@ -53,9 +53,9 @@ class BookmarksController {
       const id = req.params.bookmarkId;
       const bookmarks = await Bookmarks.findOne({ where: { userId: req.user.id, id },
         include: [bookmarkInclude] });
-      return bookmarks ? res.status(200).json({ bookmarks }) : res.status(404).json({ message: 'Bookmark not found!' });
+      return bookmarks ? res.status(200).json({ status: 200, bookmarks }) : res.status(404).json({ status: 404, message: 'Bookmark not found!' });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ status: 500, message: 'Internal server error' });
     }
   }
 
@@ -65,11 +65,11 @@ class BookmarksController {
       let bookmark;
       bookmarkFind
         ? bookmark = await Bookmarks.destroy({ where: { id: bookmarkFind.dataValues.id } })
-        : res.status(404).json({ error: 'No bookmarks found!' });
+        : res.status(404).json({ status: 404, message: 'No bookmarks found!' });
 
-      bookmark && res.status(204).json({ message: 'Bookmark saccefully deleted' });
+      bookmark && res.status(204).json({ status: 204, message: 'Bookmark saccefully deleted' });
     } catch (error) {
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ status: 500, message: 'Internal server error' });
     }
   }
 }

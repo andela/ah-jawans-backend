@@ -18,7 +18,8 @@ describe('role', () => {
       .send(user)
       .end((req, res) => {
         res.should.have.status(200);
-        tokens = res.body.data.token;
+        res.body.user.should.be.an('object');
+        tokens = res.body.user.token;
         done();
       });
   });
@@ -30,8 +31,8 @@ describe('role', () => {
       .end((req, res) => {
         // eslint-disable-next-line prefer-destructuring
         res.should.have.status(200);
-        res.body.data.should.have.property('token');
-        tokenGen = res.body.data.token;
+        res.body.user.should.be.an('object');
+        tokenGen = res.body.user.token;
         done();
       });
   });
@@ -46,7 +47,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(201);
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -61,7 +61,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(401);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -72,7 +71,6 @@ describe('role', () => {
       .set('token', tokenGen)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.roles[0].should.have.property('role');
         done();
       });
   });
@@ -87,7 +85,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -102,7 +99,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(401);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -115,7 +111,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -128,7 +123,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(401);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -141,7 +135,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(403);
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -156,7 +149,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(401);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -171,7 +163,6 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(403);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -186,7 +177,20 @@ describe('role', () => {
       .send(role)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('message');
+        done();
+      });
+  });
+
+  it('should not delete with bad role', (done) => {
+    const role = { tablesAllowed: 'Articles,User',
+      role: 'adminsdfwad',
+      actions: 'GET' };
+    chai.request(app)
+      .delete('/api/role')
+      .set('token', tokenGen)
+      .send(role)
+      .end((req, res) => {
+        res.should.have.status(401);
         done();
       });
   });

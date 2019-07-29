@@ -14,12 +14,12 @@ export default class AuthController {
     try {
       const user = await User.findOne({ where: { email: String(email) } });
       if (!user) {
-        return res.status(403).json({ error: 'Invalid username or password!' });
+        return res.status(403).json({ status: 403, message: 'Invalid username or password!' });
       }
 
       const isPasswordValid = await bcrypt.comparePassword(password, user.password);
       if (!isPasswordValid) {
-        return res.status(403).json({ error: 'Invalid username or password' });
+        return res.status(403).json({ status: 403, message: 'Invalid username or password' });
       }
 
       const payload = { username: user.username,
@@ -28,10 +28,13 @@ export default class AuthController {
         roles: user.roles };
 
       const token = await generateToken(payload);
-      return res.status(200).json({ message: 'Logged in successfully',
-        data: { token,
-          email: user.email,
-          username: user.username } });
+      return res.status(200).json({ status: 200,
+        message: 'Logged in successfully',
+        user: { email: user.email,
+          token,
+          username: user.username,
+          bio: user.bio,
+          image: user.image } });
     } catch (error) {
       return res.status(500).json(error);
     }

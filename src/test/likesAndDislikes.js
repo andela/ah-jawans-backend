@@ -44,7 +44,6 @@ describe('Likes and Deslikes', () => {
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('likes');
         res.body.should.be.an('object');
         done();
       });
@@ -105,14 +104,24 @@ describe('Likes and Deslikes', () => {
       });
   });
 
+  it('It should get all articles', (done) => {
+    chai.request(app)
+      .get('/api/articles/2')
+      .set('token', tokenGen)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
   it('Article not found', (done) => {
     chai.request(app)
       .post('/api/articles/89/like')
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(404);
-        res.body.should.have.property('message');
-        res.body.message.should.be.an('string');
+        res.body.should.be.an('object');
         done();
       });
   });
@@ -123,7 +132,6 @@ describe('Likes and Deslikes', () => {
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('likes');
         res.body.should.be.an('object');
         done();
       });
@@ -135,7 +143,6 @@ describe('Likes and Deslikes', () => {
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('dislikes');
         res.body.should.be.an('object');
         done();
       });
@@ -147,7 +154,6 @@ describe('Likes and Deslikes', () => {
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('dislikes');
         res.body.should.be.an('object');
         done();
       });
@@ -159,7 +165,6 @@ describe('Likes and Deslikes', () => {
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('likes');
         res.body.should.be.an('object');
         done();
       });
@@ -171,7 +176,6 @@ describe('Likes and Deslikes', () => {
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(404);
-        res.body.should.have.property('message');
         res.body.should.be.an('object');
         done();
       });
@@ -183,7 +187,6 @@ describe('Likes and Deslikes', () => {
       .set('token', tokenGen)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('dislikes');
         res.body.should.be.an('object');
         done();
       });

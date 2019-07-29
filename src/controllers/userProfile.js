@@ -19,11 +19,11 @@ class UserProfile {
     const { username } = req.params;
     const queryResult = await User.findOne({ where: { username } });
     if (!queryResult) {
-      return res.status(404).json({ message: `Username: ${username} does not exist` });
+      return res.status(404).json({ status: 404, message: `Username: ${username} does not exist` });
     }
     const profile = queryResult.dataValues;
 
-    return res.status(200).json({ profile });
+    return res.status(200).json({ status: 200, profile: { profile } });
   }
 
   /**
@@ -39,32 +39,32 @@ class UserProfile {
 
       if (userId) {
         const userData = await findUserData({ where: { id: userId } });
-        if (!userData) return res.status(403).json({ error: 'User does not exist' });
+        if (!userData) return res.status(403).json({ status: 403, message: 'User does not exist' });
         if (userData.dataValues.roles.includes('superAdmin')) {
-          if (id === userId) return res.status(404).json({ error: 'Not allowed to update super admin' });
+          if (id === userId) return res.status(404).json({ status: 404, message: 'Not allowed to update super admin' });
           const userData1 = await findUserData({ where: { id } });
-          if (!userData1) return res.status(403).json({ error: 'User does not exist' });
+          if (!userData1) return res.status(403).json({ status: 403, message: 'User does not exist' });
           const check = await findUserExist(username, email);
-          if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
-          return updateUser(id, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
+          if (check.check1 || check.check2) return res.status(409).json({ status: 409, message: 'email or username is already used' });
+          return updateUser(id, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ status: 200, message: 'User successfully updated!' });
         } else {
-          if (id === userId) return res.status(404).json({ message: 'Not allowed to update super admin' });
+          if (id === userId) return res.status(404).json({ status: 404, message: 'Not allowed to update super admin' });
           const userData1 = await findUserData({ where: { id: userId } });
-          if (!userData1) return res.status(403).json({ message: 'User does not exist' });
+          if (!userData1) return res.status(403).json({ status: 403, message: 'User does not exist' });
           const check = await findUserExist(username, email);
-          if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
-          return updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
+          if (check.check1 || check.check2) return res.status(409).json({ status: 409, message: 'email or username is already used' });
+          return updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ status: 200, message: 'User successfully updated!' });
         }
       }
     } catch (error) {
-      return res.status(500).json({ message: 'Server error!' });
+      return res.status(500).json({ status: 500, message: 'Server error!' });
     }
   }
 
   static async getAllUser(req, res) {
     const usersList = await User.findAll({ attributes: ['firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
     // eslint-disable-next-line no-unused-expressions
-    res.status(200).json({ usersList });
+    res.status(200).json({ status: 200, usersList });
   }
 }
 

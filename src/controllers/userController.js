@@ -24,7 +24,8 @@ export default class UserController {
       const findByUsername = await User.findOne({ where: { username: String(username) } });
 
       if (foundUser || findByUsername) {
-        return (foundUser && res.status(409).json({ error: 'email has been taken by user' })) || (findByUsername && res.status(409).json({ error:
+        return (foundUser && res.status(409).json({ status: 409, message: 'email has been taken by user' })) || (findByUsername && res.status(409).json({ status: 409,
+          message:
             'username has been taken by another user' }));
       }
       const user = await User.create({ username,
@@ -43,14 +44,17 @@ export default class UserController {
       const mailSend = await MailSender.sendMail(user.email, user.username, token);
 
       if (mailSend[0].statusCode === 202) {
-        return res.status(201).json({ message: 'Your account has been created. You can check your email for comfirmation.',
-          token,
-          username: user.username,
-          email: user.email });
+        return res.status(201).json({ status: 201,
+          message: 'Your account has been created. You can check your email for comfirmation.',
+          user: { email: user.email,
+            token,
+            username: user.username,
+            bio: user.bio,
+            image: user.image } });
       }
     } catch (error) {
       return res.status(500)
-        .json({ Error: 'Server error' });
+        .json({ status: 500, message: 'Server error' });
     }
   }
 
@@ -58,7 +62,7 @@ export default class UserController {
     try {
       const user = await User.findOne({ where: { email: req.body.email }, });
       if (!user) {
-        return res.status(404).json({ error: 'No user found with this email address.' });
+        return res.status(404).json({ status: 404, message: 'No user found with this email address.' });
       }
 
       const payload = { username: user.username,
@@ -79,7 +83,7 @@ export default class UserController {
       return res.status(200).json({ status: 200, message: 'Check your email to reset password', token });
     } catch (error) {
       return res.status(500).json({ status: 500,
-        error: 'Internal Server Error' });
+        message: 'Internal Server Error' });
     }
   }
 
@@ -92,7 +96,7 @@ export default class UserController {
       res.status(200).json({ status: 200,
         message: 'your password has been updated successfully' });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ status: 500, message: 'Internal Server Error' });
     }
   }
 
@@ -103,10 +107,10 @@ export default class UserController {
       await Blacklist.create({ token });
 
       return res.status(200)
-        .json({ message: ' Signed out ' });
+        .json({ status: 200, message: ' Signed out ' });
     } catch (error) {
       return res.status(500)
-        .json({ status: 500, Error: 'Server error' });
+        .json({ status: 500, message: 'Server error' });
     }
   }
 
@@ -114,9 +118,9 @@ export default class UserController {
     try {
       const decode = await decodeToken(req.params.userToken);
       await User.update({ verified: true }, { where: { email: decode.email } });
-      return res.status(200).json({ message: 'Your account is now verified you can login with your email', });
+      return res.status(200).json({ status: 200, message: 'Your account is now verified you can login with your email', });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ status: 500, message: error.message });
     }
   }
 
@@ -124,12 +128,12 @@ export default class UserController {
     try {
       const { id } = req.params;
       const userData = await findUserData({ where: { id } });
-      if (!userData) return res.status(404).json({ error: 'User does not exist' });
-      if (userData.dataValues.roles.includes('superAdmin')) return res.status(403).json({ error: 'Not allowed to delete super admin' });
+      if (!userData) return res.status(404).json({ message: 'User does not exist' });
+      if (userData.dataValues.roles.includes('superAdmin')) return res.status(403).json({ message: 'Not allowed to delete super admin' });
 
       return (await User.destroy({ where: { id } })) && res.status(200).json({ message: 'User successfully deleted' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error!' });
+      return res.status(500).json({ message: 'Server error!' });
     }
   }
 }

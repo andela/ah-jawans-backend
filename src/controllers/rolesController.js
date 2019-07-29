@@ -9,32 +9,32 @@ class PermitionsController {
   static async createRole(req, res) {
     try {
       const { actions, role } = req.body;
-      if ((await checkRole(role, actions))) return res.status(401).json({ error: 'role exist!' });
+      if ((await checkRole(role, actions))) return res.status(401).json({ status: 401, message: 'role exist!' });
       const tablesAllowed = req.body.tablesAllowed.split(',');
       return (await Permissions.create({ role, actions, tablesAllowed })) ? res.status(201).json({ message: 'Role successfully created' })
-        : res.status(401).json({ error: 'tableAllowed, role, and permissions are required ' });
+        : res.status(401).json({ status: 401, message: 'tableAllowed, role, and permissions are required ' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      return res.status(500).json({ status: 500, message: 'Server error' });
     }
   }
 
   static async deleteRole(req, res) {
     try {
       const { actions, role } = req.body;
-      if (role === 'superAdmin') return res.status(403).json({ error: 'Not allowed to delete super admin!' });
-      if (!(await checkRole(role, actions))) return res.status(401).json({ error: 'role does not exist!' });
-      return (await Permissions.destroy({ where: { role, actions } })) && res.status(200).json({ message: 'Role successfully deleted!' });
+      if (role === 'superAdmin') return res.status(403).json({ status: 403, message: 'Not allowed to delete super admin!' });
+      if (!(await checkRole(role, actions))) return res.status(401).json({ status: 401, message: 'role does not exist!' });
+      return (await Permissions.destroy({ where: { role, actions } })) && res.status(200).json({ status: 200, message: 'Role successfully deleted!' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error!' });
+      return res.status(500).json({ status: 500, message: 'Server error!' });
     }
   }
 
   static async getAllRoles(req, res) {
     try {
       const roles = await Permissions.findAll();
-      return roles.length && res.status(200).json({ roles });
+      return roles.length && res.status(200).json({ status: 200, roles });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error!' });
+      return res.status(500).json({ status: 500, message: 'Server error!' });
     }
   }
 
@@ -42,14 +42,14 @@ class PermitionsController {
     try {
       const { actions, role } = req.body;
       const roleAvailable = await checkRole(role, actions);
-      if (!roleAvailable) return res.status(401).json({ error: 'role does not exist!' });
+      if (!roleAvailable) return res.status(401).json({ status: 401, message: 'role does not exist!' });
       const addTables = req.body.tablesAllowed ? req.body.tablesAllowed.split(',') : [];
-      if (!addTables.length) return res.status(401).json({ error: 'Nothing to update' });
+      if (!addTables.length) return res.status(401).json({ status: 401, message: 'Nothing to update' });
       const roles = await Permissions.update({ tablesAllowed: addTables },
         { where: { role, actions } });
-      return roles && res.status(200).json({ message: 'Role successfully updated' });
+      return roles && res.status(200).json({ status: 200, message: 'Role successfully updated' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error!' });
+      return res.status(500).json({ status: 500, message: 'Server error!' });
     }
   }
 
@@ -57,13 +57,13 @@ class PermitionsController {
     try {
       const user = await findUser(req.params.id);
       const role = req.body.roles ? req.body.roles.split(',') : [];
-      if (!user) return res.status(404).json({ error: 'No user found!' });
-      if (!role.length) return res.status(401).json({ error: 'Nothing to update' });
+      if (!user) return res.status(404).json({ status: 404, message: 'No user found!' });
+      if (!role.length) return res.status(401).json({ status: 401, message: 'Nothing to update' });
       const updaterole = await User.update({ roles: role },
         { where: { id: req.params.id } });
-      return updaterole && res.status(200).json({ message: 'User role add successfully' });
+      return updaterole && res.status(200).json({ status: 200, message: 'User role add successfully' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error!' });
+      return res.status(500).json({ status: 500, message: 'Server error!' });
     }
   }
 }

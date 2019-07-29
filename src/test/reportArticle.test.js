@@ -33,7 +33,6 @@ describe('REPORTING ARTICLE TESTS', () => {
       .end((err, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -79,7 +78,6 @@ describe('REPORTING ARTICLE TESTS', () => {
       .end((err, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -92,7 +90,6 @@ describe('REPORTING ARTICLE TESTS', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -105,7 +102,6 @@ describe('REPORTING ARTICLE TESTS', () => {
       .end((err, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -118,7 +114,6 @@ describe('REPORTING ARTICLE TESTS', () => {
       .end((err, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -131,7 +126,6 @@ describe('REPORTING ARTICLE TESTS', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('message');
         done();
       });
   });
@@ -156,7 +150,6 @@ describe('REPORTING ARTICLE TESTS', () => {
       .end((err, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });

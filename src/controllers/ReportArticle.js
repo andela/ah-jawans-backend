@@ -22,10 +22,10 @@ export default class ReportArticleController {
         userId,
         comment,
         reportType })
-      && res.status(201).json({ message: 'Article reported succesfully' })
-        : res.status(404).json({ error: 'Article not found!' });
+      && res.status(201).json({ status: 201, message: 'Article reported succesfully' })
+        : res.status(404).json({ status: 404, message: 'Article not found!' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      return res.status(500).json({ status: 500, message: 'Server error' });
     }
   }
 
@@ -38,10 +38,10 @@ export default class ReportArticleController {
     try {
       const { articleId } = req.params;
       const reports = await ReportedArticles.findAll({ where: { articleId } });
-      return reports.length ? res.status(200).json({ message: 'Articles reported', reports })
-        : res.status(404).json({ error: 'No reported article found!' });
+      return reports.length ? res.status(200).json({ status: 200, message: 'Articles reported', reports })
+        : res.status(404).json({ status: 404, message: 'No reported article found!' });
     } catch (error) {
-      return res.status(500).json({ error: 'server error!' });
+      return res.status(500).json({ status: 500, message: 'server error!' });
     }
   }
 
@@ -54,10 +54,10 @@ export default class ReportArticleController {
     try {
       const { articleId } = req.params;
       const article = await ReportedArticles.findOne({ where: { articleId } });
-      return article ? res.status(200).json({ message: 'Reported article', article })
-        : res.status(404).json({ error: 'No report found for this article' });
+      return article ? res.status(200).json({ status: 200, message: 'Reported article', article })
+        : res.status(404).json({ status: 404, message: 'No report found for this article' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      return res.status(500).json({ status: 500, message: 'Server error' });
     }
   }
 
@@ -71,10 +71,10 @@ export default class ReportArticleController {
       const { articleId } = req.params;
       const article = await findArticle(articleId);
       return article ? await ReportedArticles.destroy({ where: { articleId } })
-        && res.status(204).json({ message: 'Report deleted!' })
-        : res.status(404).json({ error: 'No report found for this article' });
+        && res.status(204).json({ status: 204, message: 'Report deleted!' })
+        : res.status(404).json({ status: 404, message: 'No report found for this article' });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      return res.status(500).json({ status: 500, message: 'Server error' });
     }
   }
 }

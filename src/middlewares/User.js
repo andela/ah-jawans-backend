@@ -12,7 +12,7 @@ const decodeResetPasswordToken = async (req, res, next) => {
     req.decode = await decode;
     next();
   } catch (error) {
-    return res.status(500).json({ error: 'token error' });
+    return res.status(500).json({ status: 500, message: 'token error' });
   }
 };
 
@@ -20,12 +20,12 @@ const checkEmail = async (req, res, next) => {
   try {
     const check = await User.findOne({ email: req.decode.email });
     if (!check) {
-      return res.status(404).json({ error: 'sorry your email not found.' });
+      return res.status(404).json({ status: 404, message: 'sorry your email not found.' });
     }
     req.userInfo = check;
     next();
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json({ status: 500, message: error.message });
   }
 };
 

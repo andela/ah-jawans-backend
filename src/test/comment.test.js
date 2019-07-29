@@ -168,21 +168,19 @@ describe('COMMENTS TEST', () => {
   });
 
   it('Autenticated user should be able to get all article\'s comments', (done) => {
-    const articleId = 1;
-
+    const articleId = 2;
     chai
       .request(app)
       .get(`/api/articles/${articleId}/comments`)
       .set('token', token)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.an('object');
-        res.body.should.have.property('message');
+        res.body.comments.should.be.an('Array');
         done();
       });
   });
   it('Fail to get all article\'s comments if not found', (done) => {
-    const articleId = 5;
+    const articleId = 10;
 
     chai
       .request(app)
@@ -191,7 +189,6 @@ describe('COMMENTS TEST', () => {
       .end((err, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });

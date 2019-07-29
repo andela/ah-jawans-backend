@@ -587,6 +587,12 @@
         "description": "user should be able to view all articles",
         "parameters": [
           {
+            "name": "token",
+            "in": "header",
+            "description": "The user's token",
+            "required": true
+          },
+          {
             "name": "offset",
             "in": "query",
             "description": "offset",
@@ -619,7 +625,7 @@
           {
             "name": "token",
             "in": "header",
-            "description": "The user token",
+            "description": "The user's token",
             "required": true
           },
           {

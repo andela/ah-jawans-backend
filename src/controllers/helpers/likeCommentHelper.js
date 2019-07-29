@@ -4,7 +4,7 @@ import model from '../../models';
 
 const { Op } = Sequelize;
 
-const { LikeAndDislike } = model;
+const { LikeAndDislike, Comments } = model;
 
 const userLikedOrDiskedComment = async (id, commentId) => {
   const userReacted = await LikeAndDislike.findAll({ where: { userId: id,
@@ -47,13 +47,17 @@ const findCommentLikes = async (id, commentId) => {
 const undoLikeOrDislikeComments = async (commentLike) => {
   const unlikeComment = await LikeAndDislike.update({ likes: false, dislikes: false },
     { where: { id: commentLike } });
-
   return unlikeComment;
 };
 
 const countArticleDisikesLikes = async (object) => {
   const likesDislikes = await LikeAndDislike.count(object);
   return likesDislikes;
+};
+
+const countcomment = async (object) => {
+  const count = await Comments.count(object);
+  return count;
 };
 
 export {
@@ -63,5 +67,6 @@ export {
   findDisliked,
   ChangeLikeOrDislikeStatus,
   findLikedOrDislikedComment,
-  userLikedOrDiskedComment
+  userLikedOrDiskedComment,
+  countcomment
 };

@@ -20,9 +20,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('username');
-        res.body.should.have.property('email');
-        res.body.should.have.property('token');
         tokens = res.body.token;
         done();
       });
@@ -37,7 +34,8 @@ describe('Article', () => {
       .send(user)
       .end((req, res) => {
         res.should.have.status(200);
-        tokens = res.body.data.token;
+        res.body.user.should.be.an('object');
+        tokens = res.body.user.token;
         done();
       });
   });
@@ -52,9 +50,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('username');
-        res.body.should.have.property('email');
-        res.body.should.have.property('token');
         done();
       });
   });
@@ -68,7 +63,8 @@ describe('Article', () => {
       .send(user)
       .end((req, res) => {
         res.should.have.status(200);
-        tokens1 = res.body.data.token;
+        res.body.user.should.be.an('object');
+        tokens1 = res.body.user.token;
         done();
       });
   });
@@ -84,7 +80,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('The article successfully created!');
         done();
       });
   });
@@ -160,7 +155,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('bookmarks');
         done();
       });
   });

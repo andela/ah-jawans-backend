@@ -10,10 +10,10 @@ class Rate {
     const { id } = req.user;
     const articleId = req.params.id;
     if (rateValidation(req.body.rating)) {
-      return res.status(400).json({ error: 'provide rating' });
+      return res.status(400).json({ status: 400, message: 'provide rating' });
     }
     const article = await findArticle(articleId);
-    if (!article) return res.status(404).json({ error: 'Article not found!' });
+    if (!article) return res.status(404).json({ status: 404, message: 'Article not found!' });
     const ratingRange = await checkRateRange(req.body.rating);
     const rating = await findRatings(id, articleId);
 
@@ -25,9 +25,9 @@ class Rate {
         : newRating = await Rating.create({ rate: req.body.rating,
           reviewerId: id,
           articleId: article.dataValues.id });
-      return newRating && res.status(200).json({ message: 'You have Rated the article' });
+      return newRating && res.status(200).json({ status: 200, message: 'You have Rated the article' });
     }
-    return res.status(400).json({ error: 'Bad Rating range' });
+    return res.status(400).json({ status: 400, message: 'Bad Rating range' });
   }
 
   static async getAllRatings(req, res) {
@@ -35,9 +35,9 @@ class Rate {
     try {
       const { offset, limit } = req.query;
       const ratingsCount = await Rating.findAll({ offset, limit }, { where: { id: articleId } });
-      ratingsCount.length !== 0 ? message(req, res, 200, { ratingsCount }) : message(req, res, 404, { message: 'No Ratings found' });
+      ratingsCount.length !== 0 ? message(req, res, 200, { status: 200, message: ratingsCount }) : message(req, res, 404, { status: 404, message: 'No Ratings found' });
     } catch (error) {
-      return res.status(404).json({ error: 'No article found' });
+      return res.status(404).json({ status: 404, message: 'No article found' });
     }
   }
 }

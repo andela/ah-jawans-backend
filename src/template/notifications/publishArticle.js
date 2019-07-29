@@ -27,6 +27,6 @@ export default async (authorId, slug) => {
       return res;
     });
   } catch (error) {
-    return { errors: error };
+    return { message: error };
   }
 };

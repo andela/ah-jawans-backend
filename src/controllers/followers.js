@@ -16,19 +16,20 @@ export default class FollowerController {
     try {
       const { username } = req.params;
       const findUser = await getUser(username);
-      if (!findUser) return res.status(404).json({ error: 'Username not found' });
-      if (findUser.id === req.user.id) return res.status(400).json({ error: 'You can not follow yourself' });
+      if (!findUser) return res.status(404).json({ status: 404, message: 'Username not found' });
+      if (findUser.id === req.user.id) return res.status(400).json({ status: 400, message: 'You can not follow yourself' });
 
       const followedUser = await checkUser(findUser.id);
-      if (followedUser) return res.status(409).json({ error: `Already following ${findUser.username}` });
+      if (followedUser) return res.status(409).json({ status: 409, message: `Already following ${findUser.username}` });
       await follow(findUser.id, req.user.id);
-      return res.status(201).json({ message: `Following ${findUser.username}`,
+      return res.status(201).json({ status: 201,
+        message: `Following ${findUser.username}`,
         username: findUser.username,
         bio: findUser.bio,
         image: findUser.image,
         following: findUser.following });
     } catch (error) {
-      return res.status(500).json({ error: 'server error' });
+      return res.status(500).json({ message: 'server error' });
     }
   }
 
@@ -42,16 +43,18 @@ export default class FollowerController {
     const userId = req.user.id;
     try {
       const findUser = await getUser(username);
-      if (!findUser) return res.status(404).json({ error: 'Username not found' });
+      if (!findUser) return res.status(404).json({ status: 404, message: 'Username not found' });
       const followedUser = await checkUser(findUser.id);
-      return followedUser ? await unfollowUser(userId, findUser.id) && res.status(200).json({ message: `Unfollowed ${findUser.username}`,
+      return followedUser ? await unfollowUser(userId, findUser.id)
+      && res.status(200).json({ status: 200,
+        message: `Unfollowed ${findUser.username}`,
         username: findUser.username,
         bio: findUser.bio,
         image: findUser.image,
         following: findUser.following })
-        : res.status(404).json({ errors: { follow: `Not following "${findUser.username}"` } });
+        : res.status(404).json({ status: 404, message: { follow: `Not following "${findUser.username}"` } });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      return res.status(500).json({ status: 500, message: 'Server error' });
     }
   }
 
@@ -68,11 +71,12 @@ export default class FollowerController {
           attributes: ['id', 'username', 'email',
             'image', 'bio', 'following'] }] });
       return followers.length
-        ? res.status(200).json({ message: 'Followers',
+        ? res.status(200).json({ status: 200,
+          message: 'Followers',
           followers })
-        : res.status(404).json({ error: { follows: 'No followers found!' } });
+        : res.status(404).json({ status: 404, message: { follows: 'No followers found!' } });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      return res.status(500).json({ status: 500, message: 'Server error' });
     }
   }
 
@@ -89,11 +93,12 @@ export default class FollowerController {
           attributes: ['id', 'username', 'email',
             'image', 'bio', 'following'] }] });
       return following.length
-        ? res.status(200).json({ message: 'Following',
+        ? res.status(200).json({ status: 200,
+          message: 'Following',
           following })
-        : res.status(404).json({ error: { follows: "You don't follow anyone" } });
+        : res.status(404).json({ status: 404, message: { follows: "You don't follow anyone" } });
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      return res.status(500).json({ status: 500, message: 'Server error' });
     }
   }
 }

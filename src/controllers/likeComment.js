@@ -18,7 +18,7 @@ class LikeComment {
     const { id } = req.user;
     const comment = await findComment(commentId);
 
-    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+    if (!comment) return res.status(404).json({ status: 404, message: 'Comment not found' });
 
     const userReacted = await userLikedOrDiskedComment(id, commentId);
     const dislikedComment = await findLikedOrDislikedComment(id, commentId,
@@ -33,7 +33,7 @@ class LikeComment {
       const likes = await countArticleDisikesLikes({ where: { commentId,
         likes: true } });
 
-      return res.status(200).json({ likes });
+      return res.status(200).json({ status: 200, likes });
     }
 
     if (liked[0]) {
@@ -41,7 +41,7 @@ class LikeComment {
       const likes = await countArticleDisikesLikes({ where: { commentId,
         likes: true } });
 
-      return res.status(200).json({ likes });
+      return res.status(200).json({ status: 200, likes });
     }
 
     if (dislikedComment[0]) {
@@ -49,7 +49,7 @@ class LikeComment {
       const likes = await countArticleDisikesLikes({ where: { commentId,
         likes: true } });
 
-      return res.status(200).json({ likes });
+      return res.status(200).json({ status: 200, likes });
     }
   }
 
@@ -64,7 +64,7 @@ class LikeComment {
     const { id } = req.user;
     const comment = await findComment(commentId);
 
-    if (!comment) return res.status(404).json({ message: 'Comment not found' });
+    if (!comment) return res.status(404).json({ status: 404, message: 'Comment not found' });
 
     const userReacted = await userLikedOrDiskedComment(id, commentId);
     const likedComment = await findLikedOrDislikedComment(id, commentId,
@@ -78,21 +78,21 @@ class LikeComment {
         dislikes: true });
       const dislikes = await countArticleDisikesLikes({ where: { commentId,
         dislikes: true } });
-      return res.status(200).json({ dislikes });
+      return res.status(200).json({ status: 200, dislikes });
     }
 
     if (likedComment[0]) {
       await ChangeLikeOrDislikeStatus({ dislikes: true, likes: false }, likedComment[0].id);
       const dislikes = await countArticleDisikesLikes({ where: { commentId,
         dislikes: true } });
-      return res.status(200).json({ dislikes });
+      return res.status(200).json({ status: 200, dislikes });
     }
 
     if (dislikedComment[0]) {
       await undoLikeOrDislikeComments(dislikedComment[0].id);
       const dislikes = await countArticleDisikesLikes({ where: { commentId,
         dislikes: true } });
-      return res.status(200).json({ dislikes });
+      return res.status(200).json({ status: 200, dislikes });
     }
   }
 }

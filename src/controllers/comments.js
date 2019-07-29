@@ -1,5 +1,7 @@
+/* eslint-disable prefer-const */
 import models from '../models';
 import eventEmitter from '../template/notifications/EventEmitter';
+import { countcomment } from './helpers/likeCommentHelper';
 
 const { Comments, Articles, User, CommentsHistories } = models;
 
@@ -26,10 +28,11 @@ export default class ArticleComment {
       const { articleId } = req.params;
       const createComment = await Comments.create({ body, articleId, userId: req.user.id });
       eventEmitter.emit('commentArticle', createComment.dataValues);
-      return res.status(201).json({ message: 'comment created!',
+      return res.status(201).json({ status: 201,
+        message: 'comment created!',
         comment: createComment });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ status: 500, message: error.message });
     }
   }
 
@@ -46,20 +49,21 @@ export default class ArticleComment {
       const userId = req.user.id;
 
       const checkIfArticleExists = await Articles.findByPk(articleId);
-      if (!checkIfArticleExists) return res.status(404).json({ error: 'Article does not exist' });
+      if (!checkIfArticleExists) return res.status(404).json({ status: 404, message: 'Article does not exist' });
       const checkIfCommentExists = await Comments.findByPk(commentId);
-      if (!checkIfCommentExists) return res.status(404).json({ error: 'Comment does not exist' });
+      if (!checkIfCommentExists) return res.status(404).json({ status: 404, message: 'Comment does not exist' });
       const checkUser = await User.findByPk(userId);
-      if (!checkUser) return res.status().json({ error: 'User not found' });
+      if (!checkUser) return res.status(404).json({ status: 404, message: 'User not found' });
 
       const newThreadedComment = await Comments.create({ userId,
         articleId,
         body,
         parentId: commentId });
-      return res.status(201).json({ message: 'Commented under this thread!',
+      return res.status(201).json({ status: 201,
+        message: 'Commented under this thread!',
         newThreadedComment });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ status: 500, message: error.message });
     }
   }
 
@@ -76,10 +80,10 @@ export default class ArticleComment {
         ? await Comments.update({ body: req.body.body },
           { where: { id: commentId, articleId, userId: req.user.id } })
            && await commentHistoryCreate(req, findComent)
-           && res.status(200).json({ message: 'Comment modified!' })
-        : res.status(404).json({ message: 'Comment not found!' });
+           && res.status(200).json({ status: 200, message: 'Comment modified!' })
+        : res.status(404).json({ status: 404, message: 'Comment not found!' });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ status: 500, message: error.message });
     }
   }
 
@@ -94,10 +98,10 @@ export default class ArticleComment {
       const { articleId, commentId } = req.params;
       const deleteComment = await Comments.destroy({ where: { id: commentId, articleId, userId } });
       return deleteComment
-        ? res.status(204).json({ message: 'comment deleted' })
-        : res.status(404).json({ message: 'comment not found!' });
+        ? res.status(204).json({ status: 204, message: 'comment deleted' })
+        : res.status(404).json({ status: 404, message: 'comment not found!' });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ status: 500, message: error.message });
     }
   }
 
@@ -109,11 +113,21 @@ export default class ArticleComment {
    */
   static async getAllcomments(req, res) {
     try {
-      const allComments = await Comments.findAll({ where: { articleId: req.params.articleId } });
-      return allComments.length ? res.status(200).json({ message: 'All Comments', allComments })
-        : res.status(404).json({ error: 'No comments found!' });
+      let object;
+      const article = await Articles.findOne({ where: { id: req.params.articleId },
+        include: [{ attributes: ['id', 'createdAt', 'updatedAt', 'body'],
+          as: 'Comments',
+          model: Comments,
+          include: [{ as: 'author',
+            model: User,
+            attributes: ['username', 'bio', 'image', 'following'] }] }] });
+      const count = await countcomment(object);
+      return article ? res.status(200).json({ status: 200,
+        comments: article.Comments,
+        commentsCount: count })
+        : res.status(404).json({ status: 404, message: 'No comments found!' });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ status: 500, message: error.message });
     }
   }
 
@@ -129,7 +143,8 @@ export default class ArticleComment {
     const { id } = req.user;
     const findHistory = await CommentsHistories.findAll({ where: { commentId } });
     return findHistory.length
-      ? (findHistory[0].dataValues.userId === id) && res.status(200).json({ data: { findHistory } })
-      : res.status(404).json({ message: 'No edit history for this comment!' });
+      ? (findHistory[0].dataValues.userId === id)
+       && res.status(200).json({ status: 200, data: { findHistory } })
+      : res.status(404).json({ status: 404, message: 'No edit history for this comment!' });
   }
 }

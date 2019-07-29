@@ -84,7 +84,17 @@ describe('FOLLOW', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('The article successfully created!');
+        done();
+      });
+  });
+
+  it('It should get all articles', (done) => {
+    chai.request(app)
+      .get('/api/articles')
+      .set('token', tokenGen1)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
         done();
       });
   });
@@ -123,10 +133,10 @@ describe('FOLLOW', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('The article successfully created!');
         done();
       });
   });
+
 
   it('Should return following users', (done) => {
     chai
@@ -135,6 +145,7 @@ describe('FOLLOW', () => {
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(200);
+        res.body.should.be.an('object');
         done();
       });
   });
@@ -146,6 +157,7 @@ describe('FOLLOW', () => {
       .set('token', ' ')
       .end((err, res) => {
         res.should.have.status(401);
+        res.body.should.be.an('object');
         done();
       });
   });
@@ -178,6 +190,7 @@ describe('FOLLOW', () => {
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(200);
+        res.body.should.be.an('object');
         done();
       });
   });
@@ -188,6 +201,7 @@ describe('FOLLOW', () => {
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(404);
+        res.body.should.be.an('object');
         done();
       });
   });
@@ -199,9 +213,22 @@ describe('FOLLOW', () => {
       .set('token', ' ')
       .end((err, res) => {
         res.should.have.status(401);
+        res.body.should.be.an('object');
         done();
       });
   });
+  it('Fail to return followers when they dont exist', (done) => {
+    chai
+      .request(app)
+      .get('/api/users/followers')
+      .set('token', tokenGen1)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
   it('Should not return following users', (done) => {
     chai
       .request(app)
@@ -209,6 +236,7 @@ describe('FOLLOW', () => {
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(404);
+        res.body.should.be.an('object');
         done();
       });
   });

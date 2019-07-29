@@ -17,7 +17,7 @@ export default class ReadingStatsController {
     const articleReaders = await Articles.findAll({ attributes: ['title', 'readers'],
       where: { id: articleId } });
     const { title, readers } = articleReaders[0];
-    return res.status(200).json({ data: { title, readers } });
+    return res.status(200).json({ status: 404, message: { title, readers } });
   }
 
   /**
@@ -31,7 +31,7 @@ export default class ReadingStatsController {
     const { articleId } = req.params;
     const countComments = await Comments.count({ where: { articleId } });
     return res.status(200).json({ status: 200,
-      data: { articleId,
+      message: { articleId,
         countComments } });
   }
 }

@@ -30,7 +30,10 @@ export default (sequelize, DataTypes) => {
       targetkey: 'id',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE' });
-    Articles.hasMany(models.Rating, { foreignKey: 'articleId', allowNull: false });
+    Articles.hasMany(models.Rating, { as: 'ratings', foreignKey: 'articleId', allowNull: false });
+    Articles.hasMany(models.Bookmarks, { foreignKey: 'articleId' });
+    Articles.hasMany(models.LikeAndDislike, { as: 'likes', foreignKey: 'articleId', sourceKey: 'slug' });
+    Articles.hasMany(models.Comments, { as: 'Comments', foreignKey: 'articleId', sourceKey: 'id' });
   };
   return Articles;
 };

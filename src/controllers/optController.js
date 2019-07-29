@@ -6,12 +6,13 @@ const optInCreate = async (req, res, Type) => {
   const optedin = await Opt.findOne({ where: { userId: req.user.id,
     type: Type } });
   if (optedin) {
-    return res.status(400).json({ message: 'You are already opted-in' });
+    return res.status(400).json({ status: 400, message: 'You are already opted-in' });
   }
   const newOpt = await Opt.create({ userId: req.user.id,
     type: Type });
   if (newOpt) {
-    res.status(201).json({ message: `You are now opted-in to ${Type} notifications`,
+    res.status(201).json({ status: 201,
+      message: `You are now opted-in to ${Type} notifications`,
       data: newOpt });
   }
 };
@@ -23,9 +24,9 @@ const optOutCreate = async (req, res, Type) => {
     await Opt.destroy({ where: { userId: req.user.id,
       type: Type } });
 
-    return res.json({ message: 'You are now opted-out!' });
+    return res.status(201).json({ status: 201, message: 'You are now opted-out!' });
   }
-  res.status(400).json({ message: `You are not yet opted in with ${Type}` });
+  res.status(400).json({ status: 400, message: `You are not yet opted in with ${Type}` });
 };
 
 /**
@@ -85,9 +86,10 @@ class OptController {
   static async ViewNotification(req, res) {
     const Notifications = await Notification.findAll({ where: { userId: req.params.id } });
     return Notifications.length
-      ? res.status(200).json({ message: 'Notifications',
+      ? res.status(200).json({ status: 200,
+        message: 'Notifications',
         Notifications })
-      : res.status(404).json({ errors: { Notifications: "You don't have any notifications" } });
+      : res.status(404).json({ status: 404, message: "You don't have any notifications" });
   }
 }
 

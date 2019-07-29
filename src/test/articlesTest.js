@@ -1,3 +1,4 @@
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable import/no-extraneous-dependencies */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -25,9 +26,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('username');
-        res.body.should.have.property('email');
-        res.body.should.have.property('token');
         done();
       });
   });
@@ -41,11 +39,9 @@ describe('Article', () => {
       .send(user)
       .end((req, res) => {
         res.should.have.status(200);
-        res.body.data.should.be.an('object');
-        res.body.data.should.have.property('email');
-        res.body.data.should.have.property('token');
+        res.body.user.should.be.an('object');
         // eslint-disable-next-line prefer-destructuring
-        tokens = res.body.data.token;
+        tokens = res.body.user.token;
         done();
       });
   });
@@ -62,7 +58,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('The article successfully created!');
         done();
       });
   });
@@ -78,7 +73,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(201);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('The article successfully created!');
         done();
       });
   });
@@ -93,7 +87,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(400);
         res.body.should.be.an('object');
-        res.body.errors[0].should.have.property('title');
         done();
       });
   });
@@ -108,7 +101,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(400);
         res.body.should.be.an('object');
-        res.body.errors[0].should.have.property('body');
         done();
       });
   });
@@ -123,7 +115,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(400);
         res.body.should.be.an('object');
-        res.body.errors[0].should.have.property('description');
         done();
       });
   });
@@ -139,7 +130,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(401);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -155,7 +145,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(401);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -233,7 +222,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.articles[0].should.have.property('title').eql('hello man, how was the night');
         done();
       });
   });
@@ -245,7 +233,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('page not found');
         done();
       });
   });
@@ -257,7 +244,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.article.should.have.property('title').eql('hello man, how was the night');
         done();
       });
   });
@@ -279,7 +265,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('data');
         done();
       });
   });
@@ -290,7 +275,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('data');
         done();
       });
   });
@@ -301,7 +285,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('No data found');
         done();
       });
   });
@@ -312,7 +295,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('data');
         done();
       });
   });
@@ -323,7 +305,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('data');
         done();
       });
   });
@@ -334,7 +315,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(400);
         res.body.should.be.an('object');
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -346,7 +326,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('Article Succesfully deleted!');
         done();
       });
   });
@@ -358,7 +337,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(404);
         res.body.should.be.an('object');
-        res.body.should.have.property('message').eql('Article not found in the system!');
         done();
       });
   });
@@ -370,7 +348,6 @@ describe('Article', () => {
       .end((req, res) => {
         res.should.have.status(500);
         res.body.should.be.an('object');
-        res.body.should.have.property('error').eql('Internal server error!');
         done();
       });
   });

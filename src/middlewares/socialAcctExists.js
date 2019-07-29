@@ -7,7 +7,8 @@ const userExists = { async google(req, res, next) {
   if (currentUser) {
     const token = await tokenGeneration.generateToken(currentUser.dataValues);
     const { firstName, lastName, email } = currentUser;
-    return res.status(201).json({ message: `Welcome to Authors Haven ${displayName}`,
+    return res.status(201).json({ status: 201,
+      message: `Welcome to Authors Haven ${displayName}`,
       data: { token, firstName, lastName, email }, });
   }
   next();
@@ -18,7 +19,8 @@ async twitter(req, res, next) {
   if (currentUser) {
     const token = await tokenGeneration.generateToken(currentUser.dataValues);
     const { socialId } = currentUser;
-    return res.status(201).json({ message: `Welcome to Authors Haven ${displayName}`,
+    return res.status(201).json({ status: 201,
+      message: `Welcome to Authors Haven ${displayName}`,
       data: { token, socialId }, });
   }
   next();

@@ -11,7 +11,8 @@ const createUser = async (newUser, res, displayName) => {
       }
     } = newUser;
     const token = await tokenGeneration.generateToken(newUser.dataValues);
-    return res.status(201).json({ message: `Welcome to Authors Haven ${displayName} `,
+    return res.status(201).json({ status: 201,
+      message: `Welcome to Authors Haven ${displayName} `,
       data: { token, firstName, lastName, username, email }, });
   }
 };

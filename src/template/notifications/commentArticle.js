@@ -34,7 +34,7 @@ const commentArticle = async (comment) => {
       });
     }
   } catch (err) {
-    return { errors: err };
+    return { message: err };
   }
 };
 

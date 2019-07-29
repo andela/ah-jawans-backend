@@ -39,9 +39,9 @@ class articleContoller {
         tagList,
         readtime: ReadTime,
         authorId: user.id, })
-      : res.status(401).json({ message: "User not allowed to create an article, login or signin if you don't have an account" });
+      : res.status(401).json({ status: 401, message: "User not allowed to create an article, login or signin if you don't have an account" });
     eventEmitter.emit('publishArticle', userInfo.id, slug);
-    article && res.status(201).json({ message: 'The article successfully created!' });
+    article && res.status(201).json({ status: 201, message: 'The article successfully created!' });
   }
 
   static async updateArticle(req, res) {
@@ -65,37 +65,50 @@ class articleContoller {
         readtime: newReadTime,
         tagList,
         authorId: req.user.id }, { where: { id: req.params.id } });
-      updatedArticle && res.status(200).json({ message: 'The article successfully updated!' });
+      updatedArticle && res.status(200).json({ status: 200, message: 'The article successfully updated!' });
     } else {
-      res.status(404).json({ message: 'article doenot have either title, description or body' });
+      res.status(404).json({ status: 404, message: 'article doenot have either title, description or body' });
     }
   }
 
   static async getArticle(req, res) {
     try {
-      const article = await Articles.findOne({ where: { id: req.params.id } });
-      const highlight = await getHightlights(req.params.id);
+      const articleId = req.params.id;
+      const article = await Articles.findOne({ where: { id: articleId } });
+      const highlight = await getHightlights(articleId);
+      const author = await User.findOne({ where: { id: article.authorId } });
       if (article) {
         await ReadingStatsHelper.updateStatistic(req.params.id);
         if (highlight) {
           await updateHightlights(req.params.id);
-          return res.status(200).json({ article, highlight });
+          //    return res.status(200).json({ article, highlight });
         }
-        return res.status(200).json({ article });
+        return res.status(200).json({ status: 200,
+          article: { slug: article.slug,
+            title: article.title,
+            description: article.description,
+            body: article.body,
+            tagList: article.tagList,
+            createdAt: article.createdAt,
+            updatedAt: article.updatedAt,
+            author: { username: author.username,
+              bio: author.bio,
+              image: author.image,
+              following: author.following },
+            highlight } });
       }
-      res.status(404).json({ message: 'No article found!' });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(404).json({ status: 404, message: error.message });
     }
   }
 
   static async getArticleSlug(req, res) {
     try {
       const article = await Articles.findOne({ where: { slug: req.params.slug } });
-      if (article) return res.status(200).json({ article });
-      res.status(404).json({ message: 'No article found!' });
+      if (article) return res.status(200).json({ status: 200, article });
+      res.status(404).json({ status: 404, message: 'No article found!' });
     } catch (error) {
-      return res.status(500).json({ message: 'Internal Server error', });
+      return res.status(500).json({ status: 500, message: 'Internal Server error', });
     }
   }
 
@@ -105,11 +118,11 @@ class articleContoller {
 
       let deletedArticle;
       article && (deletedArticle = await Articles.destroy({ where: { id: req.params.id }, returning: true }));
-      if (deletedArticle) return res.status(200).json({ message: 'Article Succesfully deleted!' });
+      if (deletedArticle) return res.status(200).json({ status: 200, message: 'Article Succesfully deleted!' });
 
-      return res.status(404).json({ message: 'Article not found!', });
+      return res.status(404).json({ status: 404, message: 'Article not found!', });
     } catch (error) {
-      return res.status(500).json({ message: 'The parameter should be a number!', });
+      return res.status(500).json({ status: 500, message: 'The parameter should be a number!', });
     }
   }
 
@@ -119,21 +132,23 @@ class articleContoller {
   }
 
   static async searchArticles(req, res) {
-    Object.keys(req.query).length === 0 && res.status(400).json({ error: req.query });
+    Object.keys(req.query).length === 0 && res.status(400).json({ status: 400, message: req.query });
     const { authorName, tag, keyword, title } = req.query;
 
-    if (!authorName && !tag && !keyword && !title) return res.status(400).json({ error: 'Bad request' });
+    if (!authorName && !tag && !keyword && !title) return res.status(400).json({ status: 400, message: 'Bad request' });
 
     let user = [];
     if (authorName) user = await searchUserHelper(authorName);
     const data = await searchArticlesHelper(tag, keyword, title, user);
 
-    return data.length ? res.status(200).json({ data }) : res.status(404).json({ message: 'No data found' });
+    return data.length ? res.status(200).json({ status: 200, data }) : res.status(404).json({ status: 404, message: 'No data found' });
   }
 
 
   static async getArticles(req, res) {
-    (req.query.offset && req.query.limit) ? await articlePagination(req, res) : await getAllArticles(req, res);
+    (req.query.offset && req.query.limit)
+      ? await articlePagination(req, res)
+      : await getAllArticles(req, res);
   }
 }
 export default articleContoller;
