@@ -29,21 +29,20 @@ describe('FOLLOW', () => {
     tokenGen2 = await generateToken({ id: newUser1.id });
   });
 
-  it('Users should be able to follow each other', (done) => {
+  it('User1 should be able to follow the User2', (done) => {
     const username = 'Joseph';
     chai.request(app)
-      .patch(`/api/users/${username}/follow`)
+      .post(`/api/profiles/${username}/follow`)
       .set('token', tokenGen2)
       .end((err, res) => {
         res.should.have.status(201);
         done();
       });
   });
-
-  it('Users should be able to follow each other', (done) => {
+  it('User2 should be able to follow user1', (done) => {
     const username = 'FollowMan';
     chai.request(app)
-      .patch(`/api/users/${username}/follow`)
+      .post(`/api/profiles/${username}/follow`)
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(201);
@@ -132,7 +131,7 @@ describe('FOLLOW', () => {
   it('Should return following users', (done) => {
     chai
       .request(app)
-      .get('/api/users/following')
+      .get('/api/profiles/following')
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(200);
@@ -143,18 +142,39 @@ describe('FOLLOW', () => {
     const username = 'Kagabo';
     chai
       .request(app)
-      .patch(`/api/users/${username}/follow`)
+      .post(`/api/profiles/${username}/follow`)
       .set('token', ' ')
       .end((err, res) => {
         res.should.have.status(401);
         done();
       });
   });
+  it('Should return followers', (done) => {
+    chai
+      .request(app)
+      .get('/api/profiles/followers')
+      .set('token', tokenGen2)
+      .end((err, res) => {
+        res.should.have.status(200);
+        done();
+      });
+  });
+  it('Fail to return followers when they dont exist', (done) => {
+    chai
+      .request(app)
+      .get('/api/profiles/followers')
+      .set('token', tokenGen1)
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+  });
+
 
   it('User should be able to unfollow user', (done) => {
     const username = 'FollowMan';
     chai.request(app)
-      .patch(`/api/users/${username}/unfollow`)
+      .delete(`/api/profiles/${username}/follow`)
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(200);
@@ -162,9 +182,9 @@ describe('FOLLOW', () => {
       });
   });
   it('Fail to unfollow user that you dont follow', (done) => {
-    const username = 'Joseph';
+    const username = 'Kagabo';
     chai.request(app)
-      .patch(`/api/users/${username}/unfollow`)
+      .delete(`/api/profiles/${username}/follow`)
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(404);
@@ -175,28 +195,17 @@ describe('FOLLOW', () => {
     const username = 'Joseph';
     chai
       .request(app)
-      .patch(`/api/users/${username}/unfollow`)
+      .delete(`/api/profiles/${username}/follow`)
       .set('token', ' ')
       .end((err, res) => {
         res.should.have.status(401);
         done();
       });
   });
-  it('Fail to return followers when they dont exist', (done) => {
-    chai
-      .request(app)
-      .get('/api/users/followers')
-      .set('token', tokenGen1)
-      .end((err, res) => {
-        res.should.have.status(404);
-        done();
-      });
-  });
-
   it('Should not return following users', (done) => {
     chai
       .request(app)
-      .get('/api/users/following')
+      .get('/api/profiles/following')
       .set('token', tokenGen1)
       .end((err, res) => {
         res.should.have.status(404);

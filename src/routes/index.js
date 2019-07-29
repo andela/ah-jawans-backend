@@ -33,7 +33,7 @@ router.use('/api', likeAndDislike);
 // social route for test
 router.use('/api/social', socialRoute);
 router.use('/api/articles', commentRoute);
-router.use('/api/users', followerRoute);
+router.use('/api/profiles', followerRoute);
 router.use('/api', socialAPIRoute);
 router.use('/api', readerStatsRoute);
 router.use('/api', reportArticle);

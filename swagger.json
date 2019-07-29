@@ -676,8 +676,35 @@
         }
       }
     },
-    "/users/{username}/follow": {
-      "patch": {
+    "/profiles/{username}/follow": {
+      "post": {
+        "tags": [
+          "Follower"
+        ],
+        "description": "Allow user to follow another user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User follows another user"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Followed user"
+          }
+        }
+      },
+      "delete": {
         "tags": [
           "Follower"
         ],
@@ -705,36 +732,7 @@
         }
       }
     },
-    "/users/{username}/unfollow": {
-      "patch": {
-        "tags": [
-          "Follower"
-        ],
-        "description": "Allow to unfollow user",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "username",
-            "required": true
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "Unfollow a user"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "201": {
-            "description": "succesfully unfollowed user"
-          }
-        }
-      }
-    },
-    "/users/followers": {
+    "/profiles/followers": {
       "get": {
         "tags": [
           "Follower"
@@ -757,7 +755,7 @@
         }
       }
     },
-    "/users/following": {
+    "/profiles/following": {
       "get": {
         "tags": [
           "Follower"
@@ -1662,7 +1660,7 @@
         "tags": [
           "Report article"
         ],
-        "description": "Allow super user get reported article",
+        "description": "Allow super user to post reported article",
         "parameters": [
           {
             "name": "token",
@@ -1702,38 +1700,70 @@
         "tags": [
           "Report article"
         ],
-        "description": "Allow user get a number comments on an article",
+        "description": "Allow super user get reported article",
         "parameters": [
           {
-          "name": "articleId",
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
             "in": "path",
             "description": "Article id",
-            "required": true
-        },
-        {
-          "name": "token",
-          "in": "header",
-          "description": "User's token",
-          "required": true
-        }]
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reports"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Article reported"
+          },
+          "404": {
+            "description": " reported article not found"
+          }
+        }
       },
       "delete": {
         "tags": [
           "Report article"
         ],
-        "description": "Allow user delete article report",
-          "200": {
-            "description": "rated the article"
+        "description": "Allow super user delete reported article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
           },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reports"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
-          "201": {
-            "description": "report deleted"
+          "204": {
+            "description": "Delete reported article"
           },
           "404": {
-            "description": "Article not found"
+            "description": " Reported article not found"
           }
         }
-     }
+      }
     },
     "/articles/{id}/rating": {
       "post": {
