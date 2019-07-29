@@ -157,6 +157,7 @@ describe('users', () => {
   it('should verify a user', (done) => {
     chai.request(app)
       .patch(`/api/users/verification/${tokenGen}`)
+      .send({ verified: true })
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.have.property('message').eql('Your account is now verified you can login with your email');

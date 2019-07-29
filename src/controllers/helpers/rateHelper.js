@@ -3,10 +3,8 @@ import model from '../../models';
 
 const { Rating, Articles } = model;
 
-const findArticle = async (articleId) => {
-  const article = await Articles.findOne({ where: { id: articleId } });
-  return article;
-};
+const findArticle = articleId => Articles.findOne({ where: { id: articleId } });
+
 const findRatings = async (userId, articleId) => {
   const rating = await Rating.findOne({ where: { reviewerId: userId, articleId } });
   return rating;

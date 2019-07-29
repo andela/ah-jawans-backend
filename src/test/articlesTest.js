@@ -11,6 +11,7 @@ const { generateToken } = Tokenizer;
 chai.use(chaiHttp);
 chai.should();
 
+// eslint-disable-next-line import/no-mutable-exports
 let userObject, articleObject, testUser, testArticle, tokenGen, tokens;
 
 describe('Article', () => {
