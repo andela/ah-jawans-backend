@@ -29,16 +29,6 @@ const checkEmail = async (req, res, next) => {
   }
 };
 
-const usernameAvailability = async (req, res, next) => {
-  const userConstant = await models.User.findOne({ where: { username: req.params.username }, });
-  // eslint-disable-next-line no-cond-assign
-  if (userConstant.dataValues.username !== req.params.username) {
-    return res.status(400).json({ status: 400,
-      message: 'This username is not available, Please choose another one!', });
-  }
-  next();
-};
-
 const usernameCheck = async (req, res, next) => {
   // eslint-disable-next-line no-constant-condition
   if (!req.params.username || !(/^[A-Za-z_-]+$/.test(req.params.username))) {
@@ -51,6 +41,6 @@ const usernameCheck = async (req, res, next) => {
 export {
   checkEmail,
   decodeResetPasswordToken,
-  usernameAvailability,
+  // usernameAvailability,
   usernameCheck
 };

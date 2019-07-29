@@ -7,15 +7,18 @@ import chaiHttp from 'chai-http';
 import app from '../index';
 import models from '../models';
 import Tokenizer from '../helpers/tokenGenerator';
+import { updateUser, findUser } from '../controllers/helpers/findUser';
 
 const { User } = models;
 const { generateToken } = Tokenizer;
 
 chai.use(chaiHttp);
 chai.should();
+const { expect } = chai;
 
 let tokenGen;
 let userGen;
+let adminToken;
 
 describe('users', () => {
   it('Should return welcome message', (done) => {
@@ -85,6 +88,32 @@ describe('users', () => {
         res.body.data.should.be.an('object');
         res.body.data.should.have.property('email');
         res.body.data.should.have.property('token');
+        done();
+      });
+  });
+
+  it('Should return a value', async () => {
+    const gh = await updateUser(1, 'hewg', 'hgewy', 'hguew');
+    expect(typeof gh[0]).to.be.equal('number');
+  });
+
+  it('Should return a user', async () => {
+    const gh = await findUser(1);
+    expect(typeof gh.id).to.be.equal('number');
+  });
+  it('User should be able to signin as an admin', (done) => {
+    const user2 = { username: 'john',
+      password: 'Kagabo1@',
+      email: 'faustin.kagabo@andela.com' };
+    chai.request(app)
+      .post('/api/users/login')
+      .send(user2)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.data.should.be.an('object');
+        res.body.data.should.have.property('email');
+        res.body.data.should.have.property('token');
+        adminToken = res.body.data.token;
         done();
       });
   });
@@ -353,38 +382,44 @@ describe('User Profile view amend', () => {
 
   it('User should be able to update his/her profile', (done) => {
     chai.request(app)
-      .patch(`/api/users/${userGen}`)
+      .patch('/api/users')
       .set('token', tokenGen)
-      .send({ id: 21,
-        username: 'shaluchandwani',
-        firstName: 'Shalu',
-        lastName: 'chandwani',
-        email: 'shaluchandwani@gmail.com',
-        bio: null,
-        image: 'https://lh6.googleusercontent.com/-sZOpms2mUso/AAAAAAAAAAI/AAAAAAAAAgY/qI2F0nXUaU8/photo.jpg',
-        following: null,
-        socialId: null,
-        password: 'Shalu@99999',
-        createdAt: '2019-07-11T09:30:05.618Z',
-        updatedAt: '2019-07-11T09:30:05.618Z',
-        dateOfBirth: null,
-        gender: null,
-        provider: null,
-        role: null })
-      .end((err, res) => {
+      .send({ firstName: 'Shalu',
+        lastName: 'chandwandi' })
+      .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
         done();
       });
   });
 
-  it('User should not be able to update his/her profile if token is not present', (done) => {
+  it('User should be able to update his/her profile', (done) => {
     chai.request(app)
-      .patch(`/api/users/${userGen}`)
-      .send({ username: 'changename',
-        bio: 'changing bio' })
+      .patch('/api/users')
+      .set('token', tokenGen)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+  it('User should be able to update his/her profile admin ', (done) => {
+    chai.request(app)
+      .patch('/api/users?id=3')
+      .set('token', adminToken)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('User should delete user', (done) => {
+    chai.request(app)
+      .delete('/api/users/3')
+      .set('token', adminToken)
       .end((err, res) => {
-        res.should.have.status(401);
+        res.should.have.status(200);
         res.body.should.be.an('object');
         done();
       });

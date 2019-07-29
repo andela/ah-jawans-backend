@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Authors Haven - Jawans"
   },
-  "host": "127.0.0.1:3000",
+  "host": "ah-jawans-backend.herokuapp.com",
   "basePath": "/api",
   "tags": [
     {
@@ -261,6 +261,108 @@
             }
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "User profile update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "The username to update",
+            "required": false
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Object containing user information to update",
+            "schema": "#/definitions/user"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "User profile update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "User profile update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user id to delete",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
+          }
+        }
       }
     },
     "/users/login": {
@@ -412,46 +514,7 @@
       }
     },
     "/users/{username}": {
-      "patch": {
-        "tags": [
-          "Update User Profile"
-        ],
-        "description": "User profile update",
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "token",
-            "required": true
-          },
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The username to update",
-            "required": true
-          },
-          {
-            "name": "user",
-            "in": "body",
-            "description": "Object containing user information to update",
-            "schema": "#/definitions/user"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "User profile sucessfully updated"
-          },
-          "404": {
-            "description": "User profile not found"
-          },
-          "500": {
-            "description": "Error while updating profile"
-          }
-        }
-      }
+      
     },
     "/user/{username}": {
       "get": {
@@ -1466,21 +1529,26 @@
             "name": "id",
             "in": "path",
             "description": "Fetch ratings",
-            "require": true,
-            "schema": {
-              "$ref": "#/definitions/fecthratings"
+            "require": true
+          },{
+              "name": "offset",
+              "in": "query",
+              "description": "offset",
+              "required": true
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "article limit",
+              "required": true
             }
-          }
         ],
         "produces": [
           "application/json"
         ],
         "responses": {
           "200": {
-            "description": "Ratings",
-            "schema": {
-              "$ref": "#/definitions/fecthratings"
-            }
+            "description": "Ratings"
           }
         }
       }
@@ -1910,7 +1978,7 @@
             "description": "role data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/role"
+              "$ref": "#/definitions/roles"
             }
           }
         ],
@@ -1937,7 +2005,7 @@
             "description": "role data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/role"
+              "$ref": "#/definitions/roles"
             }
           }
         ],
@@ -1964,7 +2032,7 @@
             "description": "role data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/role"
+              "$ref": "#/definitions/roles"
             }
           }
         ],
@@ -1988,12 +2056,18 @@
             "required": true
           },
           {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true
+          },
+          {
             "name": "roles",
             "in": "body",
             "description": "role data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/role"
+              "$ref": "#/definitions/roles"
             }
           }
         ],

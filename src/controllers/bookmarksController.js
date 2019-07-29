@@ -29,11 +29,10 @@ class BookmarksController {
     try {
       const article = await findArticle(req.params.articleId);
 
-      await ArticleOwner(req.params.articleId, req.user.id) && res.status(403).json({ error: 'Not allowed to bookmark your article' });
-      const bookmark = article && await Bookmarks.create({ userId: req.user.id,
-        articleId: article.dataValues.id });
-
-      bookmark ? res.status(201).json({ message: 'Article added to bookmarks' }) : res.status(404).json({ error: 'No Article found!' });
+      if (!article) return res.status(404).json({ error: 'No Article found!' });
+      if (await ArticleOwner(req.params.articleId, req.user.id)) return res.status(403).json({ error: 'Not allowed to bookmark your article' });
+      return (await Bookmarks.create({ userId: req.user.id,
+        articleId: article.dataValues.id })) && res.status(201).json({ message: 'Article added to bookmarks' });
     } catch (error) {
       return res.status(500).json({ error: 'Internal server error' });
     }

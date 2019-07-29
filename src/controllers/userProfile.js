@@ -3,6 +3,7 @@
 /* eslint-disable no-else-return */
 /* eslint-disable prefer-destructuring */
 import models from '../models';
+import { findUserData, findUserExist, updateUser } from './helpers/findUser';
 
 const { User } = models;
 /**
@@ -31,20 +32,32 @@ class UserProfile {
     * @return {object} returns an object containing the updated user profile
     */
   static async updateProfile(req, res) {
-    const { username } = req.params;
-    const { body } = req;
-    const getUsername = await User.findOne({ where: { username } });
-    // eslint-disable-next-line no-undef
-    if (!getUsername) {
-      return res.status(404).json({ message: `Username: ${username} does not exist` });
-      // eslint-disable-next-line no-else-return
-    } else if (req.body.id !== getUsername.dataValues.id) {
-      return res.status(404).json({ message: `UserId: ${req.body.id} cannot be amended, You can only amend your id` });
-    } else {
-      const updatedUser = await User.update({ ...body },
-        { where: { id: req.body.id } });
-      return updatedUser.length
-        && res.status(200).json({ user: { message: 'User updated sucessfully', updatedUser } });
+    try {
+      const userId = req.user.id;
+      const { id } = req.query;
+      const { username, email, firstName, lastName, bio, image, dateOfBirth, gender } = req.body;
+
+      if (userId) {
+        const userData = await findUserData({ where: { id: userId } });
+        if (!userData) return res.status(403).json({ error: 'User does not exist' });
+        if (userData.dataValues.roles.includes('superAdmin')) {
+          if (id === userId) return res.status(404).json({ error: 'Not allowed to update super admin' });
+          const userData1 = await findUserData({ where: { id } });
+          if (!userData1) return res.status(403).json({ error: 'User does not exist' });
+          const check = await findUserExist(username, email);
+          if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
+          return updateUser(id, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
+        } else {
+          if (id === userId) return res.status(404).json({ message: 'Not allowed to update super admin' });
+          const userData1 = await findUserData({ where: { id: userId } });
+          if (!userData1) return res.status(403).json({ message: 'User does not exist' });
+          const check = await findUserExist(username, email);
+          if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
+          return updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
+        }
+      }
+    } catch (error) {
+      return res.status(500).json({ message: 'Server error!' });
     }
   }
 

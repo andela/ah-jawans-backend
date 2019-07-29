@@ -145,4 +145,49 @@ describe('role', () => {
         done();
       });
   });
+
+  it('should not delete with bad role', (done) => {
+    const role = { tablesAllowed: 'Articles,User',
+      role: 'adminsdfwad',
+      actions: 'GET' };
+    chai.request(app)
+      .delete('/api/role')
+      .set('token', tokenGen)
+      .send(role)
+      .end((req, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('error');
+        done();
+      });
+  });
+
+  it('should not delete with bad role', (done) => {
+    const role = { tablesAllowed: 'Articles,User',
+      role: 'superAdmin',
+      actions: 'GET' };
+    chai.request(app)
+      .delete('/api/role')
+      .set('token', tokenGen)
+      .send(role)
+      .end((req, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('error');
+        done();
+      });
+  });
+
+  it('should delete with admin token', (done) => {
+    const role = { tablesAllowed: 'Articles,User',
+      role: 'admin',
+      actions: 'GET' };
+    chai.request(app)
+      .delete('/api/role')
+      .set('token', tokenGen)
+      .send(role)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('message');
+        done();
+      });
+  });
 });
