@@ -1,6 +1,7 @@
 import model from '../models';
 import LikesDislikesHelpers from './helpers/likeAndDislikes';
 import findArticle from './helpers/findArticle';
+import likeDislikeArticle from '../helpers/likeDislikeArticle';
 
 const { LikeAndDislike } = model;
 
@@ -79,37 +80,15 @@ class LikesAndDislikes {
     const liked = await LikesDislikesHelpers.findArticleLikes(id, articleId);
     const userReacted = await LikesDislikesHelpers.userLikedOrDiskedArticle(id, articleId);
 
-    if (!userReacted[0]) {
-      await LikeAndDislike.create({ userId: id,
-        articleId: article.id,
-        dislikes: true,
-        likes: true });
-      const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes(article.dataValues.id,
-        { dislikes: true });
-      return res.status(200).json({ dislikes });
-    }
-
-    if (disliked[0]) {
-      await LikesDislikesHelpers.updateArticleDisliskes(disliked[0].id);
-      const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId,
-        dislikes: true } });
-      return res.status(200).json({ dislikes });
-    }
-    if (dislikedArticle[0]) {
-      await LikesDislikesHelpers.ChangeLikeStatus({ dislikes: true, likes: false },
-        dislikedArticle[0].id);
-      const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId,
-        dislikes: true } });
-      return res.status(200).json({ dislikes });
-    }
-
-    if (liked[0]) {
-      await LikesDislikesHelpers.ChangeLikeStatus({ dislikes: true, likes: false },
-        liked[0].id);
-      const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId,
-        dislikes: true } });
-      return res.status(200).json({ dislikes });
-    }
+    likeDislikeArticle({ res,
+      article,
+      userReacted,
+      articleId,
+      id,
+      disliked,
+      liked,
+      dislikedArticle,
+      LikeAndDislike });
   }
 }
 
