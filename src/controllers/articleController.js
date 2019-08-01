@@ -21,12 +21,14 @@ class articleContoller {
       title,
       body,
       description,
-      image,
       tags
     } = req.body;
     const ReadTime = readTime(req.body.body);
     const tagList = tags ? tags.split(',') : [];
     const slug = createSlug(title);
+    const imageArticle = req.files && req.files[0].originalname
+      ? `${req.files[0].version}/${req.files[0].public_id}.${req.files[0].format}`
+      : null;
     const user = await User.findOne({ where: { email: req.user.email } });
     const userInfo = await findUser(req.user.username);
     let article;
@@ -35,7 +37,7 @@ class articleContoller {
         title,
         description,
         body,
-        image,
+        image: imageArticle,
         tagList,
         readtime: ReadTime,
         authorId: user.id, })

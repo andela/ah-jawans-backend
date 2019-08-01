@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       references: { model: 'User',
         key: 'id' },
       onUpdate: 'CASCADE',
-      onDelete: 'CASCADE' } }, { timestamps: true });
+      onDelete: 'CASCADE' },
+    edited: { type: DataTypes.BOOLEAN } }, { timestamps: true });
   Comments.associate = (models) => {
     Comments.belongsTo(models.Articles, { foreignKey: 'articleId',
       onDelete: 'CASCADE' });

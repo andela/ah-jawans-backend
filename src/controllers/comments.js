@@ -73,7 +73,7 @@ export default class ArticleComment {
       const { articleId, commentId } = req.params;
       const findComent = await Comments.findOne({ where: { id: commentId, articleId } });
       return findComent
-        ? await Comments.update({ body: req.body.body },
+        ? await Comments.update({ body: req.body.body, edited: true },
           { where: { id: commentId, articleId, userId: req.user.id } })
            && await commentHistoryCreate(req, findComent)
            && res.status(200).json({ message: 'Comment modified!' })

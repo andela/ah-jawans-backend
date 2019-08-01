@@ -13,3 +13,7 @@ APP_URL_FRONTEND='should have Frontend url'
 SOCKET_PORT='should have the port of socketio example = 5000'
 JAWANS_USER='userid of your app'
 JAWANS_PASS='password for the app'
+CLOUDINARY_CLOUD_NAME='cloudinary_cloud_name'
+CLOUDINARY_API_KEY='cloudinary_api_key'
+CLOUDINARY_API_SECRET='cloudinary_secret'
+IMAGE_BASE_URL=http://image_cdn_server/

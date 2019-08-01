@@ -9,6 +9,7 @@ import models from '../models';
 import Tokenizer from '../helpers/tokenGenerator';
 import { updateUser, findUser } from '../controllers/helpers/findUser';
 
+
 const { User } = models;
 const { generateToken } = Tokenizer;
 
@@ -385,13 +386,15 @@ describe('User Profile view amend', () => {
       .patch('/api/users')
       .set('token', tokenGen)
       .send({ firstName: 'Shalu',
-        lastName: 'chandwandi' })
+        lastName: 'vaswani',
+        image: 'image.jpg' })
       .end((req, res) => {
         res.should.have.status(200);
         res.body.should.be.an('object');
         done();
       });
   });
+
 
   it('User should be able to update his/her profile', (done) => {
     chai.request(app)
@@ -416,7 +419,7 @@ describe('User Profile view amend', () => {
 
   it('User should delete user', (done) => {
     chai.request(app)
-      .delete('/api/users/3')
+      .delete('/api/users/1')
       .set('token', adminToken)
       .end((err, res) => {
         res.should.have.status(200);

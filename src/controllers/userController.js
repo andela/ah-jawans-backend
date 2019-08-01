@@ -50,7 +50,7 @@ export default class UserController {
       }
     } catch (error) {
       return res.status(500)
-        .json({ Error: 'Server error' });
+        .json({ Error: error.message });
     }
   }
 
