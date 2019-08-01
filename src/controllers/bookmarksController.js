@@ -42,7 +42,10 @@ class BookmarksController {
     try {
       const bookmarks = await Bookmarks.findAll({ where: { userId: req.user.id },
         include: [bookmarkInclude] });
-      return bookmarks.length ? res.status(200).json({ status: 200, bookmarks }) : res.status(404).json({ status: 404, message: 'You do not have bookmark articles' });
+      if (bookmarks.length) {
+        return res.status(200).json({ status: 200, bookmarks });
+      }
+      res.status(404).json({ status: 404, message: 'You do not have bookmark articles' });
     } catch (error) {
       return res.status(500).json({ status: 500, message: 'Internal server error' });
     }

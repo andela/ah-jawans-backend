@@ -13,7 +13,7 @@ const SocketIO = (app) => {
     console.log(`Socket.IO is running on port ${port}`);
   }));
   io.use((socket, next) => {
-    next(null, next);
+    next(next);
   });
   io.on('connection', (socket) => {
     eventEmitter.on('new_inapp', (message, user) => {

@@ -329,7 +329,9 @@
             "description": "Error while updating profile"
           }
         }
-      },
+      }
+    },
+    "/users/{id}": {
       "delete": {
         "tags": [
           "Auth"
@@ -427,7 +429,7 @@
     "/passwordreset": {
       "post": {
         "tags": [
-          "reset password"
+          "Reset password"
         ],
         "summary": "reset password",
         "description": "sending a link to reset password",

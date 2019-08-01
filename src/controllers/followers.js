@@ -1,5 +1,6 @@
 import models from '../models';
 import { follow, getUser, checkUser, unfollowUser } from './helpers/followersHelper';
+import getFollowers from './helpers/getFollowers';
 
 const { User, Follow } = models;
 /**
@@ -65,11 +66,7 @@ export default class FollowerController {
      */
   static async followers(req, res) {
     try {
-      const followers = await Follow.findAll({ where: { followed: req.user.id },
-        include: [{ model: User,
-          as: 'follower',
-          attributes: ['id', 'username', 'email',
-            'image', 'bio', 'following'] }] });
+      const followers = await getFollowers(req.user.id);
       return followers.length
         ? res.status(200).json({ status: 200,
           message: 'Followers',
