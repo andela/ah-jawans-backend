@@ -81,7 +81,6 @@ class articleContoller {
         await ReadingStatsHelper.updateStatistic(req.params.id);
         if (highlight) {
           await updateHightlights(req.params.id);
-          //    return res.status(200).json({ article, highlight });
         }
         return res.status(200).json({ status: 200,
           article: { slug: article.slug,
