@@ -35,8 +35,10 @@ class UserProfile {
     try {
       const userId = req.user.id;
       const { id } = req.query;
-      const { username, email, firstName, lastName, bio, image, dateOfBirth, gender } = req.body;
-
+      const { username, email, firstName, lastName, bio, dateOfBirth, gender } = req.body;
+      const image = req.files && req.files[0].originalname
+        ? `${req.files[0].version}/${req.files[0].public_id}.${req.files[0].format}`
+        : null;
       if (userId) {
         const userData = await findUserData({ where: { id: userId } });
         if (!userData) return res.status(403).json({ error: 'User does not exist' });
@@ -46,7 +48,8 @@ class UserProfile {
           if (!userData1) return res.status(403).json({ error: 'User does not exist' });
           const check = await findUserExist(username, email);
           if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
-          return updateUser(id, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
+          return updateUser(id, username, email, firstName, lastName, bio,
+            image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
         } else {
           if (id === userId) return res.status(404).json({ message: 'Not allowed to update super admin' });
           const userData1 = await findUserData({ where: { id: userId } });
