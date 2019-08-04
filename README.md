@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/andela/ah-jawans-backend.svg?branch=develop)](https://travis-ci.com/andela/ah-jawans-backend)
 [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
-[![Reviewed by Hound](https://img.shields.io/github/issues/andela/ah-jawans-backend.svg?style=flat-square)](https://houndci.com) [![![Coverage Status](https://coveralls.io/repos/github/andela/ah-jawans-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/ah-jawans-backend?branch=develop) [![Maintainability](https://api.codeclimate.com/v1/badges/fbf4e41d7d7846a0bee6/maintainability)](https://codeclimate.com/github/andela/ah-jawans-backend/maintainability)
+[![Reviewed by Hound](https://img.shields.io/github/issues/andela/ah-jawans-backend.svg?style=flat-square)](https://houndci.com) [!  [![Coverage Status](https://coveralls.io/repos/github/andela/ah-jawans-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/ah-jawans-backend?branch=develop) [![Maintainability](https://api.codeclimate.com/v1/badges/fbf4e41d7d7846a0bee6/maintainability)](https://codeclimate.com/github/andela/ah-jawans-backend/maintainability)
 
 Authors Haven - A Social platform for the creative at heart.
 =======
