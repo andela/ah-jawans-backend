@@ -41,17 +41,15 @@ export default class UserController {
         roles: user.roles };
 
       const token = await generateToken(payload);
-      const mailSend = await MailSender.sendMail(user.email, user.username, token);
+      await MailSender.sendMail(user.email, user.username, token);
 
-      if (mailSend[0].statusCode === 202) {
-        return res.status(201).json({ status: 201,
-          message: 'Your account has been created. You can check your email for comfirmation.',
-          user: { email: user.email,
-            token,
-            username: user.username,
-            bio: user.bio,
-            image: user.image } });
-      }
+      return res.status(201).json({ status: 201,
+        message: 'Your account has been created. You can check your email for comfirmation.',
+        user: { email: user.email,
+          token,
+          username: user.username,
+          bio: user.bio,
+          image: user.image } });
     } catch (error) {
       return res.status(500)
         .json({ status: 500, message: 'Server error' });
