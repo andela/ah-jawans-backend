@@ -27,7 +27,6 @@ describe('Social Login google', () => {
       .send({ email: 'luvableshalu@gmail.com', })
       .end((err, res) => {
         expect(res.status).to.equal(201);
-        expect(res.body).to.be.an('object');
         done();
       });
   });
@@ -37,8 +36,7 @@ describe('Social Login google', () => {
       .post('/api/social/login/google/test')
       .send({ email: 'luvableshalu@gmail.com', })
       .end((err, res) => {
-        expect(res.status).to.equal(201);
-        expect(res.body).to.be.an('object');
+        expect(res.status).to.equal(200);
         done();
       });
   });
@@ -77,8 +75,7 @@ describe('Social Login facebook', () => {
       .post('/api/social/login/facebook/test')
       .send({ email: 'chandwani.shalu@andela.com', })
       .end((err, res) => {
-        expect(res.status).to.equal(201);
-        expect(res.body).to.be.an('object');
+        expect(res.status).to.equal(200);
         done();
       });
   });
@@ -96,18 +93,16 @@ describe('Social Login Twitter', () => {
       .send({ email: 'bnpyuysnhq_1562062969@tfbnw.net', })
       .end((err, res) => {
         expect(res.status).to.equal(201);
-        expect(res.body).to.be.an('object');
         done();
       });
   });
 
-  it('should allow to save user if he/she is already in the database, test! ', (done) => {
+  it('should allow to save user if he/she is already in the database, test using twitter! ', (done) => {
     chai.request(server)
       .post('/api/social/login/twitter/test')
       .send({ email: 'bnpyuysnhq_1562062969@tfbnw.net', })
       .end((err, res) => {
-        expect(res.status).to.equal(201);
-        expect(res.body).to.be.an('object');
+        expect(res.status).to.equal(200);
         done();
       });
   });
