@@ -8,7 +8,6 @@ const { decodeToken } = Tokenizer;
 export default class Auth {
   static async verifyToken(req, res, next) {
     const tokenGen = req.headers.token;
-
     try {
       if (!tokenGen) {
         return res.status(401)
