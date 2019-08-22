@@ -24,8 +24,8 @@ export default class UserController {
       const findByUsername = await User.findOne({ where: { username: String(username) } });
 
       if (foundUser || findByUsername) {
-        return (foundUser && res.status(409).json({ error: 'email has been taken by user' })) || (findByUsername && res.status(409).json({ error:
-            'username has been taken by another user' }));
+        return (foundUser && res.status(409).json({ error: 'Email is already registered' })) || (findByUsername && res.status(409).json({ error:
+            'Username is already registered' }));
       }
       const user = await User.create({ username,
         email,
@@ -58,7 +58,7 @@ export default class UserController {
     try {
       const user = await User.findOne({ where: { email: req.body.email }, });
       if (!user) {
-        return res.status(404).json({ error: 'No user found with this email address.' });
+        return res.status(404).json({ error: 'Email not found.' });
       }
 
       const payload = { username: user.username,
