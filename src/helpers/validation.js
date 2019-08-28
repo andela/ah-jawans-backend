@@ -11,23 +11,23 @@ class ValidationSchema {
   static signup(data) {
     const signupErrors = {};
     if (!data.email || !(/^([a-zA-Z0-9_.]+)@([a-zA-Z0-9_.]+)\.([a-zA-Z]{2,5})$/.test(data.email))) {
-      signupErrors.email = 'Email is required and should look like: example@example.com!';
+      signupErrors.email = 'Email is required and should look like: example@example.com';
     }
 
     if (!data.password || !(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(data.password.trim()))) {
-      signupErrors.password = 'Your password should contain 8 characters , have a least one upper and lower case letter and symbol';
+      signupErrors.password = 'Your password should contain 8 characters , have at least one upper and lower case letter, and symbol';
     }
 
     if (!data.username || !(/^[A-Za-z_-]+$/.test(data.username))) {
-      signupErrors.username = 'username is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
+      signupErrors.username = 'username is required, should contains at least 3 letters.';
     }
 
     if (!(/^[A-Za-z_-]+$/.test(data.firstName))) {
-      signupErrors.firstName = 'first name is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
+      signupErrors.firstName = 'first name is required and should contains at least 3 letters.';
     }
 
     if (!(/^[A-Za-z_-]+$/.test(data.lastName))) {
-      signupErrors.lastName = 'last name is required, should at list contains 3 letters and can have underscores(_) and hyphens (-)';
+      signupErrors.lastName = 'last name is required and should contains at least 3 letters.';
     }
     errors.length = 0;
     addErrors(signupErrors);

@@ -33,7 +33,6 @@ class UserProfile {
     */
   static async updateProfile(req, res) {
     try {
-      console.log('oooooooo');
       const userId = req.user.id;
       const { id } = req.query;
       const { username, email, firstName, lastName, bio, dateOfBirth, gender } = req.body;
