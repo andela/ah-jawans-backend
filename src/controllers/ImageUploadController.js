@@ -14,7 +14,6 @@ export default class UploadController {
    * @returns {object} Object representing the response returned
    */
   static async save(req, res) {
-    console.log('idhar aya hai kya');
     const image = req.files && req.files[0];
     return typeof image === 'object' && typeof image !== 'boolean' && NODE_ENV !== 'test'
       ? (await Gallery.save({

@@ -24,8 +24,8 @@ export default class UserController {
       const findByUsername = await User.findOne({ where: { username: String(username) } });
 
       if (foundUser || findByUsername) {
-        return (foundUser && res.status(409).json({ error: 'email has been taken by user' })) || (findByUsername && res.status(409).json({ error:
-            'username has been taken by another user' }));
+        return (foundUser && res.status(409).json({ error: 'Email is already registered' })) || (findByUsername && res.status(409).json({ error:
+            'Username is already registered' }));
       }
       const user = await User.create({ username,
         email,
@@ -58,7 +58,7 @@ export default class UserController {
     try {
       const user = await User.findOne({ where: { email: req.body.email }, });
       if (!user) {
-        return res.status(404).json({ error: 'No user found with this email address.' });
+        return res.status(404).json({ error: 'Email not found.' });
       }
 
       const payload = { username: user.username,
@@ -69,7 +69,7 @@ export default class UserController {
       // @sends a message to an existing email in our database with the below email template
       const message = `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 
           Please click on the followoing link or paste this link in youre browser to complete this process within one hour: <Br> 
-          http://localhost:3000/api/users/passwordreset/${token}. <br>If you did not request this ,please ignore this email and your password will remain unchanged.</div>`;
+          http://localhost:8081/updatePassword/?token=${token}. <br>If you did not request this ,please ignore this email and your password will remain unchanged.</div>`;
       const mailOptions = { from: 'patrick.ngabonziza@andela.com',
         to: `${user.email}`,
         subject: 'Link to reset Password',
