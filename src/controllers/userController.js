@@ -66,17 +66,10 @@ export default class UserController {
         email: user.email,
         role: user.role };
       const token = await generateToken(payload);
-      // @sends a message to an existing email in our database with the below email template
-      const message = `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 
-          Please click on the followoing link or paste this link in youre browser to complete this process within one hour: <Br> 
-          ${process.env.FRONTEND_URL_UPDATE_PASSWORD}/updatePassword/?token=${token}. <br>If you did not request this ,please ignore this email and your password will remain unchanged.</div>`;
-      const mailOptions = { from: 'patrick.ngabonziza@andela.com',
-        to: `${user.email}`,
-        subject: 'Link to reset Password',
-        html: message };
-      SendGrid.setApiKey(SENDGRID_API_KEY);
-      await SendGrid.send(mailOptions);
-      return res.status(200).json({ status: 200, message: 'Check your email to reset password', token });
+      const mailSend = await MailSender.SendEmailReset(req.body.email, token);
+      if (mailSend[0].statusCode === 202) {
+        return res.status(200).json({ status: 200, message: 'Check your email to reset password', token });
+      }
     } catch (error) {
       return res.status(500).json({ status: 500,
         error: 'Internal Server Error' });

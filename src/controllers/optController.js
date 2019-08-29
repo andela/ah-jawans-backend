@@ -3,25 +3,41 @@ import models from '../models';
 const { Opt, Notification } = models;
 
 const optInCreate = async (req, res, Type) => {
-  const optedin = await Opt.findOne({ where: { userId: req.user.id,
-    type: Type } });
+  const optedin = await Opt.findOne({
+    where: {
+      userId: req.user.id,
+      type: Type
+    }
+  });
   if (optedin) {
     return res.status(400).json({ message: 'You are already opted-in' });
   }
-  const newOpt = await Opt.create({ userId: req.user.id,
-    type: Type });
+  const newOpt = await Opt.create({
+    userId: req.user.id,
+    type: Type
+  });
   if (newOpt) {
-    res.status(201).json({ message: `You are now opted-in to ${Type} notifications`,
-      data: newOpt });
+    res.status(201).json({
+      message: `You are now opted-in to ${Type} notifications`,
+      data: newOpt
+    });
   }
 };
 
 const optOutCreate = async (req, res, Type) => {
-  const optedin = await Opt.findOne({ where: { userId: req.user.id,
-    type: Type } });
+  const optedin = await Opt.findOne({
+    where: {
+      userId: req.user.id,
+      type: Type
+    }
+  });
   if (optedin) {
-    await Opt.destroy({ where: { userId: req.user.id,
-      type: Type } });
+    await Opt.destroy({
+      where: {
+        userId: req.user.id,
+        type: Type
+      }
+    });
 
     return res.json({ message: 'You are now opted-out!' });
   }
@@ -85,8 +101,10 @@ class OptController {
   static async ViewNotification(req, res) {
     const Notifications = await Notification.findAll({ where: { userId: req.params.id } });
     return Notifications.length
-      ? res.status(200).json({ message: 'Notifications',
-        Notifications })
+      ? res.status(200).json({
+        message: 'Notifications',
+        Notifications
+      })
       : res.status(404).json({ errors: { Notifications: "You don't have any notifications" } });
   }
 }
