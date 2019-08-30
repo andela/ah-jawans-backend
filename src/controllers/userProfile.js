@@ -79,7 +79,7 @@ class UserProfile {
   }
 
   static async getAllUser(req, res) {
-    const usersList = await User.findAll({ attributes: ['firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
+    const usersList = await User.findAll({ attributes: ['username', 'firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
     // eslint-disable-next-line no-unused-expressions
     res.status(200).json({ usersList });
   }
