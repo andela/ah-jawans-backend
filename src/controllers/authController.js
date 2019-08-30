@@ -36,7 +36,8 @@ export default class AuthController {
           token,
           username: user.username,
           email: user.email,
-          id: user.id
+          id: user.id,
+          image: user.image,
         }
       });
     } catch (error) {

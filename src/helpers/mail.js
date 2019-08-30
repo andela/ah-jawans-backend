@@ -24,7 +24,7 @@ export default class MailSender {
     try {
       const message = { to: email,
         from: 'ahjawans@gmail.com',
-        subject: 'Verification email',
+        subject: 'Password Reset Email',
         text: 'Welcome to authors haven jawans',
         html: `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 
         Please click on the followoing link or paste this link in youre browser to complete this process within one hour: <Br> 
