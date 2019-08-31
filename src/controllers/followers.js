@@ -1,4 +1,5 @@
 import models from '../models';
+import { follow, getUser, checkUser, unfollowUser } from './helpers/followersHelper';
 
 const { User, Follow } = models;
 /**
@@ -14,19 +15,20 @@ export default class FollowerController {
   static async followUser(req, res) {
     try {
       const { username } = req.params;
-      const checkUser = await User.findOne({ where: { username: String(username) } });
-      if (!checkUser) return res.status(404).json({ error: 'Username not found' });
-      if (checkUser.id === req.user.id) return res.status(400).json({ error: 'You can not follow yourself' });
+      const findUser = await getUser(username);
+      if (!findUser) return res.status(404).json({ error: 'Username not found' });
+      if (findUser.id === req.user.id) return res.status(400).json({ error: 'You can not follow yourself' });
 
-      const isUserFollowed = await Follow.findOne({ where: { followed: checkUser.id } });
-      if (isUserFollowed) return res.status(409).json(`Already following ${username}`);
-
-      await Follow.create({ followed: checkUser.id,
-        userId: req.user.id });
-
-      return res.status(201).json({ message: `Following ${checkUser.username}` });
+      const followedUser = await checkUser(findUser.id);
+      if (followedUser) return res.status(409).json({ error: `Already following ${findUser.username}` });
+      await follow(findUser.id, req.user.id);
+      return res.status(201).json({ message: `Following ${findUser.username}`,
+        username: findUser.username,
+        bio: findUser.bio,
+        image: findUser.image,
+        following: findUser.following });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ error: 'server error' });
     }
   }
 
@@ -35,17 +37,22 @@ export default class FollowerController {
      * @param {Object} res
      * @returns {Object} Unfollow user
      */
-  static async unFollowUser(req, res) {
-    const [username, user] = [req.params.username, req.user];
-    const checkUser = await User.findOne({ where: { username: String(username) } });
-    if (!checkUser) return res.status(404).json({ error: 'Username not found' });
-    const unFollowed = Object.keys(checkUser).length
-      ? await Follow.destroy({ where: { userId: user.id, followed: checkUser.id } }) : null;
-
-    if (unFollowed && unFollowed.errors) return res.status(500).json({ errors: 'Server error! Something went wrong!' });
-    return unFollowed
-      ? res.status(200).json({ message: `Unfollowed ${username}` })
-      : res.status(404).json({ errors: { follow: `You are not following "${username}"` } });
+  static async unfollowUser(req, res) {
+    const { username } = req.params;
+    const userId = req.user.id;
+    try {
+      const findUser = await getUser(username);
+      if (!findUser) return res.status(404).json({ error: 'Username not found' });
+      const followedUser = await checkUser(findUser.id);
+      return followedUser ? await unfollowUser(userId, findUser.id) && res.status(200).json({ message: `Unfollowed ${findUser.username}`,
+        username: findUser.username,
+        bio: findUser.bio,
+        image: findUser.image,
+        following: findUser.following })
+        : res.status(404).json({ errors: { follow: `Not following "${findUser.username}"` } });
+    } catch (error) {
+      return res.status(500).json({ error: 'Server error' });
+    }
   }
 
   /**
@@ -54,11 +61,19 @@ export default class FollowerController {
      * @returns {Object} List of followers
      */
   static async followers(req, res) {
-    const followers = await Follow.findAll({ where: { followed: req.user.id } });
-    return followers.length
-      ? res.status(200).json({ message: 'Followers',
-        followers })
-      : res.status(404).json({ errors: { follows: "You don't have followers" } });
+    try {
+      const followers = await Follow.findAll({ where: { followed: req.user.id },
+        include: [{ model: User,
+          as: 'follower',
+          attributes: ['id', 'username', 'email',
+            'image', 'bio', 'following'] }] });
+      return followers.length
+        ? res.status(200).json({ message: 'Followers',
+          followers })
+        : res.status(404).json({ error: { follows: 'No followers found!' } });
+    } catch (error) {
+      return res.status(500).json({ error: 'Server error' });
+    }
   }
 
   /**
@@ -67,10 +82,18 @@ export default class FollowerController {
      * @returns {Object} List of following users
      */
   static async following(req, res) {
-    const following = await Follow.findAll({ where: { userId: req.user.id } });
-    return following.length
-      ? res.status(200).json({ message: 'Following',
-        following })
-      : res.status(404).json({ errors: { follows: "You don't follow anyone" } });
+    try {
+      const following = await Follow.findAll({ where: { userId: req.user.id },
+        include: [{ model: User,
+          as: 'followedUser',
+          attributes: ['id', 'username', 'email',
+            'image', 'bio', 'following'] }] });
+      return following.length
+        ? res.status(200).json({ message: 'Following',
+          following })
+        : res.status(404).json({ error: { follows: "You don't follow anyone" } });
+    } catch (error) {
+      return res.status(500).json({ error: 'Server error' });
+    }
   }
 }

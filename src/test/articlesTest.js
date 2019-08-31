@@ -11,6 +11,7 @@ const { generateToken } = Tokenizer;
 chai.use(chaiHttp);
 chai.should();
 
+// eslint-disable-next-line import/no-mutable-exports
 let userObject, articleObject, testUser, testArticle, tokenGen, tokens;
 
 describe('Article', () => {
@@ -163,6 +164,33 @@ describe('Article', () => {
     const article = { title: 'hello man, how was the night',
       body: 'hello man, how was the night',
       description: 'hello man, how was the night' };
+    chai.request(app)
+      .patch('/api/articles/1')
+      .set('token', tokens)
+      .send(article)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('it should update an article with no title', (done) => {
+    const article = { body: 'hello man, how was the night',
+      description: 'hello man, how was the night' };
+    chai.request(app)
+      .patch('/api/articles/1')
+      .set('token', tokens)
+      .send(article)
+      .end((req, res) => {
+        res.should.have.status(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('it should update an article with no description', (done) => {
+    const article = { body: 'hello man, how was the night' };
     chai.request(app)
       .patch('/api/articles/1')
       .set('token', tokens)
@@ -457,3 +485,5 @@ describe('share article on social media', () => {
       });
   });
 });
+
+export default tokenGen;

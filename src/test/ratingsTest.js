@@ -67,7 +67,7 @@ describe('Rating an article', () => {
 
   it('User shouldn\'t find an article', (done) => {
     chai.request(app)
-      .post('/api/articles/9/rating')
+      .post('/api/articles/20/rating')
       .set('token', tokenGen)
       .send({ rating: 3 })
       .end((err, res) => {

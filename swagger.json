@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Authors Haven - Jawans"
   },
-  "host": "127.0.0.1:3000",
+  "host": "ah-jawans-backend.herokuapp.com",
   "basePath": "/api",
   "tags": [
     {
@@ -159,6 +159,24 @@
         }
       }
     },
+    "roles": {
+      "required": [
+        "actions",
+        "tablesAllowed",
+        "role"
+      ],
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "string"
+        },
+        "tablesAllowed": {
+          "type": "string"
+        }
+      }
+    },
     "comment": {
       "type": "object",
       "required": [
@@ -177,6 +195,40 @@
     "properties": {
       "rating": {
         "type": "integer"
+      }
+    }
+  },
+  "reports": {
+    "required": [
+      "reportType",
+      "comment"
+    ],
+    "properties": {
+      "reportType": {
+        "type": "string",
+        "example":"some text"
+      },
+      "comment": {
+        "type": "string",
+        "example":"some text"
+      }
+    }
+  },
+  "highlighting": {
+    "required": [
+      "indexStart",
+      "indexEnd",
+      "comment"
+    ],
+    "properties": {
+      "indexStart": {
+        "type": "integer"
+      },
+      "indexEnd": {
+        "type": "integer"
+      },
+      "comment": {
+        "type": "text"
       }
     }
   }
@@ -207,6 +259,108 @@
             "schema": {
               "$ref": "#/definitions/Signup"
             }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "User profile update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "The username to update",
+            "required": false
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Object containing user information to update",
+            "schema": "#/definitions/user"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "User profile update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "token",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "User profile update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user id to delete",
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile sucessfully updated"
+          },
+          "404": {
+            "description": "User profile not found"
+          },
+          "500": {
+            "description": "Error while updating profile"
           }
         }
       }
@@ -360,46 +514,7 @@
       }
     },
     "/users/{username}": {
-      "patch": {
-        "tags": [
-          "Update User Profile"
-        ],
-        "description": "User profile update",
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "token",
-            "required": true
-          },
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The username to update",
-            "required": true
-          },
-          {
-            "name": "user",
-            "in": "body",
-            "description": "Object containing user information to update",
-            "schema": "#/definitions/user"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "User profile sucessfully updated"
-          },
-          "404": {
-            "description": "User profile not found"
-          },
-          "500": {
-            "description": "Error while updating profile"
-          }
-        }
-      }
+      
     },
     "/user/{username}": {
       "get": {
@@ -624,8 +739,35 @@
         }
       }
     },
-    "/users/{username}/follow": {
-      "patch": {
+    "/profiles/{username}/follow": {
+      "post": {
+        "tags": [
+          "Follower"
+        ],
+        "description": "Allow user to follow another user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User follows another user"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Followed user"
+          }
+        }
+      },
+      "delete": {
         "tags": [
           "Follower"
         ],
@@ -653,36 +795,7 @@
         }
       }
     },
-    "/users/{username}/unfollow": {
-      "patch": {
-        "tags": [
-          "Follower"
-        ],
-        "description": "Allow to unfollow user",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "username",
-            "required": true
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "Unfollow a user"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "201": {
-            "description": "succesfully unfollowed user"
-          }
-        }
-      }
-    },
-    "/users/followers": {
+    "/profiles/followers": {
       "get": {
         "tags": [
           "Follower"
@@ -705,7 +818,7 @@
         }
       }
     },
-    "/users/following": {
+    "/profiles/following": {
       "get": {
         "tags": [
           "Follower"
@@ -1312,7 +1425,7 @@
         ],
         "responses": {
           "200": {
-            "description": "liked comment successfiully"
+            "description": "liked comment successfully"
           },
           "404": {
             "description": "Comment not found"
@@ -1345,7 +1458,7 @@
         ],
         "responses": {
           "200": {
-            "description": "disliked comment successfiully"
+            "description": "disliked comment successfully"
           },
           "404": {
             "description": "Comment not found"
@@ -1416,21 +1529,26 @@
             "name": "id",
             "in": "path",
             "description": "Fetch ratings",
-            "require": true,
-            "schema": {
-              "$ref": "#/definitions/fecthratings"
+            "require": true
+          },{
+              "name": "offset",
+              "in": "query",
+              "description": "offset",
+              "required": true
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "article limit",
+              "required": true
             }
-          }
         ],
         "produces": [
           "application/json"
         ],
         "responses": {
           "200": {
-            "description": "Ratings",
-            "schema": {
-              "$ref": "#/definitions/fecthratings"
-            }
+            "description": "Ratings"
           }
         }
       }
@@ -1605,6 +1723,198 @@
         }
       }
     },
+    "/reports/{articleId}": {
+      "post": {
+        "tags": [
+          "Report article"
+        ],
+        "description": "Allow super user to post reported article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "comment",
+            "in": "body",
+            "description": "context of reporting this article",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reports"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Article reported"
+          },
+          "404": {
+            "description": "Article not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Report article"
+        ],
+        "description": "Allow super user get reported article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reports"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Article reported"
+          },
+          "404": {
+            "description": " reported article not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Report article"
+        ],
+        "description": "Allow super user delete reported article",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reports"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete reported article"
+          },
+          "404": {
+            "description": " Reported article not found"
+          }
+        }
+      }
+    },
+    "/articles/{id}/rating": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "Allows other users to rate an article",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+        },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "rating",
+            "in": "body",
+            "description": "User is allowed rate article",
+            "schema": {
+              "$ref": "#/definitions/ratings"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Rated successfuly"
+          }
+        }
+      }
+    },
+    "/articles/{articleId}/highlights": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "description": "Allow user to comment on highlighted text",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "User's token",
+            "required": true
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article id",
+            "required": true
+          },
+          {
+            "name": "Highlight",
+            "in": "body",
+            "description": "Comment on highlighted text",
+            "schema": {
+              "$ref": "#/definitions/highlighting"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+        "200": {
+          "description": "Commented on highlighted text"
+        },
+        "404": {
+          "description": "Article not found"
+        },
+        "409": {
+          "description": "Already highlighted"
+        }
+      }
+      }
+    },
     "/articles/comments/{commentId}/history": {
       "get": {
         "tags": [
@@ -1623,6 +1933,142 @@
             "in": "path",
             "description": "Comment Id",
             "required": true
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/role": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      },
+      "delete": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roles"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "204": {}
+        }
+      },
+      "patch": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roles"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      },
+      "post": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven roles",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roles"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/addrole/{id}": {
+      "patch": {
+        "tags": [
+          "role"
+        ],
+        "description": "Authors Haven role update",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The user login token",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true
+          },
+          {
+            "name": "roles",
+            "in": "body",
+            "description": "role data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roles"
+            }
           }
         ],
         "produces": ["application/json"],

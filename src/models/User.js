@@ -1,4 +1,4 @@
-export default (sequelize) => {
+export default (sequelize, DataTypes) => {
   const User = sequelize.define('User',
     { username: { type: String, unique: true, required: true },
       firstName: { allowNull: true, type: String },
@@ -15,7 +15,7 @@ export default (sequelize) => {
       dateOfBirth: { allowNull: true, type: Date },
       gender: { type: String },
       provider: { type: String },
-      role: { type: String } },
+      roles: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true } },
     { timestamps: true, tableName: 'User' });
 
   User.associate = (models) => {

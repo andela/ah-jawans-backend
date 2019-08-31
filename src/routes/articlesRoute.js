@@ -6,11 +6,14 @@ import Auth from '../middlewares/Auth';
 import slugExist from '../middlewares/slugExists';
 import shareArticle from '../helpers/shareArticle';
 import ratingsController from '../controllers/ratingsController';
+import Highlighter from '../controllers/highlighterController';
+import multerUploads from '../middlewares/multerUploads';
+import asyncHandler from '../middlewares/asyncHandler';
 
 const { verifyToken } = Auth;
 const articles = express.Router();
 
-articles.post('/articles', verifyToken, bodyValidationArticle, articlesController.createArticle);
+articles.post('/articles', verifyToken, multerUploads.array('image', 1), bodyValidationArticle, asyncHandler(articlesController.createArticle));
 articles.patch('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.updateArticle);
 articles.get('/articles', articlesController.getArticles);
 articles.get('/articles/:id', articlesController.getArticle);
@@ -28,6 +31,6 @@ articles.get('/articles/:slug/share/email', verifyToken, slugExist, shareArticle
 articles.post('/articles/:id/rating', Auth.verifyToken, ratingsController.createRatings);
 articles.get('/articles/:id/ratings', ratingsController.getAllRatings);
 articles.delete('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.deleteArticle);
-
+articles.post('/articles/:articleId/highlights', verifyToken, Highlighter.createHighlight);
 
 export default articles;

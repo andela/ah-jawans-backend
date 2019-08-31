@@ -5,6 +5,7 @@ import models from '../models';
 import tokenGen from '../helpers/tokenGenerator';
 import bcrypt from '../helpers/hash';
 import MailSender from '../helpers/mail';
+import { findUserData } from './helpers/findUser';
 
 const { User, Blacklist } = models;
 const { generateToken, decodeToken } = tokenGen;
@@ -23,18 +24,20 @@ export default class UserController {
       const findByUsername = await User.findOne({ where: { username: String(username) } });
 
       if (foundUser || findByUsername) {
-        return (foundUser && res.status(409).json({ error: 'email has been taken by user' })) || (findByUsername && res.status(409).json({ error:
-            'username has been taken by another user' }));
+        return (foundUser && res.status(409).json({ error: 'Email is already registered' })) || (findByUsername && res.status(409).json({ error:
+            'Username is already registered' }));
       }
       const user = await User.create({ username,
         email,
         password: hashedPasword,
-        verified });
+        verified,
+        roles: ['normalUser'] });
 
       const payload = { username: user.username,
         id: user.id,
         email: user.email,
-        verified: user.verified };
+        verified: user.verified,
+        roles: user.roles };
 
       const token = await generateToken(payload);
       const mailSend = await MailSender.sendMail(user.email, user.username, token);
@@ -47,7 +50,7 @@ export default class UserController {
       }
     } catch (error) {
       return res.status(500)
-        .json({ Error: 'Server error' });
+        .json({ Error: error.message });
     }
   }
 
@@ -55,12 +58,13 @@ export default class UserController {
     try {
       const user = await User.findOne({ where: { email: req.body.email }, });
       if (!user) {
-        return res.status(404).json({ error: 'No user found with this email address.' });
+        return res.status(404).json({ error: 'Email not found.' });
       }
 
       const payload = { username: user.username,
         userId: user.id,
-        email: user.email };
+        email: user.email,
+        role: user.role };
       const token = await generateToken(payload);
       // @sends a message to an existing email in our database with the below email template
       const message = `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 
@@ -109,13 +113,23 @@ export default class UserController {
   static async verifyUser(req, res) {
     try {
       const decode = await decodeToken(req.params.userToken);
-      if (!decode.email || decode.verified) {
-        return (!decode.email && res.status(409).json({ error: `Email:${decode.email} does not exist in the database` })) || (decode.verified && res.status(409).json({ error: 'Your account is already verified' }));
-      }
       await User.update({ verified: true }, { where: { email: decode.email } });
       return res.status(200).json({ message: 'Your account is now verified you can login with your email', });
     } catch (error) {
       return res.status(500).json(error.message);
+    }
+  }
+
+  static async deleteUser(req, res) {
+    try {
+      const { id } = req.params;
+      const userData = await findUserData({ where: { id } });
+      if (!userData) return res.status(404).json({ error: 'User does not exist' });
+      if (userData.dataValues.roles.includes('superAdmin')) return res.status(403).json({ error: 'Not allowed to delete super admin' });
+
+      return (await User.destroy({ where: { id } })) && res.status(200).json({ message: 'User successfully deleted' });
+    } catch (error) {
+      return res.status(500).json({ error: 'Server error!' });
     }
   }
 }

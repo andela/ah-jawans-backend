@@ -9,7 +9,7 @@ const { google, twitter } = socialAccount;
 
 // social login routes
 socialAPIRoute.get('/social/login/google', passport.authenticate('google', { scope: ['profile', 'email'], }));
-socialAPIRoute.get('/api/social/login/google/redirect', passport.authenticate('google', { session: false }), google, socialLogin.loginGoogle);
+socialAPIRoute.get('/social/login/google/redirect', passport.authenticate('google', { session: false }), google, socialLogin.loginGoogle);
 
 
 socialAPIRoute.get('/social/login/facebook', passport.authenticate('facebook', { scope: ['email'] }));

@@ -25,18 +25,8 @@ const checkEmail = async (req, res, next) => {
     req.userInfo = check;
     next();
   } catch (error) {
-    return res.status(500).json({ error });
+    return res.status(500).json(error.message);
   }
-};
-
-const usernameAvailability = async (req, res, next) => {
-  const userConstant = await models.User.findOne({ where: { username: req.params.username }, });
-  // eslint-disable-next-line no-cond-assign
-  if (userConstant.dataValues.username !== req.params.username) {
-    return res.status(400).json({ status: 400,
-      message: 'This username is not available, Please choose another one!', });
-  }
-  next();
 };
 
 const usernameCheck = async (req, res, next) => {
@@ -51,6 +41,6 @@ const usernameCheck = async (req, res, next) => {
 export {
   checkEmail,
   decodeResetPasswordToken,
-  usernameAvailability,
+  // usernameAvailability,
   usernameCheck
 };

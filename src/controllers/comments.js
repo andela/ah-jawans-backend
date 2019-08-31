@@ -73,7 +73,7 @@ export default class ArticleComment {
       const { articleId, commentId } = req.params;
       const findComent = await Comments.findOne({ where: { id: commentId, articleId } });
       return findComent
-        ? await Comments.update({ body: req.body.body },
+        ? await Comments.update({ body: req.body.body, edited: true },
           { where: { id: commentId, articleId, userId: req.user.id } })
            && await commentHistoryCreate(req, findComent)
            && res.status(200).json({ message: 'Comment modified!' })
@@ -110,8 +110,8 @@ export default class ArticleComment {
   static async getAllcomments(req, res) {
     try {
       const allComments = await Comments.findAll({ where: { articleId: req.params.articleId } });
-      return allComments ? res.status(200).json({ message: 'All Comments', allComments })
-        : res.status(404).json({ message: 'No comments found!' });
+      return allComments.length ? res.status(200).json({ message: 'All Comments', allComments })
+        : res.status(404).json({ error: 'No comments found!' });
     } catch (error) {
       return res.status(500).json(error.message);
     }

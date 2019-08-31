@@ -8,6 +8,7 @@ import eventEmitter from '../template/notifications/EventEmitter';
 import findUser from '../helpers/FindUser';
 import readTime from './helpers/read_time';
 import createSlug from './helpers/createSluge';
+import { getHightlights, updateHightlights } from './helpers/highlightHelper';
 import { getAllArticles, articlePagination } from './helpers/getAllArticlesHelper';
 import ReadingStatsHelper from './helpers/readingStatsHelper';
 
@@ -20,12 +21,14 @@ class articleContoller {
       title,
       body,
       description,
-      image,
       tags
     } = req.body;
     const ReadTime = readTime(req.body.body);
     const tagList = tags ? tags.split(',') : [];
     const slug = createSlug(title);
+    const imageArticle = req.files && req.files[0].originalname
+      ? `${req.files[0].version}/${req.files[0].public_id}.${req.files[0].format}`
+      : null;
     const user = await User.findOne({ where: { email: req.user.email } });
     const userInfo = await findUser(req.user.username);
     let article;
@@ -34,7 +37,7 @@ class articleContoller {
         title,
         description,
         body,
-        image,
+        image: imageArticle,
         tagList,
         readtime: ReadTime,
         authorId: user.id, })
@@ -73,8 +76,13 @@ class articleContoller {
   static async getArticle(req, res) {
     try {
       const article = await Articles.findOne({ where: { id: req.params.id } });
+      const highlight = await getHightlights(req.params.id);
       if (article) {
         await ReadingStatsHelper.updateStatistic(req.params.id);
+        if (highlight) {
+          await updateHightlights(req.params.id);
+          return res.status(200).json({ article, highlight });
+        }
         return res.status(200).json({ article });
       }
       res.status(404).json({ message: 'No article found!' });
