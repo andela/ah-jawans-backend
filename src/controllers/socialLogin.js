@@ -17,7 +17,6 @@ const createUser = async (newUser, res, displayName) => {
 };
 
 const displayOutput = async (req, res, displayName) => {
-  console.log(req.user);
   const newUser = await User.create({ firstName: req.user.name.givenName,
     lastName: req.user.name.familyName,
     username: req.user.name.givenName || req.user.name.familyName || req.user.name,

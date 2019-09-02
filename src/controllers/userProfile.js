@@ -56,7 +56,17 @@ class UserProfile {
           if (!userData1) return res.status(403).json({ message: 'User does not exist' });
           const check = await findUserExist(username, email);
           if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
-          return updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
+          const updateUseragain = updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender);
+          if (updateUseragain) {
+            const updatedUser = await findUserData({ where: { id: userId } });
+            res.status(200).json({ message: 'User successfully updated!',
+              data: { username: updatedUser.username,
+                email: updatedUser.email,
+                firstName: updatedUser.firstName,
+                lastName: updatedUser.lastName,
+                bio: updatedUser.bio,
+                image: updatedUser.image } });
+          }
         }
       }
     } catch (error) {
@@ -65,7 +75,7 @@ class UserProfile {
   }
 
   static async getAllUser(req, res) {
-    const usersList = await User.findAll({ attributes: ['firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
+    const usersList = await User.findAll({ attributes: ['username', 'firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
     // eslint-disable-next-line no-unused-expressions
     res.status(200).json({ usersList });
   }

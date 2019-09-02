@@ -22,16 +22,24 @@ export default class AuthController {
         return res.status(403).json({ error: 'Invalid username or password' });
       }
 
-      const payload = { username: user.username,
+      const payload = {
+        username: user.username,
         id: user.id,
         email: user.email,
-        roles: user.roles };
+        roles: user.roles
+      };
 
       const token = await generateToken(payload);
-      return res.status(200).json({ message: 'Logged in successfully',
-        data: { token,
+      return res.status(200).json({
+        message: 'Logged in successfully',
+        data: {
+          token,
+          username: user.username,
           email: user.email,
-          username: user.username } });
+          id: user.id,
+          image: user.image,
+        }
+      });
     } catch (error) {
       return res.status(500).json(error);
     }

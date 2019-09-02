@@ -1,4 +1,4 @@
-  {
+{
   "swagger": "2.0",
   "info": {
     "description": "A Social platform for the creative at heart.\n",
@@ -17,16 +17,9 @@
       "description": "User Authentication"
     }
   ],
-  "schemes": [
-    "https",
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["https", "http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "definitions": {
     "user": {
       "type": "object",
@@ -90,11 +83,7 @@
       }
     },
     "Signup": {
-      "required": [
-        "username",
-        "email",
-        "password"
-      ],
+      "required": ["username", "email", "password"],
       "properties": {
         "username": {
           "type": "string"
@@ -142,11 +131,7 @@
       }
     },
     "article": {
-      "required": [
-        "title",
-        "description",
-        "body"
-      ],
+      "required": ["title", "description", "body"],
       "properties": {
         "title": {
           "type": "string"
@@ -160,11 +145,7 @@
       }
     },
     "roles": {
-      "required": [
-        "actions",
-        "tablesAllowed",
-        "role"
-      ],
+      "required": ["actions", "tablesAllowed", "role"],
       "properties": {
         "role": {
           "type": "string"
@@ -179,66 +160,53 @@
     },
     "comment": {
       "type": "object",
-      "required": [
-        "body"
-      ],
+      "required": ["body"],
       "properties": {
         "body": {
           "type": "string"
         }
       }
     },
-  "ratings": {
-    "required": [
-      "rating"
-    ],
-    "properties": {
-      "rating": {
-        "type": "integer"
+    "ratings": {
+      "required": ["rating"],
+      "properties": {
+        "rating": {
+          "type": "integer"
+        }
+      }
+    },
+    "reports": {
+      "required": ["reportType", "comment"],
+      "properties": {
+        "reportType": {
+          "type": "string",
+          "example": "some text"
+        },
+        "comment": {
+          "type": "string",
+          "example": "some text"
+        }
+      }
+    },
+    "highlighting": {
+      "required": ["indexStart", "indexEnd", "comment"],
+      "properties": {
+        "indexStart": {
+          "type": "integer"
+        },
+        "indexEnd": {
+          "type": "integer"
+        },
+        "comment": {
+          "type": "text"
+        }
       }
     }
   },
-  "reports": {
-    "required": [
-      "reportType",
-      "comment"
-    ],
-    "properties": {
-      "reportType": {
-        "type": "string",
-        "example":"some text"
-      },
-      "comment": {
-        "type": "string",
-        "example":"some text"
-      }
-    }
-  },
-  "highlighting": {
-    "required": [
-      "indexStart",
-      "indexEnd",
-      "comment"
-    ],
-    "properties": {
-      "indexStart": {
-        "type": "integer"
-      },
-      "indexEnd": {
-        "type": "integer"
-      },
-      "comment": {
-        "type": "text"
-      }
-    }
-  }
-},
   "paths": {
     "/users": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "Allow user to register himself",
         "parameters": [
           {
@@ -250,9 +218,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Registered successfully",
@@ -263,9 +229,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "User profile update",
         "parameters": [
           {
@@ -287,9 +251,7 @@
             "schema": "#/definitions/user"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "User profile sucessfully updated"
@@ -303,9 +265,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "User profile update",
         "parameters": [
           {
@@ -315,9 +275,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "User profile sucessfully updated"
@@ -331,9 +289,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "User profile update",
         "parameters": [
           {
@@ -349,9 +305,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "User profile sucessfully updated"
@@ -367,9 +321,7 @@
     },
     "/users/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "Allow user to login",
         "parameters": [
           {
@@ -381,9 +333,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "successfully logged in",
@@ -396,9 +346,7 @@
     },
     "/users/logout": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "description": "Allow a user to signout from the system",
         "parameters": [
           {
@@ -408,9 +356,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Signed out"
@@ -426,14 +372,10 @@
     },
     "/passwordreset": {
       "post": {
-        "tags": [
-          "reset password"
-        ],
+        "tags": ["reset password"],
         "summary": "reset password",
         "description": "sending a link to reset password",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK"
@@ -443,9 +385,7 @@
     },
     "/social/login/google": {
       "get": {
-        "tags": [
-          "Social Media Login"
-        ],
+        "tags": ["Social Media Login"],
         "description": "Login using google account",
         "parameters": [
           {
@@ -455,9 +395,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Google email Login"
@@ -467,9 +405,7 @@
     },
     "/social/login/facebook": {
       "get": {
-        "tags": [
-          "Social Media Login"
-        ],
+        "tags": ["Social Media Login"],
         "description": "Login using Facebook account",
         "parameters": [
           {
@@ -479,9 +415,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Welcome to Author Heaven"
@@ -491,9 +425,7 @@
     },
     "/social/login/twitter": {
       "get": {
-        "tags": [
-          "Social Media Login"
-        ],
+        "tags": ["Social Media Login"],
         "description": "Login via twitter email account",
         "parameters": [
           {
@@ -503,9 +435,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Welcome to Authors Heaven"
@@ -513,14 +443,10 @@
         }
       }
     },
-    "/users/{username}": {
-      
-    },
+    "/users/{username}": {},
     "/user/{username}": {
       "get": {
-        "tags": [
-          "Profile Inquiry"
-        ],
+        "tags": ["Profile Inquiry"],
         "description": "Get user profile",
         "parameters": [
           {
@@ -530,9 +456,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "User profile returned"
@@ -548,9 +472,7 @@
     },
     "/articles": {
       "post": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "user should be able to create an article",
         "parameters": [
           {
@@ -568,9 +490,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Article created successfully",
@@ -581,9 +501,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "user should be able to view all articles",
         "parameters": [
           {
@@ -599,9 +517,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Articles fetched successfully"
@@ -611,9 +527,7 @@
     },
     "/articles/{id}": {
       "get": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "user should be able to view a specific article",
         "parameters": [
           {
@@ -629,9 +543,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "User profile returned"
@@ -645,9 +557,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "user should be able to update his/her own article",
         "parameters": [
           {
@@ -671,9 +581,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Article updated successfully"
@@ -681,9 +589,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "user should be able to delete a specific article",
         "parameters": [
           {
@@ -699,9 +605,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Article deleted successfully!"
@@ -711,9 +615,7 @@
     },
     "/allusers": {
       "get": {
-        "tags": [
-          "Profile"
-        ],
+        "tags": ["Profile"],
         "description": "List of all users",
         "parameters": [
           {
@@ -723,9 +625,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "User profile sucessfully updated"
@@ -741,9 +641,7 @@
     },
     "/profiles/{username}/follow": {
       "post": {
-        "tags": [
-          "Follower"
-        ],
+        "tags": ["Follower"],
         "description": "Allow user to follow another user",
         "parameters": [
           {
@@ -758,9 +656,7 @@
             "description": "User follows another user"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Followed user"
@@ -768,9 +664,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Follower"
-        ],
+        "tags": ["Follower"],
         "description": "Allow user to follow another user",
         "parameters": [
           {
@@ -785,9 +679,7 @@
             "description": "User follows another user"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Followed user"
@@ -797,9 +689,7 @@
     },
     "/profiles/followers": {
       "get": {
-        "tags": [
-          "Follower"
-        ],
+        "tags": ["Follower"],
         "description": "Displays all user followers",
         "parameters": [
           {
@@ -808,9 +698,7 @@
             "description": "User followers"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Followers list"
@@ -820,9 +708,7 @@
     },
     "/profiles/following": {
       "get": {
-        "tags": [
-          "Follower"
-        ],
+        "tags": ["Follower"],
         "description": "Displays all my following list",
         "parameters": [
           {
@@ -831,9 +717,7 @@
             "description": "User following"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Following list"
@@ -843,9 +727,7 @@
     },
     "/articles/{id}/like": {
       "post": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "Allow user to like the article",
         "parameters": [
           {
@@ -861,9 +743,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Liked the article"
@@ -882,9 +762,7 @@
     },
     "/articles/{id}/dislike": {
       "post": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "Allow user to dislike the article",
         "parameters": [
           {
@@ -900,9 +778,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Disliked the article"
@@ -921,9 +797,7 @@
     },
     "/articles/{articleId}/comments": {
       "post": {
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "description": "Allow user to comment on article",
         "parameters": [
           {
@@ -948,9 +822,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Comment on article"
@@ -961,9 +833,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "description": "Get article's comment",
         "parameters": [
           {
@@ -985,9 +855,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Get all comment"
@@ -1000,9 +868,7 @@
     },
     "/articles/{slug}/share/twitter": {
       "get": {
-        "tags": [
-          "Social Media Article Share"
-        ],
+        "tags": ["Social Media Article Share"],
         "description": "Allows Sharing of articles across twitter",
         "parameters": [
           {
@@ -1017,9 +883,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Thanks for sharing!"
@@ -1029,9 +893,7 @@
     },
     "/articles/{slug}/share/linkedin": {
       "get": {
-        "tags": [
-          "Social Media Article Share"
-        ],
+        "tags": ["Social Media Article Share"],
         "description": "Allows Sharing of articles across Linkedin",
         "parameters": [
           {
@@ -1046,9 +908,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Thanks for sharing!"
@@ -1058,9 +918,7 @@
     },
     "/articles/{slug}/share/facebook": {
       "get": {
-        "tags": [
-          "Social Media Article Share"
-        ],
+        "tags": ["Social Media Article Share"],
         "description": "Allows Sharing of articles across facebook",
         "parameters": [
           {
@@ -1075,9 +933,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Thanks for sharing!"
@@ -1087,9 +943,7 @@
     },
     "/articles/{slug}/share/mail": {
       "get": {
-        "tags": [
-          "Social Media Article Share"
-        ],
+        "tags": ["Social Media Article Share"],
         "description": "Allows Sharing of articles thru email",
         "parameters": [
           {
@@ -1104,9 +958,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Thanks for sharing!"
@@ -1116,9 +968,7 @@
     },
     "/articles/{articleId}/comments/{commentId}": {
       "patch": {
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "description": "Allow user to edit a comment",
         "parameters": [
           {
@@ -1149,9 +999,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Edit comment"
@@ -1162,9 +1010,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "description": "Get article's comment",
         "parameters": [
           {
@@ -1186,9 +1032,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": " delete a comment"
@@ -1201,9 +1045,7 @@
     },
     "/optinemail": {
       "post": {
-        "tags": [
-          "Notifications Subscription"
-        ],
+        "tags": ["Notifications Subscription"],
         "description": "Enable user to subscribe email notification",
         "parameters": [
           {
@@ -1213,9 +1055,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "You successfully subscribed to email notifications"
@@ -1226,9 +1066,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Notifications Subscription"
-        ],
+        "tags": ["Notifications Subscription"],
         "description": "Enable user to unsubscribe email notification",
         "parameters": [
           {
@@ -1238,9 +1076,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "You successfully unsubscribed to email notifications"
@@ -1253,9 +1089,7 @@
     },
     "/optinapp": {
       "post": {
-        "tags": [
-          "Notifications Subscription"
-        ],
+        "tags": ["Notifications Subscription"],
         "description": "Enable user to subscribe Inapp notification",
         "parameters": [
           {
@@ -1265,9 +1099,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "You successfully subscribed to inapp notifications"
@@ -1278,9 +1110,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Notifications Subscription"
-        ],
+        "tags": ["Notifications Subscription"],
         "description": "Enable user to unsubscribe inapp notification",
         "parameters": [
           {
@@ -1290,9 +1120,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "You successfully unsubscribed to inapp notifications"
@@ -1303,11 +1131,9 @@
         }
       }
     },
-    "/viewNotifications/{id}": {
+    "/viewNotifications/{id}/unseen": {
       "get": {
-        "tags": [
-          "Notifications Subscription"
-        ],
+        "tags": ["Notifications Subscription"],
         "description": "Allows Sharing of articles across Linkedin",
         "parameters": [
           {
@@ -1322,9 +1148,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Notifications"
@@ -1337,9 +1161,7 @@
     },
     "/article/search": {
       "get": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "Displays all my following list",
         "parameters": [
           {
@@ -1363,9 +1185,7 @@
             "description": "search using title"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "bookmark data"
@@ -1373,9 +1193,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Bookmark article"
-        ],
+        "tags": ["Bookmark article"],
         "description": "Delete one bookmark",
         "parameters": [
           {
@@ -1390,9 +1208,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "204": {
             "description": "deleted"
@@ -1402,9 +1218,7 @@
     },
     "/articles/comments/{commentParamsId}/likes": {
       "post": {
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "description": "Allow user to like a comment",
         "parameters": [
           {
@@ -1420,9 +1234,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "liked comment successfully"
@@ -1435,9 +1247,7 @@
     },
     "/articles/comments/{commentParamsId}/dislikes": {
       "post": {
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "description": "Allow user to dislike a comment",
         "parameters": [
           {
@@ -1453,9 +1263,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "disliked comment successfully"
@@ -1466,63 +1274,53 @@
         }
       }
     },
- "/bookmarks/{articleId}": {
-          "post": {
-          "tags": [
-            "Bookmark article"
-          ],
-          "description": "Create bookmark",
-          "parameters": [
-            {
-              "name": "token",
-              "in": "header",
-              "description": "logged in user token"
-            },
-            {
-              "name": "articleId",
-              "in": "path",
-              "description": "Article Id",
-              "required": true
+    "/bookmarks/{articleId}": {
+      "post": {
+        "tags": ["Bookmark article"],
+        "description": "Create bookmark",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "Article Id",
+            "required": true
           }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "bookmark data"
-            }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "bookmark data"
           }
+        }
+      }
+    },
+    "/bookmarks": {
+      "get": {
+        "tags": ["Bookmark article"],
+        "description": "Get bookmarks",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "logged in user token"
           }
-        },
-        "/bookmarks": {
-          "get": {
-          "tags": [
-            "Bookmark article"
-          ],
-          "description": "Get bookmarks",
-          "parameters": [
-            {
-              "name": "token",
-              "in": "header",
-              "description": "logged in user token"
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "bookmark data"
-            }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "bookmark data"
           }
-          }
-        },
+        }
+      }
+    },
     "/articles/{id}/ratings": {
       "get": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "Fetches ratings of an article",
         "parameters": [
           {
@@ -1530,22 +1328,21 @@
             "in": "path",
             "description": "Fetch ratings",
             "require": true
-          },{
-              "name": "offset",
-              "in": "query",
-              "description": "offset",
-              "required": true
-            },
-            {
-              "name": "limit",
-              "in": "query",
-              "description": "article limit",
-              "required": true
-            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "article limit",
+            "required": true
+          }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Ratings"
@@ -1555,9 +1352,7 @@
     },
     "/bookmarks/{bookmarkId}": {
       "get": {
-        "tags": [
-          "Bookmark article"
-        ],
+        "tags": ["Bookmark article"],
         "description": "Get one bookmark",
         "parameters": [
           {
@@ -1572,9 +1367,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "bookmark data"
@@ -1582,9 +1375,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Bookmark article"
-        ],
+        "tags": ["Bookmark article"],
         "description": "Delete one bookmark",
         "parameters": [
           {
@@ -1599,9 +1390,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "204": {
             "description": "deleted"
@@ -1611,9 +1400,7 @@
     },
     "/{articleId}/comments/{commentId}": {
       "post": {
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "description": "Allow user to thread a comment",
         "parameters": [
           {
@@ -1644,9 +1431,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Comment on article"
@@ -1659,9 +1444,7 @@
     },
     "/readerstats/{articleId}": {
       "get": {
-        "tags": [
-          "ReadingStats"
-        ],
+        "tags": ["ReadingStats"],
         "description": "Allow user get users who read  an article",
         "parameters": [
           {
@@ -1677,9 +1460,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "recorded stats"
@@ -1692,9 +1473,7 @@
     },
     "/readerstats/comments/{articleId}": {
       "get": {
-        "tags": [
-          "ReadingStats"
-        ],
+        "tags": ["ReadingStats"],
         "description": "Allow user get a number comments on an article",
         "parameters": [
           {
@@ -1710,9 +1489,7 @@
             "required": true
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "reading stats"
@@ -1725,9 +1502,7 @@
     },
     "/reports/{articleId}": {
       "post": {
-        "tags": [
-          "Report article"
-        ],
+        "tags": ["Report article"],
         "description": "Allow super user to post reported article",
         "parameters": [
           {
@@ -1752,9 +1527,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Article reported"
@@ -1765,9 +1538,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Report article"
-        ],
+        "tags": ["Report article"],
         "description": "Allow super user get reported article",
         "parameters": [
           {
@@ -1786,9 +1557,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Article reported"
@@ -1799,9 +1568,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Report article"
-        ],
+        "tags": ["Report article"],
         "description": "Allow super user delete reported article",
         "parameters": [
           {
@@ -1820,9 +1587,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "204": {
             "description": "Delete reported article"
@@ -1835,9 +1600,7 @@
     },
     "/articles/{id}/rating": {
       "post": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "Allows other users to rate an article",
         "parameters": [
           {
@@ -1845,7 +1608,7 @@
             "in": "path",
             "description": "Article id",
             "required": true
-        },
+          },
           {
             "name": "token",
             "in": "header",
@@ -1861,9 +1624,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Rated successfuly"
@@ -1873,9 +1634,7 @@
     },
     "/articles/{articleId}/highlights": {
       "post": {
-        "tags": [
-          "Articles"
-        ],
+        "tags": ["Articles"],
         "description": "Allow user to comment on highlighted text",
         "parameters": [
           {
@@ -1899,27 +1658,23 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
-        "200": {
-          "description": "Commented on highlighted text"
-        },
-        "404": {
-          "description": "Article not found"
-        },
-        "409": {
-          "description": "Already highlighted"
+          "200": {
+            "description": "Commented on highlighted text"
+          },
+          "404": {
+            "description": "Article not found"
+          },
+          "409": {
+            "description": "Already highlighted"
+          }
         }
-      }
       }
     },
     "/articles/comments/{commentId}/history": {
       "get": {
-        "tags": [
-          "comment"
-        ],
+        "tags": ["comment"],
         "description": "Authors Haven users should be able track their comments edit history",
         "parameters": [
           {
@@ -1943,9 +1698,7 @@
     },
     "/role": {
       "get": {
-        "tags": [
-          "role"
-        ],
+        "tags": ["role"],
         "description": "Authors Haven roles",
         "parameters": [
           {
@@ -1961,9 +1714,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "role"
-        ],
+        "tags": ["role"],
         "description": "Authors Haven roles",
         "parameters": [
           {
@@ -1988,9 +1739,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "role"
-        ],
+        "tags": ["role"],
         "description": "Authors Haven roles",
         "parameters": [
           {
@@ -2015,9 +1764,7 @@
         }
       },
       "post": {
-        "tags": [
-          "role"
-        ],
+        "tags": ["role"],
         "description": "Authors Haven roles",
         "parameters": [
           {
@@ -2044,9 +1791,7 @@
     },
     "/addrole/{id}": {
       "patch": {
-        "tags": [
-          "role"
-        ],
+        "tags": ["role"],
         "description": "Authors Haven role update",
         "parameters": [
           {
