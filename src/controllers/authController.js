@@ -30,8 +30,10 @@ export default class AuthController {
       const token = await generateToken(payload);
       return res.status(200).json({ message: 'Logged in successfully',
         data: { token,
+          username: user.username,
           email: user.email,
-          username: user.username } });
+          id: user.id,
+          image: user.image, } });
     } catch (error) {
       return res.status(500).json(error);
     }
