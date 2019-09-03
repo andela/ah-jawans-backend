@@ -56,6 +56,7 @@ class UserProfile {
           if (!userData1) return res.status(403).json({ message: 'User does not exist' });
           const check = await findUserExist(username, email);
           if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
+          // eslint-disable-next-line max-len
           const updateUseragain = updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender);
           if (updateUseragain) {
             const updatedUser = await findUserData({ where: { id: userId } });

@@ -15,7 +15,7 @@ const getArticle = async (res, req, offset, limit) => {
   if (offset && limit) {
     const allArticles = await Articles.findAll({ offset,
       limit,
-      attributes: ['id', 'slug', 'title', 'description', 'body', 'tagList', 'readtime', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'slug', 'title', 'body', 'image', 'tagList', 'readtime', 'createdAt', 'updatedAt'],
       include: [
         { model: User,
           as: 'author',
@@ -24,7 +24,7 @@ const getArticle = async (res, req, offset, limit) => {
     return allArticles;
   // eslint-disable-next-line no-else-return
   } else {
-    const allArticles1 = await Articles.findAll({ attributes: ['id', 'slug', 'title', 'description', 'body', 'tagList', 'readtime', 'createdAt', 'updatedAt'],
+    const allArticles1 = await Articles.findAll({ attributes: ['id', 'slug', 'title', 'body', 'image', 'tagList', 'readtime', 'createdAt', 'updatedAt'],
       include: [
         { model: User,
           as: 'author',
