@@ -56,7 +56,15 @@ class UserProfile {
           if (!userData1) return res.status(403).json({ message: 'User does not exist' });
           const check = await findUserExist(username, email);
           if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
-          const updateUseragain = updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender);
+          const updateUseragain = updateUser(userId,
+            username,
+            email,
+            firstName,
+            lastName,
+            bio,
+            image,
+            dateOfBirth,
+            gender);
           if (updateUseragain) {
             const updatedUser = await findUserData({ where: { id: userId } });
             res.status(200).json({ message: 'User successfully updated!',

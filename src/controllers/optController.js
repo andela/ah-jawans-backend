@@ -99,7 +99,7 @@ class OptController {
     * @returns {Object} Response object
     */
   static async ViewNotification(req, res) {
-    const Notifications = await Notification.findAll({ where: { userId: req.params.id, type: 'inapp' } });
+    const Notifications = await Notification.findAll({ where: { userId: req.params.id, type: 'inapp' }, order: [['createdAt', 'DESC']] });
     return Notifications.length
       ? res.status(200).json({
         message: 'Notifications',
