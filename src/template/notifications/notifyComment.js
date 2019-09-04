@@ -6,7 +6,8 @@ const { Notification, Opt, User } = models;
 
 const notifyComment = async (data) => {
   let inAppNotification, emailNotification;
-  const { resource, user, inAppMessage, emailMessage } = data;
+  const { resource, user, inAppMessage, emailMessage, url } = data;
+  console.log(url, 'url from notify');
   const optedin = await Opt.findAll({ where: { userId: user.userId } });
   optedin.forEach(async (subscription) => {
     const { dataValues } = await User.findOne({ where: { id: user.userId } });
@@ -17,7 +18,8 @@ const notifyComment = async (data) => {
           resource,
           message: emailMessage,
           status: 'unseen',
-          type: subscription.type
+          type: subscription.type,
+          url
         });
         await sendMail(dataValues.email, 'notification', { message: emailMessage });
         break;
@@ -27,7 +29,8 @@ const notifyComment = async (data) => {
           resource,
           message: inAppMessage,
           status: 'unseen',
-          type: subscription.type
+          type: subscription.type,
+          url
         });
         eventEmitter.emit('new_inapp', inAppMessage, dataValues);
         break;
