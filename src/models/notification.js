@@ -6,5 +6,11 @@ module.exports = (sequelize, DataTypes) => {
     message: DataTypes.STRING,
     url: DataTypes.STRING,
     status: DataTypes.STRING }, {});
+  Notification.association = (models) => {
+    Notification.belongsTo(models.User, { as: 'userFkey',
+      foreignkey: 'userId',
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE' });
+  };
   return Notification;
 };

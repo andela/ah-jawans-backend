@@ -3,7 +3,8 @@ import OptController from '../controllers/optController';
 import Auth from '../middlewares/Auth';
 
 const { verifyToken } = Auth;
-const { optOutEmail, optOutApp, OptInApp, OptInEmail, ViewNotification } = OptController;
+// eslint-disable-next-line max-len
+const { optOutEmail, optOutApp, OptInApp, OptInEmail, ViewNotification, EditNotification } = OptController;
 
 const optinAndOptOut = Router();
 // Opt in-app or Email
@@ -14,6 +15,7 @@ optinAndOptOut.delete('/api/optinapp', verifyToken, optOutApp);
 
 // view notifications
 
-optinAndOptOut.get('/api/viewNotifications/:id', verifyToken, ViewNotification);
+optinAndOptOut.get('/api/viewNotifications/:id/unseen', verifyToken, ViewNotification);
+optinAndOptOut.patch('/api/viewNotifications/:id/seen/:notificationid', verifyToken, EditNotification);
 
 export default optinAndOptOut;

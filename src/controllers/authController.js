@@ -32,7 +32,8 @@ export default class AuthController {
         data: { token,
           username: user.username,
           email: user.email,
-          id: user.id } });
+          id: user.id,
+          image: user.image, } });
     } catch (error) {
       return res.status(500).json(error);
     }

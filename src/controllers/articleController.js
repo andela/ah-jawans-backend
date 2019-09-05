@@ -137,5 +137,13 @@ class articleContoller {
   static async getArticles(req, res) {
     (req.query.offset && req.query.limit) ? await articlePagination(req, res) : await getAllArticles(req, res);
   }
+
+  static async getArticlesForAuthor(req, res) {
+    const { authorId } = req.params;
+    const articles = await Articles.findAll({ where: { authorId } });
+    if (articles.length > 0) return res.status(200).json({ status: 200, articles });
+
+    return res.status(404).json({ status: 404, message: 'No published article' });
+  }
 }
 export default articleContoller;

@@ -3,41 +3,25 @@ import models from '../models';
 const { Opt, Notification } = models;
 
 const optInCreate = async (req, res, Type) => {
-  const optedin = await Opt.findOne({
-    where: {
-      userId: req.user.id,
-      type: Type
-    }
-  });
+  const optedin = await Opt.findOne({ where: { userId: req.user.id,
+    type: Type } });
   if (optedin) {
     return res.status(400).json({ message: 'You are already opted-in' });
   }
-  const newOpt = await Opt.create({
-    userId: req.user.id,
-    type: Type
-  });
+  const newOpt = await Opt.create({ userId: req.user.id,
+    type: Type });
   if (newOpt) {
-    res.status(201).json({
-      message: `You are now opted-in to ${Type} notifications`,
-      data: newOpt
-    });
+    res.status(201).json({ message: `You are now opted-in to ${Type} notifications`,
+      data: newOpt });
   }
 };
 
 const optOutCreate = async (req, res, Type) => {
-  const optedin = await Opt.findOne({
-    where: {
-      userId: req.user.id,
-      type: Type
-    }
-  });
+  const optedin = await Opt.findOne({ where: { userId: req.user.id,
+    type: Type } });
   if (optedin) {
-    await Opt.destroy({
-      where: {
-        userId: req.user.id,
-        type: Type
-      }
-    });
+    await Opt.destroy({ where: { userId: req.user.id,
+      type: Type } });
 
     return res.json({ message: 'You are now opted-out!' });
   }
@@ -99,13 +83,26 @@ class OptController {
     * @returns {Object} Response object
     */
   static async ViewNotification(req, res) {
-    const Notifications = await Notification.findAll({ where: { userId: req.params.id } });
+    const Notifications = await Notification.findAll({ where: { userId: req.params.id, type: 'inapp' }, order: [['createdAt', 'DESC']] });
     return Notifications.length
-      ? res.status(200).json({
-        message: 'Notifications',
-        Notifications
-      })
+      ? res.status(200).json({ message: 'Notifications',
+        Notifications })
       : res.status(404).json({ errors: { Notifications: "You don't have any notifications" } });
+  }
+
+  /**
+    * @description User should be able able to view notifications
+    * @param {Object} req Request object
+    * @param {Object} res Response object
+    * @returns {Object} Response object
+    */
+  static async EditNotification(req, res) {
+    const amendNotifications = await Notification.findOne({ where: { userId: req.params.id, id: req.params.notificationid, type: 'inapp' } });
+    return amendNotifications
+      ? await Notification.update({ status: 'seen' },
+        { where: { userId: req.params.id, id: req.params.notificationid, type: 'inapp' } })
+      && res.status(200).json({ message: 'Notification Viewed!' })
+      : res.status(404).json({ message: 'Notification not found!' });
   }
 }
 

@@ -39,10 +39,6 @@ class ValidationSchema {
       articleErrors.title = 'Title is required and should contain at least 10 characters';
     }
 
-    if (!data.description || !(/([^]+)(?=.{10,})/.test(data.description.trim()))) {
-      articleErrors.description = 'Description is required and should contain at least 10 characters';
-    }
-
     if (!data.body || !(/([^]+)(?=.{10,})/.test(data.body.trim()))) {
       articleErrors.body = 'Body is required and should contain at least 10 character';
     }
