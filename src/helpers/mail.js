@@ -27,7 +27,7 @@ export default class MailSender {
         subject: 'Password Reset Email',
         text: 'Welcome to authors haven jawans',
         html: `<div>You are receiving this because you (or someone else) requested the reset of your password.<br> 
-        Please click on the followoing link or paste this link in youre browser to complete this process within one hour: <Br> 
+        Please click on the following link or paste this link in youre browser to complete this process within one hour: <Br> 
         ${process.env.FRONTEND_URL_UPDATE_PASSWORD}/updatePassword/?token=${token}. <br>If you did not request this ,please ignore this email and your password will remain unchanged.</div>` };
       return await sendGridMail.send(message);
     } catch (error) {
