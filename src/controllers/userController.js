@@ -24,37 +24,29 @@ export default class UserController {
       const findByUsername = await User.findOne({ where: { username: String(username) } });
 
       if (foundUser || findByUsername) {
-        return (foundUser && res.status(409).json({ error: 'Email is already registered' })) || (findByUsername && res.status(409).json({
-          error:
-            'Username is already registered'
-        }));
+        return (foundUser && res.status(409).json({ error: 'Email is already registered' })) || (findByUsername && res.status(409).json({ error:
+            'Username is already registered' }));
       }
-      const user = await User.create({
-        username,
+      const user = await User.create({ username,
         email,
         password: hashedPasword,
         verified,
-        roles: ['normalUser']
-      });
+        roles: ['normalUser'] });
 
-      const payload = {
-        username: user.username,
+      const payload = { username: user.username,
         id: user.id,
         email: user.email,
         verified: user.verified,
-        roles: user.roles
-      };
+        roles: user.roles };
 
       const token = await generateToken(payload);
       const mailSend = await MailSender.sendMail(user.email, user.username, token);
 
       if (mailSend[0].statusCode === 202) {
-        return res.status(201).json({
-          message: 'Your account has been created. You can check your email for comfirmation.',
+        return res.status(201).json({ message: 'Your account has been created. You can check your email for comfirmation.',
           token,
           username: user.username,
-          email: user.email
-        });
+          email: user.email });
       }
     } catch (error) {
       return res.status(500)
@@ -69,22 +61,18 @@ export default class UserController {
         return res.status(404).json({ error: 'Email not found.' });
       }
 
-      const payload = {
-        username: user.username,
+      const payload = { username: user.username,
         id: user.id,
         email: user.email,
-        role: user.role
-      };
+        role: user.role };
       const token = await generateToken(payload);
       const mailSend = await MailSender.SendEmailReset(req.body.email, token);
       if (mailSend[0].statusCode === 202) {
         return res.status(200).json({ status: 200, message: 'Check your email to reset password', token });
       }
     } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: 'Internal Server Error'
-      });
+      return res.status(500).json({ status: 500,
+        error: 'Internal Server Error' });
     }
   }
 
@@ -98,10 +86,8 @@ export default class UserController {
 
 
       if (update) {
-        res.status(200).json({
-          status: 200,
-          message: 'your password has been updated successfully'
-        });
+        res.status(200).json({ status: 200,
+          message: 'your password has been updated successfully' });
       }
     } catch (error) {
       return res.status(500).json({ error: 'Internal Server Error' });

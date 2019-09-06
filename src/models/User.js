@@ -25,6 +25,9 @@ export default (sequelize, DataTypes) => {
     User.hasMany(models.Comments, { foreignKey: 'userId',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE' });
+    User.hasMany(models.Opt, { foreignKey: 'userId',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE' });
   };
   return User;
 };

@@ -3,6 +3,7 @@ import OptController from '../controllers/optController';
 import Auth from '../middlewares/Auth';
 
 const { verifyToken } = Auth;
+// eslint-disable-next-line max-len
 const { optOutEmail, optOutApp, OptInApp, OptInEmail, ViewNotification, EditNotification } = OptController;
 
 const optinAndOptOut = Router();

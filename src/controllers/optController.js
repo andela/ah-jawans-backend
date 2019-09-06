@@ -105,7 +105,7 @@ class OptController {
         message: 'Notifications',
         Notifications
       })
-      : res.status(404).json({ errors: { Notifications: "You don't have any notifications" } });
+      : res.status(200).json({ message: { Notifications: "You don't have any notifications" } });
   }
 
   /**
