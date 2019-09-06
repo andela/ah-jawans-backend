@@ -1,8 +1,7 @@
-import models from '../models';
+
 import Tokenizer from '../helpers/tokenGenerator';
 import { findUser } from '../controllers/helpers/findUser';
 
-const { User } = models;
 const { decodeToken } = Tokenizer;
 
 // @middleware for decoding reset password token

@@ -5,7 +5,7 @@
 import models from '../models';
 import { findUserData, findUserExist, updateUser } from './helpers/findUser';
 
-const { User } = models;
+const { User, Opt } = models;
 /**
   * This class contains user controllers
   */
@@ -17,13 +17,13 @@ class UserProfile {
     */
   static async getProfile(req, res) {
     const { username } = req.params;
-    const queryResult = await User.findOne({ where: { username } });
+    const queryResult = await User.findOne({ where: { username }, include: [{ model: Opt }] });
     if (!queryResult) {
       return res.status(404).json({ message: `Username: ${username} does not exist` });
     }
-    const profile = queryResult.dataValues;
+    // const profile = queryResult.dataValues;
 
-    return res.status(200).json({ profile });
+    return res.status(200).json({ profile: queryResult });
   }
 
   /**
