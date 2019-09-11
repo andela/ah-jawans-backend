@@ -13,25 +13,21 @@ const notify = async (data) => {
     const { dataValues } = await User.findOne({ where: { id: user.userId } });
     switch (subscription.type) {
       case 'email':
-        emailNotification = await Notification.create({
-          userId: user.userId,
+        emailNotification = await Notification.create({ userId: user.userId,
           resource,
           message: emailMessage,
           status: 'unseen',
           type: subscription.type,
-          url
-        });
+          url });
         await sendMail(dataValues.email, 'notification', { message: emailMessage });
         break;
       case 'inapp':
-        inAppNotification = await Notification.create({
-          userId: user.userId,
+        inAppNotification = await Notification.create({ userId: user.userId,
           resource,
           message: inAppMessage,
           status: 'unseen',
           type: subscription.type,
-          url
-        });
+          url });
         eventEmitter.emit('new_inapp', inAppMessage, dataValues);
         break;
       default:
