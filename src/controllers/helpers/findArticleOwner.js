@@ -7,13 +7,21 @@ const ArticleOwner = async (articleId, userId) => {
   return (userId === article.dataValues.authorId) ? 1 : 0;
 };
 
+const findBookmarkedArticle = async (articleId, userId) => {
+  const article = await Articles.findOne({ where:
+    { userId, articleId } });
+  return (article.dataValues.length) ? 1 : 0;
+};
+
 const findArticle = id => Articles.findOne({ where: { id } });
 
 
 const findBookmark = (id, bookmarkId) => Bookmarks.findOne({ where:
   { userId: id, id: bookmarkId } });
+
 export {
   ArticleOwner,
   findArticle,
-  findBookmark
+  findBookmark,
+  findBookmarkedArticle
 };

@@ -13,7 +13,7 @@ import { getAllArticles, articlePagination, getAllArticlesAuthor, articlePaginat
 import ReadingStatsHelper from './helpers/readingStatsHelper';
 
 
-const { Articles, User } = model;
+const { Articles, User, LikeAndDislike } = model;
 
 class articleContoller {
   static async createArticle(req, res) {
@@ -42,7 +42,7 @@ class articleContoller {
         readtime: ReadTime,
         authorId: user.id, })
       : res.status(401).json({ message: "User not allowed to create an article, login or signin if you don't have an account" });
-    eventEmitter.emit('publishArticle', userInfo.id, slug);
+    eventEmitter.emit('publishArticle', userInfo.id, article.id);
     article && res.status(201).json({ message: 'The article successfully created!' });
   }
 
@@ -77,6 +77,7 @@ class articleContoller {
     try {
       const articleId = req.params.id;
       const article = await Articles.findOne({ where: { id: articleId } });
+      const likesOrDislikes = await LikeAndDislike.findAll({ where: { articleId: article.get().id } });
       const highlight = await getHightlights(articleId);
       const author = await User.findOne({ where: { id: article.authorId } });
       if (article) {
@@ -96,6 +97,7 @@ class articleContoller {
             readtime: article.readtime,
             createdAt: article.createdAt,
             updatedAt: article.updatedAt,
+            likesOrDislikes,
             author: { username: author.username,
               bio: author.bio,
               image: author.image,
@@ -147,7 +149,7 @@ class articleContoller {
     const counts = await articleCount(tag, keyword, title, user);
     const data = await searchArticlesHelper(tag, keyword, title, user, offset, limit);
 
-    return data.length ? res.status(200).json({ data, counts }) : res.status(404).json({ message: 'No data found' });
+    return data.length ? res.status(200).json({ data, counts }) : res.status(404).json({ error: 'No data found' });
   }
 
 

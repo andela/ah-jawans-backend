@@ -6,10 +6,10 @@ import models from '../../models';
 const { User, Follow } = models;
 dotenv.config();
 
-export default async (authorId, slug) => {
+export default async (authorId, articleId) => {
   try {
     const author = await User.findOne({ where: { id: authorId } });
-    const url = `${process.env.BASE_URL}/api/articles/slug/${slug}`;
+    const url = `${process.env.FRONT_END_URL}/readArticle/${articleId}`;
     const followers = await Follow.findAll({ where: { followed: authorId } });
     followers.forEach(async (follower) => {
       const user = await User.findOne({ where: { id: follower.dataValues.userId } });
