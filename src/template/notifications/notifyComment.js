@@ -17,7 +17,8 @@ const notifyComment = async (data) => {
           resource,
           message: emailMessage,
           status: 'unseen',
-          type: subscription.type });
+          type: subscription.type,
+          url });
         await sendMail(dataValues.email, 'notification', { message: emailMessage });
         break;
       case 'inapp':
@@ -25,7 +26,8 @@ const notifyComment = async (data) => {
           resource,
           message: inAppMessage,
           status: 'unseen',
-          type: subscription.type });
+          type: subscription.type,
+          url });
         eventEmitter.emit('new_inapp', inAppMessage, dataValues);
         break;
       default:

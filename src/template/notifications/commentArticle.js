@@ -10,8 +10,7 @@ dotenv.config();
 const commentArticle = async (comment) => {
   try {
     const author = await Articles.findOne({ where: { id: comment.articleId } });
-    const url = `${process.env.BASE_URL}/api/articles/${comment.articleId}/comments`;
-    console.log(url, 'url of the comment');
+    const url = `${process.env.FRONT_END_URL}/readArticle/${comment.articleId}`;
     const favourites = await LikeAndDislike.findAll({ where: { articleId: comment.articleId } });
     if (favourites) {
       favourites.forEach(async (fav) => {
