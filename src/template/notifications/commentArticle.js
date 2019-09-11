@@ -26,14 +26,12 @@ const commentArticle = async (comment) => {
        <a href='${process.env.BASE_URL}/api/articles/${comment.articleId}/comments'>View all comments</a>
        <br>
        `;
-        const data = {
-          resource: 'articles',
+        const data = { resource: 'articles',
           action: 'comment',
           user: fav.dataValues,
           inAppMessage,
           emailMessage,
-          url
-        };
+          url };
         const res = await notifyComment(data);
         return res;
       });

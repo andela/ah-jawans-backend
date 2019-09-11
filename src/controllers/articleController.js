@@ -3,13 +3,13 @@
 /* eslint-disable require-jsdoc */
 import model from '../models';
 import searchUserHelper from './helpers/searchUserHelper';
-import searchArticlesHelper from './helpers/searchArticlesHelper';
+import { searchArticlesHelper, articleCount } from './helpers/searchArticlesHelper';
 import eventEmitter from '../template/notifications/EventEmitter';
 import findUser from '../helpers/FindUser';
 import readTime from './helpers/read_time';
 import createSlug from './helpers/createSluge';
 import { getHightlights, updateHightlights } from './helpers/highlightHelper';
-import { getAllArticles, articlePagination } from './helpers/getAllArticlesHelper';
+import { getAllArticles, articlePagination, getAllArticlesAuthor, articlePaginationForAuthor } from './helpers/getAllArticlesHelper';
 import ReadingStatsHelper from './helpers/readingStatsHelper';
 
 
@@ -75,19 +75,35 @@ class articleContoller {
 
   static async getArticle(req, res) {
     try {
-      const article = await Articles.findOne({ where: { id: req.params.id } });
-      const highlight = await getHightlights(req.params.id);
+      const articleId = req.params.id;
+      const article = await Articles.findOne({ where: { id: articleId } });
+      const highlight = await getHightlights(articleId);
+      const author = await User.findOne({ where: { id: article.authorId } });
       if (article) {
         await ReadingStatsHelper.updateStatistic(req.params.id);
         if (highlight) {
           await updateHightlights(req.params.id);
-          return res.status(200).json({ article, highlight });
         }
-        return res.status(200).json({ article });
+        return res.status(200).json({ status: 200,
+          article: { id: article.id,
+            slug: article.slug,
+            title: article.title,
+            description: article.description,
+            body: article.body,
+            image: article.image,
+            tagList: article.tagList,
+            readers: article.readers,
+            readtime: article.readtime,
+            createdAt: article.createdAt,
+            updatedAt: article.updatedAt,
+            author: { username: author.username,
+              bio: author.bio,
+              image: author.image,
+              following: author.following },
+            highlight } });
       }
-      res.status(404).json({ message: 'No article found!' });
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(404).json({ status: 404, message: error.message });
     }
   }
 
@@ -122,15 +138,16 @@ class articleContoller {
 
   static async searchArticles(req, res) {
     Object.keys(req.query).length === 0 && res.status(400).json({ error: req.query });
-    const { authorName, tag, keyword, title } = req.query;
+    const { authorName, tag, keyword, title, offset, limit } = req.query;
 
     if (!authorName && !tag && !keyword && !title) return res.status(400).json({ error: 'Bad request' });
 
     let user = [];
-    if (authorName) user = await searchUserHelper(authorName);
-    const data = await searchArticlesHelper(tag, keyword, title, user);
+    if (authorName) user = await searchUserHelper(authorName, offset, limit);
+    const counts = await articleCount(tag, keyword, title, user);
+    const data = await searchArticlesHelper(tag, keyword, title, user, offset, limit);
 
-    return data.length ? res.status(200).json({ data }) : res.status(404).json({ message: 'No data found' });
+    return data.length ? res.status(200).json({ data, counts }) : res.status(404).json({ message: 'No data found' });
   }
 
 
@@ -139,11 +156,9 @@ class articleContoller {
   }
 
   static async getArticlesForAuthor(req, res) {
-    const { authorId } = req.params;
-    const articles = await Articles.findAll({ where: { authorId } });
-    if (articles.length > 0) return res.status(200).json({ status: 200, articles });
-
-    return res.status(404).json({ status: 404, message: 'No published article' });
+    (req.query.offset && req.query.limit)
+      ? await articlePaginationForAuthor(req, res)
+      : await getAllArticlesAuthor(req, res);
   }
 }
 export default articleContoller;
