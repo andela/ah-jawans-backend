@@ -9,7 +9,7 @@ class Highlighter {
   static async createHighlight(req, res) {
     const { id } = req.user;
     const { articleId } = req.params;
-    const { indexStart, indexEnd, comment } = req.body;
+    const { indexStart, indexEnd, comment, elementId } = req.body;
     const highlighted = true;
 
     await validations.ValidationSchema.highlight(req.body);
@@ -31,10 +31,13 @@ class Highlighter {
         text: highlightText,
         articleId,
         comment,
-        highlighted });
+        highlighted,
+        elementId });
 
-      return res.status(201).json({ highlightedText: commentOnHighlight.text,
-        Comment: commentOnHighlight.comment });
+      return res.status(201).json({
+        highlightedText: commentOnHighlight.text,
+        Comment: commentOnHighlight.comment,
+        elementId });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
