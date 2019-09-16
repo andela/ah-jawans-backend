@@ -7,7 +7,6 @@ const { Notification, Opt, User } = models;
 const notifyComment = async (data) => {
   let inAppNotification, emailNotification;
   const { resource, user, inAppMessage, emailMessage, url } = data;
-  console.log(url, 'url from notify');
   const optedin = await Opt.findAll({ where: { userId: user.userId } });
   optedin.forEach(async (subscription) => {
     const { dataValues } = await User.findOne({ where: { id: user.userId } });
