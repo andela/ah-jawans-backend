@@ -1,7 +1,8 @@
 import models from '../models';
 import eventEmitter from '../template/notifications/EventEmitter';
+import { countArticleDisikesLikes } from './helpers/likeCommentHelper';
 
-const { Comments, Articles, User, CommentsHistories } = models;
+const { Comments, Articles, User, CommentsHistories, LikeAndDislike } = models;
 
 const commentHistoryCreate = async (req, findComent) => {
   CommentsHistories.create({ userId: req.user.id,
@@ -112,7 +113,10 @@ export default class ArticleComment {
       const allComments = await Comments.findAll({ where: { articleId: req.params.articleId },
         include: [
           { model: User,
-            attributes: ['username', 'bio', 'image'] }
+            attributes: ['username', 'bio', 'image'] },
+          { as: 'Comment',
+            model: LikeAndDislike,
+            attributes: ['likes', 'dislikes'] },
         ], });
       return allComments.length ? res.status(200).json({ message: 'All Comments', allComments })
         : res.status(404).json({ error: 'No comments found!' });

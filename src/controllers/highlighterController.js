@@ -9,7 +9,7 @@ class Highlighter {
   static async createHighlight(req, res) {
     const { id } = req.user;
     const { articleId } = req.params;
-    const { indexStart, indexEnd, comment } = req.body;
+    const { indexStart, indexEnd, comment, elementId, text } = req.body;
     const highlighted = true;
 
     await validations.ValidationSchema.highlight(req.body);
@@ -17,24 +17,27 @@ class Highlighter {
     try {
       const article = await findArticle(articleId);
       if (!article) return res.status(404).json({ message: 'Article not found' });
-      const highlightText = article.body.slice(indexStart, indexEnd);
-
       const highlightedText = await Highlight.findOne({ where: { userId: id,
         articleId,
-        text: highlightText } });
+        text,
+        elementId,
+        indexStart,
+        indexEnd } });
 
       if (highlightedText) return res.status(409).json({ message: 'Already highlighted' });
 
       const commentOnHighlight = await Highlight.create({ userId: id,
         indexStart,
         indexEnd,
-        text: highlightText,
+        text,
         articleId,
         comment,
-        highlighted });
+        highlighted,
+        elementId });
 
       return res.status(201).json({ highlightedText: commentOnHighlight.text,
-        Comment: commentOnHighlight.comment });
+        Comment: commentOnHighlight.comment,
+        elementId });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

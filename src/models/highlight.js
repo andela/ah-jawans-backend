@@ -8,6 +8,7 @@ export default (sequelize, DataTypes) => {
   indexEnd: { type: DataTypes.INTEGER, allowNull: false },
   text: { type: DataTypes.TEXT, allowNull: false },
   comment: { type: DataTypes.TEXT, allowNull: false },
+  elementId: { type: DataTypes.STRING },
   highlighted: { type: DataTypes.BOOLEAN } },
   { tableName: 'Highlight' }, {});
   Highlight.associate = (models) => {
