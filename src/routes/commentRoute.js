@@ -18,6 +18,6 @@ router.post('/comments/:commentParamsId/likes', verifyToken, LikeComment.likeCom
 router.post('/comments/:commentParamsId/dislikes', verifyToken, LikeComment.DislikeComment);
 router.get('/comments/:id/likes', LikeComment.getNumberOfLikes);
 router.get('/comments/:id/dislikes', LikeComment.getNumberOfDislikes);
-router.get('/comments/:commentId/history', verifyToken, Comments.commentHistory);
+router.get('/comments/:commentId/history', Comments.commentHistory);
 router.get('/:articleId/comments/:commentId', Comments.getSpecificComment);
 export default router;

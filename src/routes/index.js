@@ -52,7 +52,7 @@ router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEm
 router.post('/api/users/logout', verifyToken, UserController.signOut);
 
 router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
-router.get('/api/allusers/', verifyToken, UserProfile.getAllUser);
+router.get('/api/allusers/', UserProfile.getAllUser);
 router.post('/api/users/login', AuthController.signin);
 router.patch('/api/users/verification/:userToken', UserController.verifyUser);
 

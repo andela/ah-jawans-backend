@@ -134,10 +134,9 @@ export default class ArticleComment {
    */
   static async commentHistory(req, res) {
     const { commentId } = req.params;
-    const { id } = req.user;
     const findHistory = await CommentsHistories.findAll({ where: { commentId } });
     return findHistory.length
-      ? (findHistory[0].dataValues.userId === id) && res.status(200).json({ data: { findHistory } })
+      ? res.status(200).json({ data: { findHistory } })
       : res.status(404).json({ message: 'No edit history for this comment!' });
   }
 
