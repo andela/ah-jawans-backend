@@ -3,7 +3,7 @@ import model from '../../models';
 const { Highlight } = model;
 
 const getHightlights = async (articleId) => {
-  const highlights = await Highlight.findAll({ where: { articleId }, attributes: ['text', 'comment'] });
+  const highlights = await Highlight.findAll({ where: { articleId } });
   return highlights;
 };
 

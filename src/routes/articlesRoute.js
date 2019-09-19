@@ -20,6 +20,7 @@ articles.get('/articles/:id', articlesController.getArticle);
 articles.delete('/articles/:id', verifyToken, authenticateUser.checkUserArticle, articlesController.deleteArticle);
 articles.get('/article/search', articlesController.searchArticles);
 articles.get('/articles/slug/:slug', articlesController.getArticleSlug);
+articles.get('/articles/author/:authorId', articlesController.getArticlesForAuthor);
 
 
 // sharing articles

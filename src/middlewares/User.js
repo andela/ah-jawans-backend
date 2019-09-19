@@ -1,7 +1,7 @@
-import models from '../models';
-import Tokenizer from '../helpers/tokenGenerator';
 
-const { User } = models;
+import Tokenizer from '../helpers/tokenGenerator';
+import { findUser } from '../controllers/helpers/findUser';
+
 const { decodeToken } = Tokenizer;
 
 // @middleware for decoding reset password token
@@ -18,11 +18,11 @@ const decodeResetPasswordToken = async (req, res, next) => {
 
 const checkEmail = async (req, res, next) => {
   try {
-    const check = await User.findOne({ email: req.decode.email });
+    const check = await findUser(req.decode.id);
     if (!check) {
       return res.status(404).json({ error: 'sorry your email not found.' });
     }
-    req.userInfo = check;
+    req.userInfo = check.dataValues;
     next();
   } catch (error) {
     return res.status(500).json(error.message);

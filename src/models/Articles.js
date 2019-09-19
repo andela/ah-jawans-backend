@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
     required: true, },
   description: { type: String,
     unique: false,
-    required: true, },
+    required: false, },
   body: { type: DataTypes.TEXT,
     unique: false,
     required: true, },

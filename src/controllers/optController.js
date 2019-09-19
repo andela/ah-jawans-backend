@@ -83,11 +83,26 @@ class OptController {
     * @returns {Object} Response object
     */
   static async ViewNotification(req, res) {
-    const Notifications = await Notification.findAll({ where: { userId: req.params.id } });
+    const Notifications = await Notification.findAll({ where: { userId: req.params.id, type: 'inapp' }, order: [['createdAt', 'DESC']] });
     return Notifications.length
       ? res.status(200).json({ message: 'Notifications',
         Notifications })
-      : res.status(404).json({ errors: { Notifications: "You don't have any notifications" } });
+      : res.status(200).json({ message: { Notifications: "You don't have any notifications" } });
+  }
+
+  /**
+    * @description User should be able able to view notifications
+    * @param {Object} req Request object
+    * @param {Object} res Response object
+    * @returns {Object} Response object
+    */
+  static async EditNotification(req, res) {
+    const amendNotifications = await Notification.findOne({ where: { userId: req.params.id, id: req.params.notificationid, type: 'inapp' } });
+    return amendNotifications
+      ? await Notification.update({ status: 'seen' },
+        { where: { userId: req.params.id, id: req.params.notificationid, type: 'inapp' } })
+      && res.status(200).json({ message: 'Notification Viewed!' })
+      : res.status(404).json({ message: 'Notification not found!' });
   }
 }
 

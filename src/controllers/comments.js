@@ -1,7 +1,8 @@
 import models from '../models';
 import eventEmitter from '../template/notifications/EventEmitter';
+import { countArticleDisikesLikes } from './helpers/likeCommentHelper';
 
-const { Comments, Articles, User, CommentsHistories } = models;
+const { Comments, Articles, User, CommentsHistories, LikeAndDislike } = models;
 
 const commentHistoryCreate = async (req, findComent) => {
   CommentsHistories.create({ userId: req.user.id,
@@ -109,7 +110,14 @@ export default class ArticleComment {
    */
   static async getAllcomments(req, res) {
     try {
-      const allComments = await Comments.findAll({ where: { articleId: req.params.articleId } });
+      const allComments = await Comments.findAll({ where: { articleId: req.params.articleId },
+        include: [
+          { model: User,
+            attributes: ['username', 'bio', 'image'] },
+          { as: 'Comment',
+            model: LikeAndDislike,
+            attributes: ['likes', 'dislikes'] },
+        ], });
       return allComments.length ? res.status(200).json({ message: 'All Comments', allComments })
         : res.status(404).json({ error: 'No comments found!' });
     } catch (error) {
@@ -126,10 +134,26 @@ export default class ArticleComment {
    */
   static async commentHistory(req, res) {
     const { commentId } = req.params;
-    const { id } = req.user;
     const findHistory = await CommentsHistories.findAll({ where: { commentId } });
     return findHistory.length
-      ? (findHistory[0].dataValues.userId === id) && res.status(200).json({ data: { findHistory } })
+      ? res.status(200).json({ data: { findHistory } })
       : res.status(404).json({ message: 'No edit history for this comment!' });
+  }
+
+  /**
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} Get Specific comments
+   */
+  static async getSpecificComment(req, res) {
+    try {
+      const { articleId, commentId } = req.params;
+      const comment = await Comments.findOne({ where: { articleId, id: commentId } });
+      return comment ? res.status(200).json({ message: 'Comments', comment })
+        : res.status(404).json({ error: 'No comment found!' });
+    } catch (error) {
+      return res.status(500).json(error.message);
+    }
   }
 }

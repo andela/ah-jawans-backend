@@ -19,8 +19,11 @@ export default class FollowerController {
       if (!findUser) return res.status(404).json({ error: 'Username not found' });
       if (findUser.id === req.user.id) return res.status(400).json({ error: 'You can not follow yourself' });
 
-      const followedUser = await checkUser(findUser.id);
-      if (followedUser) return res.status(409).json({ error: `Already following ${findUser.username}` });
+      // const followedUser = await checkUser(findUser.id);
+      // eslint-disable-next-line max-len
+      const checkFollowed = await Follow.findOne({ where: { followed: findUser.id, userId: req.user.id } });
+
+      if (checkFollowed) return res.status(409).json({ error: `Already following ${findUser.username}` });
       await follow(findUser.id, req.user.id);
       return res.status(201).json({ message: `Following ${findUser.username}`,
         username: findUser.username,
@@ -65,8 +68,8 @@ export default class FollowerController {
       const followers = await Follow.findAll({ where: { followed: req.user.id },
         include: [{ model: User,
           as: 'follower',
-          attributes: ['id', 'username', 'email',
-            'image', 'bio', 'following'] }] });
+          attributes: ['id', 'username', 'firstName', 'lastName', 'email',
+            'image', 'dateOfBirth', 'bio', 'following'] }] });
       return followers.length
         ? res.status(200).json({ message: 'Followers',
           followers })
@@ -86,8 +89,8 @@ export default class FollowerController {
       const following = await Follow.findAll({ where: { userId: req.user.id },
         include: [{ model: User,
           as: 'followedUser',
-          attributes: ['id', 'username', 'email',
-            'image', 'bio', 'following'] }] });
+          attributes: ['id', 'username', 'firstName', 'lastName', 'email',
+            'image', 'dateOfBirth', 'bio', 'following'] }] });
       return following.length
         ? res.status(200).json({ message: 'Following',
           following })

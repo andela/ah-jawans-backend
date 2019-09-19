@@ -5,7 +5,7 @@ import UserController from '../controllers/userController';
 import AuthController from '../controllers/authController';
 // middlwares
 import { decodeResetPasswordToken, checkEmail, usernameCheck } from '../middlewares/User';
-import { bodyValidation, signinValidation } from '../middlewares/bodyValidation';
+import { bodyValidation } from '../middlewares/bodyValidation';
 import socialRoute from './socialTestRoute';
 import UserProfile from '../controllers/userProfile';
 import Auth from '../middlewares/Auth';
@@ -52,8 +52,8 @@ router.post('/api/users/passwordreset/:token', decodeResetPasswordToken, checkEm
 router.post('/api/users/logout', verifyToken, UserController.signOut);
 
 router.get('/api/user/:username', usernameCheck, UserProfile.getProfile);
-router.get('/api/allusers/', verifyToken, UserProfile.getAllUser);
-router.post('/api/users/login', signinValidation, AuthController.signin);
+router.get('/api/allusers/', UserProfile.getAllUser);
+router.post('/api/users/login', AuthController.signin);
 router.patch('/api/users/verification/:userToken', UserController.verifyUser);
 
 router.patch('/api/users', verifyToken, multerUploads.array('image', 1), asyncHandler(UserProfile.updateProfile));

@@ -83,9 +83,10 @@ class LikesAndDislikes {
       await LikeAndDislike.create({ userId: id,
         articleId: article.id,
         dislikes: true,
-        likes: true });
-      const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes(article.dataValues.id,
-        { dislikes: true });
+        likes: false });
+      const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where:
+        { articleId: article.id },
+      dislikes: true });
       return res.status(200).json({ dislikes });
     }
 
@@ -110,6 +111,22 @@ class LikesAndDislikes {
         dislikes: true } });
       return res.status(200).json({ dislikes });
     }
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  static async getNumberOfLikes(req, res) {
+    const { id } = req.params;
+    const likes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId: id,
+      likes: true } });
+    return res.status(200).json({ likes });
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  static async getNumberOfDislikes(req, res) {
+    const { id } = req.params;
+    const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { articleId: id,
+      dislikes: true } });
+    return res.status(200).json({ dislikes });
   }
 }
 

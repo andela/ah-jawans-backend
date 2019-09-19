@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
 import model from '../models';
 import findComment from './helpers/findComment';
 import { countArticleDisikesLikes, undoLikeOrDislikeComments, findCommentLikes, findDisliked, ChangeLikeOrDislikeStatus, findLikedOrDislikedComment, userLikedOrDiskedComment } from './helpers/likeCommentHelper';
+import LikesDislikesHelpers from './helpers/likeAndDislikes';
 
 const { LikeAndDislike } = model;
 /**
@@ -94,6 +96,22 @@ class LikeComment {
         dislikes: true } });
       return res.status(200).json({ dislikes });
     }
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  static async getNumberOfLikes(req, res) {
+    const { id } = req.params;
+    const likes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { commentId: id,
+      likes: true } });
+    return res.status(200).json({ likes });
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  static async getNumberOfDislikes(req, res) {
+    const { id } = req.params;
+    const dislikes = await LikesDislikesHelpers.countArticleDisikesLikes({ where: { commentId: id,
+      dislikes: true } });
+    return res.status(200).json({ dislikes });
   }
 }
 

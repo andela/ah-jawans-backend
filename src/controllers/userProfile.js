@@ -5,7 +5,7 @@
 import models from '../models';
 import { findUserData, findUserExist, updateUser } from './helpers/findUser';
 
-const { User } = models;
+const { User, Opt } = models;
 /**
   * This class contains user controllers
   */
@@ -17,13 +17,13 @@ class UserProfile {
     */
   static async getProfile(req, res) {
     const { username } = req.params;
-    const queryResult = await User.findOne({ where: { username } });
+    const queryResult = await User.findOne({ where: { username }, include: [{ model: Opt }] });
     if (!queryResult) {
       return res.status(404).json({ message: `Username: ${username} does not exist` });
     }
-    const profile = queryResult.dataValues;
+    // const profile = queryResult.dataValues;
 
-    return res.status(200).json({ profile });
+    return res.status(200).json({ profile: queryResult });
   }
 
   /**
@@ -56,7 +56,25 @@ class UserProfile {
           if (!userData1) return res.status(403).json({ message: 'User does not exist' });
           const check = await findUserExist(username, email);
           if (check.check1 || check.check2) return res.status(409).json({ error: 'email or username is already used' });
-          return updateUser(userId, username, email, firstName, lastName, bio, image, dateOfBirth, gender) && res.status(200).json({ message: 'User successfully updated!' });
+          const updateUseragain = updateUser(userId,
+            username,
+            email,
+            firstName,
+            lastName,
+            bio,
+            image,
+            dateOfBirth,
+            gender);
+          if (updateUseragain) {
+            const updatedUser = await findUserData({ where: { id: userId } });
+            res.status(200).json({ message: 'User successfully updated!',
+              data: { username: updatedUser.username,
+                email: updatedUser.email,
+                firstName: updatedUser.firstName,
+                lastName: updatedUser.lastName,
+                bio: updatedUser.bio,
+                image: updatedUser.image } });
+          }
         }
       }
     } catch (error) {
@@ -65,7 +83,7 @@ class UserProfile {
   }
 
   static async getAllUser(req, res) {
-    const usersList = await User.findAll({ attributes: ['firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
+    const usersList = await User.findAll({ attributes: ['username', 'firstName', 'lastName', 'bio', 'image', 'following', 'createdAt', 'updatedAt'] });
     // eslint-disable-next-line no-unused-expressions
     res.status(200).json({ usersList });
   }

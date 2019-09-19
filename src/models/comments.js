@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE' });
     Comments.belongsTo(models.User, { foreignKey: 'userId',
       onDelete: 'CASCADE' });
+    Comments.hasMany(models.LikeAndDislike, { as: 'Comment',
+      foreignKey: 'commentId' });
   };
   return Comments;
 };
