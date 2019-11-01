@@ -60,7 +60,7 @@
     "pg-hstore": "^2.3.3",
     "request": "^2.87.0",
     "rosie": "^2.0.1",
-    "sequelize": "^5.8.12",
+    "sequelize": "^5.15.1",
     "sequelize-auto-migrations": "^1.0.3",
     "sequelize-cli": "^5.5.0",
     "social-share": "^0.1.0",
